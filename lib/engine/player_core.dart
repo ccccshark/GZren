@@ -1,6 +1,6 @@
 // player_core.dart
 // 玩家蛊师核心逻辑：境界体系、蛊槽、寿元基准、道痕冲突、境界突破。
-import 'player_model.dart' show Player;
+import '../data_model/player_model.dart' show Player;
 
 // 境界 -> 蛊槽上限（一转3 ~ 九转11）
 const Map<String, int> levelSlot = {

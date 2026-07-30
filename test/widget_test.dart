@@ -2,8 +2,9 @@
 // Widget 测试：HelpPage 静态渲染、MainMenuPage 菜单显示、MainGamePage 输入与快捷按钮。
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -12,53 +13,27 @@ import 'package:gzren/engine/command.dart';
 import 'package:gzren/ui/help_page.dart';
 import 'package:gzren/ui/main_game_page.dart';
 
-// ---------- 测试用辅助：将 assets 重定向到磁盘文件 + 临时存档目录 ----------
-class _DiskAssetBundle extends CachingAssetBundle {
-  final String assetsRoot;
-  _DiskAssetBundle(this.assetsRoot);
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async {
-    // key 形如 'assets/static/xxx.json'
-    final path = '$assetsRoot/${key.replaceFirst("assets/", "")}';
-    return File(path).readAsString();
-  }
-
-  @override
-  Future<ByteData> load(String key) async {
-    final str = await loadString(key);
-    return ByteData.sublistView(utf8.encode(str));
-  }
-}
-
+// 测试用 fake：把存档目录重定向到系统临时目录
 class _FakePathProvider extends PathProviderPlatform with MockPlatformInterfaceMixin {
   final Directory dir;
   _FakePathProvider(this.dir);
   @override
-  Future<Directory?> getApplicationDocumentsPath() async => dir;
+  Future<String?> getApplicationDocumentsPath() async => dir.path;
+  @override
+  Future<String?> getTemporaryPath() async => dir.path;
+  @override
+  Future<String?> getApplicationSupportPath() async => dir.path;
 }
 
+// 通过 mock flutter/assets 消息通道，让 rootBundle 直接读取磁盘 assets/static/ 真实 JSON
 Future<void> _loadAssets(GameContext ctx) async {
-  // flutter_test 默认 rootBundle 不能读取真实文件，这里通过 override 替换。
-  // 简化：直接读取磁盘文件喂给 GameContext.loadStatic。
-  // 但 loadStatic 内部已用 rootBundle，故需通过 setMockMessageHandler 替换。
   TestWidgetsFlutterBinding.ensureInitialized();
   final assetsRoot = Directory.current.path + '/assets/static';
-  // 注册 asset 路径回源
-  // 使用 services 二进制消息通道 mock
-  ByteData? _handler(String channel, ByteData? msg) {
-    return null;
-  }
-  // 简化做法：用 _DiskAssetBundle 直接构造然后调用底层数据加载。
-  // 这里采用更直接的办法：把所有 JSON 解析逻辑复制到测试中以验证 GameContext。
-  // 为避免重复，我们直接调用 ctx.loadStatic()，并通过 rootBundle mock。
-
-  // 注册 platform asset channel
   ServicesBinding.instance.defaultBinaryMessenger.setMockMessageHandler(
     'flutter/assets',
     (ByteData? message) async {
       final key = utf8.decode(message!.buffer.asUint8List());
-      final file = File('$assetsRoot/$key'.replaceAll('assets/static/', ''));
-      // 上面拼接逻辑修正：key 即 'assets/static/xxx.json'
+      // key 形如 'assets/static/xxx.json'
       final path = '$assetsRoot/${key.substring('assets/static/'.length)}';
       if (File(path).existsSync()) {
         final bytes = File(path).readAsBytesSync();
@@ -74,7 +49,7 @@ void main() {
   late Directory tmpDir;
 
   setUp(() {
-    tmpDir = Directory.systemTemp.createTempSync('guzhenren_widget_test_');
+    tmpDir = Directory.systemTemp.createTempSync('guzren_widget_test_');
     PathProviderPlatform.instance = _FakePathProvider(tmpDir);
   });
 

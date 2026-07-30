@@ -12,11 +12,11 @@ class _FakePathProvider extends PathProviderPlatform with MockPlatformInterfaceM
   final Directory dir;
   _FakePathProvider(this.dir);
   @override
-  Future<Directory?> getApplicationDocumentsPath() async => dir;
+  Future<String?> getApplicationDocumentsPath() async => dir.path;
   @override
-  Future<Directory?> getTemporaryPath() async => dir;
+  Future<String?> getTemporaryPath() async => dir.path;
   @override
-  Future<Directory?> getApplicationSupportPath() async => dir;
+  Future<String?> getApplicationSupportPath() async => dir.path;
 }
 
 void main() {

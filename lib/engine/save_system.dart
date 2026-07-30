@@ -61,10 +61,10 @@ Future<bool> saveGame(int slot, Player p, Map<String, Npc> npcs) async {
 
 /// 读取存档，返回 (player, npc状态列表)。NPC 状态由调用方合并到模板。
 Future<(Player?, List<Map<String, dynamic>>)> loadGame(int slot) async {
-  if (slot < 1 || slot > maxSlots) return (null, []);
+  if (slot < 1 || slot > maxSlots) return (null as Player?, <Map<String, dynamic>>[]);
   final dir = await _saveDir();
   final f = File('${dir.path}/${_slotPath(slot)}');
-  if (!f.existsSync()) return (null, []);
+  if (!f.existsSync()) return (null as Player?, <Map<String, dynamic>>[]);
   try {
     final j = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
     final player = Player.fromJson(j['player'] as Map<String, dynamic>);
@@ -73,7 +73,7 @@ Future<(Player?, List<Map<String, dynamic>>)> loadGame(int slot) async {
         .toList();
     return (player, npcStates);
   } catch (_) {
-    return (null, []);
+    return (null as Player?, <Map<String, dynamic>>[]);
   }
 }
 
