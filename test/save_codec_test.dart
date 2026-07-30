@@ -134,7 +134,7 @@ void main() {
       final code = encodeSaveCode(_sampleSave());
       // 解码成功即说明版本标记被识别
       final decoded = decodeSaveCode(code);
-      expect(decoded.version, greaterThanOrEqual(kMinCompatibleVersion));
+      expect(decoded.version, greaterThanOrEqualTo(kMinCompatibleVersion));
     });
 
     test('低于最低兼容版本提示过旧（模拟）', () {

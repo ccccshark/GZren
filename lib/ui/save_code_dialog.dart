@@ -143,7 +143,7 @@ class _ExportPageState extends State<_ExportPage> {
                     label: const Text('一键复制'),
                     style: ElevatedButton.styleFrom(backgroundColor: _ok, foregroundColor: Colors.white),
                     onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: code));
+                      await Clipboard.setData(ClipboardData(text: code!));
                       _toast('存档码已复制到剪贴板，请粘贴保存。');
                     },
                   )),
