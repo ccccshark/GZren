@@ -5,6 +5,7 @@ import 'engine/command.dart';
 import 'ui/main_game_page.dart';
 import 'ui/save_menu.dart';
 import 'ui/help_page.dart';
+import 'ui/disclaimer_dialog.dart';
 
 void main() {
   runApp(const GuZhenRenApp());
@@ -43,6 +44,7 @@ class BootPage extends StatefulWidget {
 class _BootPageState extends State<BootPage> {
   final GameContext ctx = GameContext();
   bool _loading = true;
+  bool _disclaimerAccepted = false;
 
   @override
   void initState() {
@@ -52,7 +54,14 @@ class _BootPageState extends State<BootPage> {
 
   Future<void> _init() async {
     await ctx.loadStatic();
-    setState(() => _loading = false);
+    if (!mounted) return;
+    // 启动后最先弹出免责声明弹窗；用户必须同意才进入主菜单，拒绝则退出 App。
+    final accepted = await showStartupDisclaimer(context);
+    if (!mounted) return;
+    setState(() {
+      _disclaimerAccepted = accepted;
+      _loading = false;
+    });
   }
 
   @override
@@ -61,6 +70,10 @@ class _BootPageState extends State<BootPage> {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator(color: Color(0xFF8E44AD))),
       );
+    }
+    // 用户拒绝时显示空 Scaffold（SystemNavigator.pop 已触发退出 App）
+    if (!_disclaimerAccepted) {
+      return const Scaffold(body: SizedBox.shrink());
     }
     return MainMenuPage(ctx: ctx);
   }
