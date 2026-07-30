@@ -77,6 +77,32 @@ Future<(Player?, List<Map<String, dynamic>>)> loadGame(int slot) async {
   }
 }
 
+/// 读取存档槽原始 JSON 对象（供存档码导出用）。空槽或损坏返回 null。
+Future<Map<String, dynamic>?> readRawSlot(int slot) async {
+  if (slot < 1 || slot > maxSlots) return null;
+  final dir = await _saveDir();
+  final f = File('${dir.path}/${_slotPath(slot)}');
+  if (!f.existsSync()) return null;
+  try {
+    return jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+  } catch (_) {
+    return null;
+  }
+}
+
+/// 将原始存档对象写入指定槽（供存档码导入用）。返回是否成功。
+Future<bool> writeRawSlot(int slot, Map<String, dynamic> data) async {
+  if (slot < 1 || slot > maxSlots) return false;
+  final dir = await _saveDir();
+  final f = File('${dir.path}/${_slotPath(slot)}');
+  try {
+    f.writeAsStringSync(jsonEncode(data));
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 /// 死亡惩罚：随机丢失背包蛊虫、大量物资；一定概率永久损伤空窍。
 void applyDeathPenalty(Player p, List<String> log) {
   final loseMat = max(1, (p.inventory.length * (0.3 + Random().nextDouble() * 0.3)).toInt());

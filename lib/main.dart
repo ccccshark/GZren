@@ -6,6 +6,7 @@ import 'ui/main_game_page.dart';
 import 'ui/save_menu.dart';
 import 'ui/help_page.dart';
 import 'ui/disclaimer_dialog.dart';
+import 'ui/save_code_dialog.dart';
 
 void main() {
   runApp(const GuZhenRenApp());
@@ -104,6 +105,7 @@ class MainMenuPage extends StatelessWidget {
               _menuBtn(context, '新建角色', Icons.person_add, () => _newGame(context)),
               _menuBtn(context, '读取存档', Icons.save, () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => SaveMenuPage(ctx: ctx, mode: SaveMenuMode.load)))),
+              _menuBtn(context, '存档码备份', Icons.qr_code, () => showSaveCodeBackup(context, ctx)),
               _menuBtn(context, '游戏说明', Icons.help_outline, () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const HelpPage()))),
               _menuBtn(context, '退出', Icons.exit_to_app, () => Navigator.of(context).maybePop()),

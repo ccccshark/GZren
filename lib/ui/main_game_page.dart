@@ -10,6 +10,7 @@ import '../data_model/npc_model.dart';
 import 'action_dialogs.dart';
 import 'combat_ui.dart';
 import 'save_menu.dart';
+import 'save_code_dialog.dart';
 import 'help_page.dart';
 
 class MainGamePage extends StatefulWidget {
@@ -315,6 +316,7 @@ class _MainGamePageState extends State<MainGamePage> {
                   _moreBtn(c, '境界突破', Icons.auto_awesome, () { ctx.handle('breakthrough'); }),
                   _moreBtn(c, '区域地图', Icons.map, () { ctx.handle('map'); }),
                   _moreBtn(c, '存读档', Icons.save, _showSaveMenu),
+                  _moreBtn(c, '存档码备份', Icons.qr_code, () => showSaveCodeBackup(context, ctx)),
                 ],
               ),
             ],
