@@ -153,6 +153,7 @@ void main() {
       final ctx = GameContext();
       await _loadAssets(ctx);
       ctx.newGame('方源', '中立');
+      ctx.advancedMode = true; // 进阶模式才显示底部指令输入框
       await tester.pumpWidget(MaterialApp(home: MainGamePage(ctx: ctx)));
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField), 'help');

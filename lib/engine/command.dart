@@ -50,6 +50,20 @@ class GameContext extends ChangeNotifier {
   bool inTribulation = false;
   bool gameOver = false;
 
+  // 交互模式：false=图形触屏模式（默认，隐藏指令输入框）；true=进阶模式（显示底部指令输入框）
+  bool advancedMode = false;
+
+  void toggleAdvancedMode() {
+    advancedMode = !advancedMode;
+    notifyListeners();
+  }
+
+  void setAdvancedMode(bool v) {
+    if (advancedMode == v) return;
+    advancedMode = v;
+    notifyListeners();
+  }
+
   // 死亡回滚快照
   Map<String, dynamic>? _snapshot;
 
