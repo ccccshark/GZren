@@ -1,7 +1,7 @@
 name: gzren
 description: 蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
