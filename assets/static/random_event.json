@@ -1,0 +1,65 @@
+{
+  "events": [
+    {
+      "eid": "ev001", "name": "机缘·遗物", "type": "fortune",
+      "weight": 10, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "你在草丛中发现一具枯骨，怀中抱着一枚刻有蛊纹的原石。",
+      "effect": {"add_item": ["原石x1"], "luck": 1}
+    },
+    {
+      "eid": "ev002", "name": "机缘·月华灌顶", "type": "fortune",
+      "weight": 6, "min_rank": 1, "max_rank": 5,
+      "trigger": "rest",
+      "desc": "修炼之际，一缕精纯月华没入空窍，真元暴涨。",
+      "effect": {"trueyuan": 30, "dao_mark": {"月道": 2}}
+    },
+    {
+      "eid": "ev003", "name": "机缘·野生蛊群", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 4,
+      "trigger": "gather",
+      "desc": "采集时惊起一群野生蛊虫，其中一只落入了你的背包。",
+      "effect": {"add_gu_rank_max": 2}
+    },
+    {
+      "eid": "ev004", "name": "劫难·毒瘴", "type": "disaster",
+      "weight": 12, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一阵毒瘴突然袭来，你吸入毒气，体魄受损。",
+      "effect": {"physique": -8, "injure": "毒伤", "luck": -1}
+    },
+    {
+      "eid": "ev005", "name": "劫难·蛊虫反噬", "type": "disaster",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "rest",
+      "desc": "静坐时空窍内蛊虫躁动反噬，魂力遭到冲击。",
+      "effect": {"soul_power": -5, "trueyuan": -10}
+    },
+    {
+      "eid": "ev006", "name": "劫难·山贼劫掠", "type": "disaster",
+      "weight": 7, "min_rank": 1, "max_rank": 6,
+      "trigger": "move",
+      "desc": "一伙山贼拦路打劫，混战中你丢失了部分蛊材。",
+      "effect": {"lose_random_material": 2, "physique": -5}
+    },
+    {
+      "eid": "ev007", "name": "机缘·古方残片", "type": "fortune",
+      "weight": 4, "min_rank": 2, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "你挖到一片兽骨，上刻模糊的蛊方残片，似乎有所感悟。",
+      "effect": {"dao_mark": {"气道": 3}, "luck": 2}
+    },
+    {
+      "eid": "ev008", "name": "劫难·寿元诅咒", "type": "disaster",
+      "weight": 3, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "踏入一处古阵，无形诅咒缠身，寿元莫名流逝!",
+      "effect": {"life_left": -2, "luck": -2}
+    }
+  ],
+  "trigger_chance": {
+    "move": 0.18,
+    "rest": 0.12,
+    "gather": 0.15
+  }
+}

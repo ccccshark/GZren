@@ -1,0 +1,69 @@
+# ===== Flutter / Dart =====
+# 构建产物
+/build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+pubspec.lock
+
+# ===== Android =====
+# flutter create 生成的 android/ 工程文件需要提交，但以下构建产物排除
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+android/key.properties
+**/android/**/gradle-wrapper.jar
+# 原生构建产物
+android/app/build/
+android/build/
+android/app/.cxx/
+android/app/debug/
+android/app/profile/
+android/app/release/
+*.iml
+.idea/
+
+# ===== iOS（本项目仅安卓，但保留以防误生成） =====
+**/ios/Flutter/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# ===== 由 flutter_launcher_icons 生成的图标产物 =====
+# 注意：这些产物每次打包都会重新生成，不入库；打包脚本/CI 会自动执行生成
+android/app/src/main/res/mipmap-*/ic_launcher.png
+android/app/src/main/res/mipmap-*/ic_launcher_round.png
+android/app/src/main/res/mipmap-anydpi-v26/
+
+# ===== 通用 =====
+.DS_Store
+*.log
+*.tmp
+*.swp
+*.bak
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+.clang-format
+.clang-tidy
+
+# ===== 敏感信息 =====
+# 本项目纯离线无密钥，但保险起见排除以下文件
+.env
+*.keystore
+*.jks
+key.properties

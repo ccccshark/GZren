@@ -1,0 +1,26 @@
+{
+  "recipes": [
+    {"rid": "r001", "name": "探路蛊蛊方", "rank": 1, "material": ["露水x3", "青茅草根x1"], "base_success": 0.65, "output_gid": "g001"},
+    {"rid": "r002", "name": "青茅蛊蛊方", "rank": 1, "material": ["青茅草根x2", "野草露水x2"], "base_success": 0.70, "output_gid": "g002"},
+    {"rid": "r003", "name": "月光蛊蛊方", "rank": 1, "material": ["月光石x1", "露水x3"], "base_success": 0.55, "output_gid": "g003"},
+    {"rid": "r004", "name": "白豕蛊蛊方", "rank": 1, "material": ["野草露水x3", "兽血x1"], "base_success": 0.60, "output_gid": "g004"},
+    {"rid": "r005", "name": "玉皮蛊蛊方", "rank": 2, "material": ["玉髓x1", "铁矿石x2"], "base_success": 0.40, "output_gid": "g005"},
+    {"rid": "r006", "name": "毒蛇蛊蛊方", "rank": 2, "material": ["蛇蜕x1", "毒囊x1"], "base_success": 0.45, "output_gid": "g006"},
+    {"rid": "r007", "name": "酒虫蛊蛊方", "rank": 2, "material": ["酒液x3", "露水x1"], "base_success": 0.50, "output_gid": "g007"},
+    {"rid": "r008", "name": "铁骨蛊蛊方", "rank": 2, "material": ["铁矿石x3"], "base_success": 0.50, "output_gid": "g008"},
+    {"rid": "r009", "name": "竹叶青蛊蛊方", "rank": 2, "material": ["竹节x2", "毒囊x1"], "base_success": 0.45, "output_gid": "g009"},
+    {"rid": "r010", "name": "遁地蛊蛊方", "rank": 2, "material": ["青茅草根x3", "铁矿石x1"], "base_success": 0.40, "output_gid": "g013"},
+    {"rid": "r011", "name": "疗伤蛊蛊方", "rank": 2, "material": ["野草露水x2", "兽血x1"], "base_success": 0.50, "output_gid": "g014"},
+    {"rid": "r012", "name": "野猪蛊蛊方", "rank": 1, "material": ["野草露水x3", "兽血x1"], "base_success": 0.60, "output_gid": "g018"},
+    {"rid": "r013", "name": "草人蛊蛊方", "rank": 2, "material": ["青茅草根x2", "野草露水x2"], "base_success": 0.48, "output_gid": "g019"},
+    {"rid": "r014", "name": "九齿竹蛊蛊方", "rank": 3, "material": ["竹节x3", "铁矿石x2"], "base_success": 0.30, "output_gid": "g020"},
+    {"rid": "r015", "name": "剑草蛊蛊方", "rank": 3, "material": ["青茅草根x3", "铁矿石x2", "兽血x1"], "base_success": 0.25, "output_gid": "g010"},
+    {"rid": "r016", "name": "月刃蛊蛊方", "rank": 3, "material": ["月光石x2", "星砂x1"], "base_success": 0.22, "output_gid": "g011"},
+    {"rid": "r017", "name": "蟒毒蛊蛊方", "rank": 3, "material": ["毒囊x2", "蛇蜕x2", "兽血x1"], "base_success": 0.25, "output_gid": "g012"}
+  ],
+  "evolve_recipes": [
+    {"name": "青茅蛊→剑草蛊进化", "base_gu": "g002", "material": ["铁矿石x2", "兽血x1"], "output_gid": "g010", "base_success": 0.30},
+    {"name": "月光蛊→月刃蛊进化", "base_gu": "g003", "material": ["月光石x1", "星砂x1"], "output_gid": "g011", "base_success": 0.25},
+    {"name": "毒蛇蛊→蟒毒蛊进化", "base_gu": "g006", "material": ["毒囊x1", "兽血x2"], "output_gid": "g012", "base_success": 0.25}
+  ]
+}

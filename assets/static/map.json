@@ -1,0 +1,86 @@
+{
+  "regions": ["青茅山"],
+  "start_rid": "qingmao_01",
+  "rooms": [
+    {
+      "rid": "qingmao_01", "name": "青茅山山脚",
+      "description": "青茅山郁郁葱葱，草木繁茂，随处可见野生蛊虫踪迹。一条石阶蜿蜒通向山腰，远处传来蛊虫嘶鸣。",
+      "exits": {"north": "qingmao_02", "east": "qingmao_village"},
+      "env_effect": {"毒道": 1.05, "气道": 1.0},
+      "refresh_resource": ["野草露水", "青茅草根"],
+      "wild_gu": ["g002", "g004", "g018"],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_village", "name": "青茅村",
+      "description": "青茅村坐落在山脚一隅，几户蛊师人家炊烟袅袅。村口老槐树下坐着一位贩卖蛊材的老者。",
+      "exits": {"west": "qingmao_01"},
+      "env_effect": {"气道": 1.0},
+      "refresh_resource": ["露水"],
+      "wild_gu": [],
+      "npc_list": ["npc_trader_lao"],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_02", "name": "青茅山山腰",
+      "description": "山腰处云雾缭绕，青茅草高过人头。林间偶见毒蛇游走，是采集蛇蜕与毒囊的好去处。",
+      "exits": {"north": "qingmao_03", "south": "qingmao_01", "east": "qingmao_bamboo", "west": "qingmao_swamp"},
+      "env_effect": {"毒道": 1.10, "气道": 1.02},
+      "refresh_resource": ["青茅草根", "蛇蜕"],
+      "wild_gu": ["g002", "g009"],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_bamboo", "name": "青茅山竹林",
+      "description": "成片青竹遮天蔽日，竹节沙沙作响。竹林深处据说藏有罕见的九齿竹蛊，但亦有猛兽盘踞。",
+      "exits": {"west": "qingmao_02"},
+      "env_effect": {"气道": 1.05, "毒道": 1.05},
+      "refresh_resource": ["竹节", "露水"],
+      "wild_gu": ["g020", "g009"],
+      "npc_list": ["npc_beast_bamboo"],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_03", "name": "青茅山山顶",
+      "description": "山顶视野开阔，可俯瞰整座青茅山。月夜时分月华浓郁，是修炼月道蛊虫的绝佳之地。",
+      "exits": {"south": "qingmao_02", "north": "qingmao_cave", "west": "qingmao_mine"},
+      "env_effect": {"月道": 1.20, "气道": 1.0},
+      "refresh_resource": ["月光石", "星砂"],
+      "wild_gu": ["g003"],
+      "npc_list": [],
+      "secret": "flag_moon_peak"
+    },
+    {
+      "rid": "qingmao_cave", "name": "山顶溶洞",
+      "description": "幽深溶洞寒气逼人，洞壁渗水叮咚作响。传闻洞中藏有炼蛊师的遗物与一只凶悍的蟒毒蛊。",
+      "exits": {"south": "qingmao_03"},
+      "env_effect": {"地道": 1.15, "毒道": 1.10},
+      "refresh_resource": ["铁矿石", "玉髓"],
+      "wild_gu": ["g012", "g013"],
+      "npc_list": ["npc_beast_python"],
+      "secret": "flag_cave_treasure"
+    },
+    {
+      "rid": "qingmao_swamp", "name": "青茅山沼泽",
+      "description": "山阴一片沼泽，腐臭弥漫，毒虫遍地。深入者多有去无回，唯有胆大妄为之辈敢来采毒囊。",
+      "exits": {"east": "qingmao_02"},
+      "env_effect": {"毒道": 1.25, "气道": 0.90},
+      "refresh_resource": ["毒囊", "蛇蜕"],
+      "wild_gu": ["g006", "g012"],
+      "npc_list": ["npc_beast_swamp"],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_mine", "name": "青茅山废矿",
+      "description": "废弃的蛊材矿洞，矿车散落，铁石遍地。深处偶尔能听到异响，似有铁骨蛊的鸣动。",
+      "exits": {"east": "qingmao_03"},
+      "env_effect": {"地道": 1.20, "气道": 1.05},
+      "refresh_resource": ["铁矿石", "玉髓", "原石"],
+      "wild_gu": ["g008", "g005"],
+      "npc_list": [],
+      "secret": ""
+    }
+  ]
+}

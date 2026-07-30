@@ -1,0 +1,48 @@
+{
+  "npcs": [
+    {
+      "nid": "npc_trader_lao", "name": "老槐翁", "align": "中立", "level": "三转中阶",
+      "life_left": 120, "trueyuan": 200, "trueyuan_max": 200, "physique": 80, "soul_power": 60,
+      "slot_max": 5, "gu_in_slot": ["g005", "g007", "g014"],
+      "dao_mark": {"气道": 30, "毒道": 5},
+      "inventory": ["露水x10", "青茅草根x5", "酒液x3", "月光石x2", "铁矿石x5"],
+      "is_hostile": false, "is_merchant": true, "is_beast": false,
+      "dialogue": ["蛊师一路小心，青茅山近来不太平。", "老朽这儿有些蛊材，物美价廉。", "毒蛇蛊方? 老朽可不出售蛊方，只卖材料。"],
+      "trade_goods": {"露水": 1, "青茅草根": 2, "酒液": 5, "月光石": 8, "铁矿石": 3, "蛇蜕": 6, "毒囊": 10, "竹节": 2, "原石": 15}
+    },
+    {
+      "nid": "npc_beast_bamboo", "name": "竹林巨猿", "align": "中立", "level": "二转初阶",
+      "life_left": 60, "trueyuan": 80, "trueyuan_max": 80, "physique": 70, "soul_power": 20,
+      "slot_max": 4, "gu_in_slot": ["g018", "g008"],
+      "dao_mark": {"气道": 15},
+      "inventory": ["竹节x3", "兽血x2"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "dialogue": ["巨猿捶胸咆哮，目露凶光!"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_beast_python", "name": "溶洞蟒王", "align": "中立", "level": "三转中阶",
+      "life_left": 200, "trueyuan": 150, "trueyuan_max": 150, "physique": 110, "soul_power": 40,
+      "slot_max": 5, "gu_in_slot": ["g012", "g006", "g013"],
+      "dao_mark": {"毒道": 35, "地道": 10},
+      "inventory": ["蛇蜕x3", "毒囊x3", "兽血x2", "原石x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "dialogue": ["蟒王吐信嘶嘶，毒雾弥漫!"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_beast_swamp", "name": "沼泽毒鳄", "align": "中立", "level": "二转中阶",
+      "life_left": 90, "trueyuan": 90, "trueyuan_max": 90, "physique": 85, "soul_power": 25,
+      "slot_max": 4, "gu_in_slot": ["g006", "g009"],
+      "dao_mark": {"毒道": 20},
+      "inventory": ["毒囊x2", "蛇蜕x1", "兽血x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "dialogue": ["毒鳄张开血盆大口，腥臭扑鼻!"],
+      "trade_goods": {}
+    }
+  ],
+  "spawn_rules": {
+    "respawn_hours": 24,
+    "note": "被击杀的NPC/异兽将在世界时间若干小时后在原场景重生"
+  }
+}

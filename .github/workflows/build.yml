@@ -1,0 +1,94 @@
+name: Build Android APK
+
+# 蛊真人单机MUD（安卓端）云端自动打包工作流
+# 触发方式：
+#   1. push 到 main / master 分支
+#   2. 在 GitHub 仓库页面手动点 "Run workflow"（Actions 标签页）
+#   3. 创建 v* 开头的 tag（如 v1.0.0）会发布到 Releases
+#
+# 产物：
+#   - build/app/outputs/flutter-apk/app-release.apk 作为 artifact 下载
+#   - tag 触发时同时发布到 GitHub Releases
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: 安装 Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: 显示版本
+        run: |
+          flutter --version
+          java -version
+
+      - name: 补全 Android 工程脚手架
+        run: |
+          flutter create \
+            --org com.guzhenren \
+            --project-name gzren \
+            --platforms=android \
+            --description "蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。" \
+            .
+
+      - name: 校验 AndroidManifest 离线约束
+        run: |
+          MANIFEST=android/app/src/main/AndroidManifest.xml
+          grep -q "蛊真人单机MUD" "$MANIFEST" || { echo "AndroidManifest 被覆盖，请检查"; exit 1; }
+          ! grep -q "android.permission.INTERNET" "$MANIFEST" || { echo "AndroidManifest 含 INTERNET 权限，违反离线约束"; exit 1; }
+          echo "AndroidManifest 校验通过"
+
+      - name: 拉取依赖
+        run: flutter pub get
+
+      - name: 生成应用图标
+        run: flutter pub run flutter_launcher_icons
+
+      - name: 静态分析
+        run: flutter analyze || true
+
+      - name: 运行测试
+        run: flutter test
+
+      - name: 接受 Android 许可证
+        run: yes | flutter doctor --android-licenses || true
+
+      - name: 打包 Release APK
+        run: flutter build apk --release
+
+      - name: 上传 APK 为 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: guzhenren-mud-android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: 发布到 GitHub Releases（仅 tag 触发）
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/app/outputs/flutter-apk/app-release.apk
+          generate_release_notes: true
+          draft: false
+          prerelease: false

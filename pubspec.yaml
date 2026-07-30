@@ -1,0 +1,41 @@
+name: gzren
+description: 蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+  path_provider_platform_interface: ^2.1.0
+  plugin_platform_interface: ^2.1.0
+
+# 应用图标配置（蛊真人主题：黑蛊虫 + 紫毒气 + 深紫黑背景）
+# 生成命令：flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/icon_full.png"          # legacy 图标 + Play Store 展示图
+  android: true
+  ios: false                                        # 本项目仅安卓
+  min_sdk_android: 26                               # 与 AndroidManifest 最低 API 一致
+  adaptive_icon_background: "assets/icon/icon_background.png"  # 自适应图标背景
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"  # 自适应图标前景（已含 18% 边距）
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/static/gu_list.json
+    - assets/static/recipe.json
+    - assets/static/map.json
+    - assets/static/npc_template.json
+    - assets/static/material.json
+    - assets/static/random_event.json

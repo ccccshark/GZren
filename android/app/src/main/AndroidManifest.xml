@@ -1,0 +1,46 @@
+<!--
+  蛊真人单机MUD · AndroidManifest.xml
+  严格离线：仅保留必要权限，故意不声明 INTERNET / ACCESS_NETWORK_STATE 权限。
+  生成 android 工程脚手架后，用本文件覆盖 android/app/src/main/AndroidManifest.xml。
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 纯单机离线 APP，无任何联网权限，不读取外部存储 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:label="蛊真人单机MUD"
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="true"
+        android:fullBackupContent="false"
+        android:usesCleartextTraffic="false">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|platformFontScale"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+              android:name="io.flutter.embedding.android.NormalTheme"
+              android:resource="@style/NormalTheme"
+              />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+
+    <!-- 仅支持 arm64 即可，单机文字游戏无需其他 ABI -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT"/>
+            <data android:mimeType="text/plain"/>
+        </intent>
+    </queries>
+</manifest>

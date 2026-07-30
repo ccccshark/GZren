@@ -1,0 +1,168 @@
+{
+  "gu_list": [
+    {
+      "gid": "g001", "name": "探路蛊", "rank": 1, "school": "气道",
+      "cost_zhen": 5, "cost_life": 0, "durability_max": 100,
+      "feed_material": ["露水"], "side_effect": "无明显副作用",
+      "desc": "感知周边环境，探查道路与隐藏资源",
+      "evolve_gid": "", "habitat": ["南疆", "山林"],
+      "combat": {"type": "utility", "power": 0}
+    },
+    {
+      "gid": "g002", "name": "青茅蛊", "rank": 1, "school": "气道",
+      "cost_zhen": 4, "cost_life": 0, "durability_max": 100,
+      "feed_material": ["青茅草根"], "side_effect": "无明显副作用",
+      "desc": "催动可放出锋利青茅草刃攻击敌人",
+      "evolve_gid": "g010", "habitat": ["青茅山"],
+      "combat": {"type": "attack", "power": 12}
+    },
+    {
+      "gid": "g003", "name": "月光蛊", "rank": 1, "school": "月道",
+      "cost_zhen": 8, "cost_life": 0, "durability_max": 90,
+      "feed_material": ["月光石"], "side_effect": "夜间威力倍增，白昼威力减半",
+      "desc": "凝聚月华化作光刃，月道入门蛊",
+      "evolve_gid": "g011", "habitat": ["月夜", "高地"],
+      "combat": {"type": "attack", "power": 15}
+    },
+    {
+      "gid": "g004", "name": "白豕蛊", "rank": 1, "school": "气道",
+      "cost_zhen": 6, "cost_life": 0, "durability_max": 110,
+      "feed_material": ["野草露水"], "side_effect": "体魄增强但反应迟钝",
+      "desc": "增强体魄气力，攻防兼备的低阶蛊",
+      "evolve_gid": "", "habitat": ["山林"],
+      "combat": {"type": "attack", "power": 10}
+    },
+    {
+      "gid": "g005", "name": "玉皮蛊", "rank": 2, "school": "气道",
+      "cost_zhen": 10, "cost_life": 0, "durability_max": 120,
+      "feed_material": ["玉髓", "铁矿石"], "side_effect": "玉皮覆盖后行动略微迟缓",
+      "desc": "催动形成玉色护体屏障，强力防御蛊",
+      "evolve_gid": "", "habitat": ["矿脉"],
+      "combat": {"type": "defense", "power": 30}
+    },
+    {
+      "gid": "g006", "name": "毒蛇蛊", "rank": 2, "school": "毒道",
+      "cost_zhen": 12, "cost_life": 0, "durability_max": 95,
+      "feed_material": ["蛇蜕", "毒囊"], "side_effect": "长期寄宿空窍会反噬自身血脉",
+      "desc": "吐出剧毒蛇雾，使敌人持续中毒掉血",
+      "evolve_gid": "g012", "habitat": ["沼泽", "毒林"],
+      "combat": {"type": "attack_poison", "power": 18}
+    },
+    {
+      "gid": "g007", "name": "酒虫蛊", "rank": 2, "school": "气道",
+      "cost_zhen": 9, "cost_life": 0, "durability_max": 100,
+      "feed_material": ["酒液"], "side_effect": "嗜酒成性，无酒则耐久每日下降",
+      "desc": "吞酒化气，可快速恢复真元",
+      "evolve_gid": "", "habitat": ["酒窖", "村落"],
+      "combat": {"type": "heal_zhen", "power": 20}
+    },
+    {
+      "gid": "g008", "name": "铁骨蛊", "rank": 2, "school": "气道",
+      "cost_zhen": 11, "cost_life": 0, "durability_max": 130,
+      "feed_material": ["铁矿石"], "side_effect": "骨骼沉重，移动稍慢",
+      "desc": "使骨骼坚如铁石，大幅提升体魄防御",
+      "evolve_gid": "", "habitat": ["矿脉"],
+      "combat": {"type": "defense", "power": 25}
+    },
+    {
+      "gid": "g009", "name": "竹叶青蛊", "rank": 2, "school": "毒道",
+      "cost_zhen": 10, "cost_life": 0, "durability_max": 100,
+      "feed_material": ["竹节", "毒囊"], "side_effect": "寄生后空窍隐隐作痛",
+      "desc": "青色毒蛇形蛊，攻击迅猛带毒",
+      "evolve_gid": "", "habitat": ["竹林"],
+      "combat": {"type": "attack_poison", "power": 20}
+    },
+    {
+      "gid": "g010", "name": "剑草蛊", "rank": 3, "school": "气道",
+      "cost_zhen": 18, "cost_life": 0, "durability_max": 110,
+      "feed_material": ["青茅草根", "铁矿石"], "side_effect": "攻击时反震自身经脉",
+      "desc": "青茅蛊进化的剑草蛊，草叶如剑锋利无匹",
+      "evolve_gid": "", "habitat": ["青茅山深处"],
+      "combat": {"type": "attack", "power": 35}
+    },
+    {
+      "gid": "g011", "name": "月刃蛊", "rank": 3, "school": "月道",
+      "cost_zhen": 22, "cost_life": 0, "durability_max": 100,
+      "feed_material": ["月光石", "星砂"], "side_effect": "白昼催动真元消耗翻倍",
+      "desc": "月光蛊进化的月刃蛊，凝月为刃斩敌",
+      "evolve_gid": "", "habitat": ["月夜", "高地"],
+      "combat": {"type": "attack", "power": 40}
+    },
+    {
+      "gid": "g012", "name": "蟒毒蛊", "rank": 3, "school": "毒道",
+      "cost_zhen": 20, "cost_life": 0, "durability_max": 105,
+      "feed_material": ["毒囊", "蛇蜕", "兽血"], "side_effect": "反噬剧毒，持续损伤魂力",
+      "desc": "毒蛇蛊进化的蟒毒蛊，毒雾笼罩大范围",
+      "evolve_gid": "", "habitat": ["沼泽深处"],
+      "combat": {"type": "attack_poison", "power": 32}
+    },
+    {
+      "gid": "g013", "name": "遁地蛊", "rank": 2, "school": "地道",
+      "cost_zhen": 14, "cost_life": 0, "durability_max": 90,
+      "feed_material": ["青茅草根"], "side_effect": "遁地后短暂无法行动",
+      "desc": "遁入地中逃离战斗，逃亡判定核心蛊",
+      "evolve_gid": "", "habitat": ["山林", "矿脉"],
+      "combat": {"type": "flee", "power": 0}
+    },
+    {
+      "gid": "g014", "name": "疗伤蛊", "rank": 2, "school": "气道",
+      "cost_zhen": 13, "cost_life": 0, "durability_max": 100,
+      "feed_material": ["野草露水", "兽血"], "side_effect": "治愈时消耗体魄气血",
+      "desc": "修复肉身伤势，恢复体魄",
+      "evolve_gid": "", "habitat": ["山林"],
+      "combat": {"type": "heal_body", "power": 25}
+    },
+    {
+      "gid": "g015", "name": "空窍蛊", "rank": 1, "school": "气道",
+      "cost_zhen": 0, "cost_life": 0, "durability_max": 999,
+      "feed_material": ["露水"], "side_effect": "无",
+      "desc": "永久占用一个蛊槽，提升蛊槽上限1点",
+      "evolve_gid": "", "habitat": ["特殊"],
+      "combat": {"type": "passive", "power": 0}
+    },
+    {
+      "gid": "g016", "name": "寿蛊", "rank": 5, "school": "寿道",
+      "cost_zhen": 50, "cost_life": 0, "durability_max": 50,
+      "feed_material": ["寿桃"], "side_effect": "持续寿道诅咒，每旬损耗气运与魂力",
+      "desc": "夺天地造化延寿的禁忌蛊，每催动一次延寿数十年",
+      "evolve_gid": "", "habitat": ["禁地"],
+      "combat": {"type": "extend_life", "power": 0}
+    },
+    {
+      "gid": "g017", "name": "春蝉蛊", "rank": 6, "school": "岁月道",
+      "cost_zhen": 80, "cost_life": 1, "durability_max": 30,
+      "feed_material": ["寿桃", "星砂"], "side_effect": "每次催动消耗自身寿元一年",
+      "desc": "传说中岁月道的逆天蛊，可重炼宿主溯回时光，禁忌之物",
+      "evolve_gid": "", "habitat": ["禁地"],
+      "combat": {"type": "time_reversal", "power": 0}
+    },
+    {
+      "gid": "g018", "name": "野猪蛊", "rank": 1, "school": "气道",
+      "cost_zhen": 7, "cost_life": 0, "durability_max": 120,
+      "feed_material": ["野草露水"], "side_effect": "性格暴躁易冲动",
+      "desc": "化野猪之力冲撞，攻高防厚",
+      "evolve_gid": "", "habitat": ["山林"],
+      "combat": {"type": "attack", "power": 14}
+    },
+    {
+      "gid": "g019", "name": "草人蛊", "rank": 2, "school": "气道",
+      "cost_zhen": 10, "cost_life": 0, "durability_max": 90,
+      "feed_material": ["青茅草根", "野草露水"], "side_effect": "替死后耐久归零报废",
+      "desc": "替身蛊，可抵挡一次致命攻击后损毁",
+      "evolve_gid": "", "habitat": ["田野"],
+      "combat": {"type": "substitute", "power": 0}
+    },
+    {
+      "gid": "g020", "name": "九齿竹蛊", "rank": 3, "school": "气道",
+      "cost_zhen": 16, "cost_life": 0, "durability_max": 115,
+      "feed_material": ["竹节", "铁矿石"], "side_effect": "催动需静心凝神",
+      "desc": "九节竹虫化蛊，攻防兼备的中阶蛊",
+      "evolve_gid": "", "habitat": ["竹林深处"],
+      "combat": {"type": "attack", "power": 30}
+    }
+  ],
+  "evolve_rules": {
+    "note": "进化需要主蛊耐久满、消耗对应进阶材料、炼蛊造诣达标，概率产出进化蛊",
+    "base_success": 0.5
+  }
+}
