@@ -65,7 +65,8 @@ bool consumeMaterial(Player p, String name, int count) {
         need -= c;
         continue;
       } else {
-        newInv.add('$name${c - need}');
+        final remain = c - need;
+        newInv.add(remain > 1 ? '${name}x$remain' : name);
         need = 0;
       }
     } else {
@@ -81,11 +82,12 @@ void addMaterial(Player p, String name, int count) {
   for (var i = 0; i < p.inventory.length; i++) {
     final (n, c) = MatParser.parse(p.inventory[i]);
     if (n == name) {
-      p.inventory[i] = '$name${c + count}';
+      final total = c + count;
+      p.inventory[i] = total > 1 ? '${name}x$total' : name;
       return;
     }
   }
-  p.inventory.add(count > 1 ? '$name$count' : name);
+  p.inventory.add(count > 1 ? '${name}x$count' : name);
 }
 
 // ---------- 捕捉野蛊 ----------

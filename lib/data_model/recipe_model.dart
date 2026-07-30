@@ -52,12 +52,29 @@ class EvolveRecipe {
 }
 
 // 解析 "露水x3" -> ("露水", 3)
+// 兼容两种格式：
+//   1. 标准格式 "原石x10"（带 'x' 分隔符，初始背包/蛊方/修复后写入均用此格式）
+//   2. 旧版损坏格式 "原石10"（旧 addMaterial/consumeMaterial 漏写 'x' 产生，
+//      兼容已有存档，避免交易面板读到数量 0）
 class MatParser {
   static (String, int) parse(String s) {
-    final idx = s.lastIndexOf('x');
-    if (idx > 0) {
-      final cnt = int.tryParse(s.substring(idx + 1));
-      if (cnt != null) return (s.substring(0, idx), cnt);
+    // 1. 优先匹配标准 "名称x数量" 格式
+    final xIdx = s.lastIndexOf('x');
+    if (xIdx > 0) {
+      final cnt = int.tryParse(s.substring(xIdx + 1));
+      if (cnt != null) return (s.substring(0, xIdx), cnt);
+    }
+    // 2. 兼容旧版 "名称数量" 格式：从末尾向前扫描连续数字
+    //    材料名（露水/原石/月光石…）与蛊方名均不含 ASCII 数字，安全。
+    int end = s.length;
+    while (end > 0) {
+      final code = s.codeUnitAt(end - 1);
+      if (code < 48 || code > 57) break; // 非 '0'~'9'
+      end--;
+    }
+    if (end > 0 && end < s.length) {
+      final cnt = int.tryParse(s.substring(end));
+      if (cnt != null && cnt > 0) return (s.substring(0, end), cnt);
     }
     return (s, 1);
   }

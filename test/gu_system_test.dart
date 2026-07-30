@@ -135,6 +135,42 @@ void main() {
       expect(ok, false);
       expect(p.inventory, ['露水x2']);
     });
+
+    // ---- 回归：交易面板原石数量为 0 的 BUG ----
+    // 根因：旧版 addMaterial/consumeMaterial 写入 "原石10"（无 'x'），
+    // 而 MatParser 只认 "原石x10"，导致 countMaterial 返回 0，交易面板显示 0。
+    test('MatParser 兼容标准 "原石x10" 与旧版 "原石10" 格式', () {
+      expect(MatParser.parse('原石x10'), ('原石', 10));
+      expect(MatParser.parse('原石10'), ('原石', 10)); // 旧版损坏格式
+      expect(MatParser.parse('原石'), ('原石', 1));
+      expect(MatParser.parse('露水x5'), ('露水', 5));
+      expect(MatParser.parse('青茅草根'), ('青茅草根', 1));
+    });
+
+    test('countMaterial 能读取旧版损坏格式存档（向后兼容）', () {
+      // 模拟旧版损坏存档：背包中原石条目为 "原石10"（无 'x'）
+      final p = Player(inventory: ['原石10', '露水x5']);
+      expect(gu.countMaterial(p, '原石'), 10); // 修复前返回 0
+      expect(gu.countMaterial(p, '露水'), 5);
+    });
+
+    test('采集原石后交易面板可读取真实数量（回归）', () {
+      // 场景：初始背包有 "原石x10"，采集获得原石，打开交易面板读取数量
+      final p = Player(inventory: ['原石x10']);
+      gu.addMaterial(p, '原石', 3); // 采集
+      expect(gu.countMaterial(p, '原石'), 13); // 修复前：写入 "原石13" 后 countMaterial 返回 0
+      // 出售（consumeMaterial）后剩余数量仍可正确读取
+      expect(gu.consumeMaterial(p, '原石', 5), true);
+      expect(gu.countMaterial(p, '原石'), 8);
+    });
+
+    test('addMaterial 写入标准 x 格式（不再产生损坏格式）', () {
+      final p = Player();
+      gu.addMaterial(p, '原石', 10);
+      expect(p.inventory, ['原石x10']); // 标准格式，非 "原石10"
+      gu.addMaterial(p, '原石', 5);
+      expect(p.inventory, ['原石x15']);
+    });
   });
 
   group('capture 捕捉', () {
