@@ -20,6 +20,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write      # tag 触发时发布 GitHub Releases 所需
 
     steps:
       - name: 检出代码
