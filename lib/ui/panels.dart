@@ -16,6 +16,7 @@ import '../engine/command.dart';
 import '../data_model/scene_model.dart';
 import '../data_model/gu_model.dart';
 import '../data_model/recipe_model.dart'; // MatParser
+import '../data_model/poison_model.dart' show PoisonStore, PoisonRank, PoisonInstance;
 
 // 通用配色（与 action_dialogs.dart 保持一致风格）
 const Color _panelBg = Color(0xFF1E1E1E);
@@ -537,11 +538,11 @@ class _InventoryClassifiedContent extends StatelessWidget {
                   ? ['无寄存蛊虫']
                   : p.guBag.map((g) => '· ${g.name}${g.mutated ? "[变异]" : ""}　${g.rank}转/${g.school}　耐久 ${g.durability}/${g.durabilityMax}').toList()),
           const SizedBox(height: 4),
-          const Row(children: [
-            Icon(Icons.info_outline, color: Colors.white38, size: 14),
-            SizedBox(width: 4),
+          Row(children: [
+            const Icon(Icons.info_outline, color: Colors.white38, size: 14),
+            const SizedBox(width: 4),
             Expanded(child: Text('材料/蛊方合计 ${p.inventory.length} 项；空窍 ${p.guInSlot.length}/${p.effectiveSlotMax}。',
-                style: TextStyle(color: Colors.white38, fontSize: 11))),
+                style: const TextStyle(color: Colors.white38, fontSize: 11))),
           ]),
         ],
       ),
@@ -745,6 +746,391 @@ class _TutorialGuideDialogState extends State<_TutorialGuideDialog> {
           ),
       ],
       actionsAlignment: MainAxisAlignment.spaceBetween,
+    );
+  }
+}
+
+// ===================== 6. 毒素中毒系统·毒素详情面板 =====================
+
+/// 毒素详情面板：展示当前所有中毒状态、下次毒发倒计时、解毒建议。
+/// 底层调用 ctx.handle('detox') / ctx.handle('rest') 等指令，完全兼容旧引擎。
+Future<void> showPoisonDetailPanel(BuildContext context, GameContext ctx) async {
+  if (ctx.player == null) return;
+  await showDialog(
+    context: context,
+    builder: (c) => AlertDialog(
+      backgroundColor: _panelBg,
+      title: Row(children: [
+        const Icon(Icons.science, color: Color(0xFF9D5CD0), size: 22),
+        const SizedBox(width: 8),
+        const Expanded(child: Text('中毒状态',
+            style: TextStyle(color: Colors.white, fontSize: 17))),
+      ]),
+      contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: _PoisonDetailContent(ctx: ctx),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c), child: const Text('关闭')),
+      ],
+    ),
+  );
+}
+
+class _PoisonDetailContent extends StatelessWidget {
+  final GameContext ctx;
+  const _PoisonDetailContent({required this.ctx});
+  @override
+  Widget build(BuildContext context) {
+    final p = ctx.player!;
+    final poisons = PoisonStore.list(p);
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (poisons.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Row(children: [
+                Icon(Icons.check_circle, color: Color(0xFF27AE60), size: 20),
+                SizedBox(width: 8),
+                Text('体内无毒，经脉清明。', style: TextStyle(color: Colors.white, fontSize: 14)),
+              ]),
+            )
+          else
+            ...poisons.map((x) => _poisonCard(x)),
+          const SizedBox(height: 10),
+          const Divider(color: Colors.white24, height: 8),
+          const SizedBox(height: 4),
+          const Text('解毒途径',
+              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 6),
+          _detoxWay('① 静坐休养', '缓慢代谢轻微毒素，高阶仅延缓', 'rest', context),
+          _detoxWay('② 服解毒草药', '解轻微、压制烈性（重复衰减）', 'herb', context),
+          _detoxWay('③ 催动解毒蛊', '主流手段，凡蛊不解道毒', 'use', context),
+          _detoxWay('④ 燃烧寿元逼毒', '永久削寿，失败叠加', 'burnlife', context),
+          _detoxWay('⑤ 以毒攻毒', '失败则毒素叠加', 'poisonattack', context),
+          const SizedBox(height: 6),
+          const Row(children: [
+            Icon(Icons.info_outline, color: Colors.white38, size: 14),
+            SizedBox(width: 4),
+            Expanded(child: Text('凡蛊、草药无法解除道毒；毒素长期不清会留下永久暗伤。',
+                style: TextStyle(color: Colors.white38, fontSize: 11))),
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _poisonCard(PoisonInstance x) {
+    final color = switch (x.rank) {
+      PoisonRank.minor  => const Color(0xFF27AE60),
+      PoisonRank.fierce => const Color(0xFFE67E22),
+      PoisonRank.odd    => const Color(0xFFE74C3C),
+      PoisonRank.dao    => const Color(0xFF9D5CD0),
+    };
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        border: Border.all(color: color, width: 1.2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Icon(Icons.bug_report, color: color, size: 18),
+            const SizedBox(width: 6),
+            Expanded(child: Text('${x.name} [${x.rank.cn}]',
+                style: TextStyle(color: color, fontSize: 15, fontWeight: FontWeight.bold))),
+          ]),
+          const SizedBox(height: 4),
+          Text('威力 ${x.power}　周期 ${x.tickHours}h　下次毒发 ${x.hoursLeft.toStringAsFixed(0)}h 后',
+              style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text('累计毒发 ${x.tickCount} 次　来源：${x.source}',
+              style: const TextStyle(color: Colors.white54, fontSize: 11)),
+        ],
+      ),
+    );
+  }
+
+  Widget _detoxWay(String title, String desc, String cmd, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () {
+          Navigator.pop(context);
+          if (cmd == 'rest' || cmd == 'herb' || cmd == 'use' ||
+              cmd == 'burnlife' || cmd == 'poisonattack') {
+            // 走"祛毒解毒"操作面板统一选择
+            showDetoxActionPanel(context, ctx, initialCmd: cmd);
+          } else {
+            ctx.handle(cmd);
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: _panelItemBg,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: _panelAccent.withOpacity(0.4), width: 1),
+          ),
+          child: Row(children: [
+            const Icon(Icons.healing, color: _panelAccent, size: 18),
+            const SizedBox(width: 8),
+            Expanded(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                Text(desc, style: const TextStyle(color: Colors.white54, fontSize: 11)),
+              ],
+            )),
+            const Icon(Icons.chevron_right, color: Colors.white38, size: 18),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+/// 祛毒操作面板：根据途径选择具体材料/蛊/年数，统一弹窗交互。
+/// 底层仍调 ctx.handle()，不改动引擎。
+Future<void> showDetoxActionPanel(BuildContext context, GameContext ctx,
+    {String? initialCmd}) async {
+  if (ctx.player == null) return;
+  await showDialog(
+    context: context,
+    builder: (c) => _DetoxActionDialog(ctx: ctx, initialCmd: initialCmd ?? 'herb'),
+  );
+}
+
+class _DetoxActionDialog extends StatefulWidget {
+  final GameContext ctx;
+  final String initialCmd;
+  const _DetoxActionDialog({required this.ctx, required this.initialCmd});
+  @override
+  State<_DetoxActionDialog> createState() => _DetoxActionDialogState();
+}
+
+class _DetoxActionDialogState extends State<_DetoxActionDialog> {
+  late String _cmd;
+
+  @override
+  void initState() {
+    super.initState();
+    _cmd = widget.initialCmd;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.ctx.player!;
+    return AlertDialog(
+      backgroundColor: _panelBg,
+      title: const Text('祛毒解毒', style: TextStyle(color: Colors.white, fontSize: 17)),
+      contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 途径切换
+            Wrap(spacing: 6, runSpacing: 6, children: [
+              _chip('herb', '解毒草药', _cmd == 'herb'),
+              _chip('use', '解毒蛊', _cmd == 'use'),
+              _chip('burnlife', '燃烧寿元', _cmd == 'burnlife'),
+              _chip('poisonattack', '以毒攻毒', _cmd == 'poisonattack'),
+            ]),
+            const SizedBox(height: 12),
+            _buildBody(p),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('取消')),
+      ],
+    );
+  }
+
+  Widget _chip(String cmd, String label, bool active) {
+    return ChoiceChip(
+      label: Text(label, style: TextStyle(color: active ? Colors.white : Colors.white70, fontSize: 12)),
+      selected: active,
+      selectedColor: _panelAccent,
+      backgroundColor: _panelItemBg,
+      onSelected: (_) => setState(() => _cmd = cmd),
+    );
+  }
+
+  Widget _buildBody(p) {
+    switch (_cmd) {
+      case 'herb':
+        return _herbList(p);
+      case 'use':
+        return _detoxGuList(p);
+      case 'burnlife':
+        return _burnLifeInput(p);
+      case 'poisonattack':
+        return _poisonAttackList(p);
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  // ---- 解毒草药列表 ----
+  Widget _herbList(p) {
+    final herbs = <MapEntry<String, int>>[];
+    for (final it in p.inventory) {
+      final (n, c) = MatParser.parse(it);
+      // 识别解毒草药：青茅草、银针花、解毒散
+      if (['青茅草', '银针花', '解毒散'].contains(n)) {
+        herbs.add(MapEntry(n, c));
+      }
+    }
+    if (herbs.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Text('背包无解毒草药。可向老槐翁购入青茅草、银针花、解毒散。',
+            style: TextStyle(color: Colors.white54, fontSize: 12)),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('选择草药服用（重复使用效果衰减）：',
+            style: TextStyle(color: Colors.white, fontSize: 13)),
+        const SizedBox(height: 6),
+        ...herbs.map((e) => _actionRow(e.key, 'x${e.value}', () {
+          widget.ctx.handle('herb ${e.key}');
+          Navigator.pop(context);
+        })),
+      ],
+    );
+  }
+
+  // ---- 解毒蛊列表 ----
+  Widget _detoxGuList(p) {
+    final gus = p.guInSlot.where((g) =>
+        g.combat['type'] == 'detox' && g.durability > 0).toList();
+    if (gus.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Text('空窍中无可用解毒蛊。可通过炼蛊或捕捉获得。',
+            style: TextStyle(color: Colors.white54, fontSize: 12)),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('选择解毒蛊催动：',
+            style: TextStyle(color: Colors.white, fontSize: 13)),
+        const SizedBox(height: 6),
+        ...gus.map((g) => _actionRow(g.name, '${g.rank}转 耐久${g.durability}/${g.durabilityMax}', () {
+          widget.ctx.handle('use ${g.instId}');
+          Navigator.pop(context);
+        })),
+      ],
+    );
+  }
+
+  // ---- 燃烧寿元输入 ----
+  Widget _burnLifeInput(p) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('当前寿元：${p.lifeLeft.toStringAsFixed(1)} 年',
+            style: const TextStyle(color: Colors.white, fontSize: 13)),
+        const SizedBox(height: 4),
+        const Text('燃烧寿元强行逼毒，永久削减寿元，失败则毒素叠加。建议留有余寿。',
+            style: TextStyle(color: Colors.white54, fontSize: 11)),
+        const SizedBox(height: 8),
+        Wrap(spacing: 6, runSpacing: 6, children: [
+          _actionChip('燃烧 2 年', () {
+            widget.ctx.handle('burnlife 2');
+            Navigator.pop(context);
+          }),
+          _actionChip('燃烧 5 年', () {
+            widget.ctx.handle('burnlife 5');
+            Navigator.pop(context);
+          }),
+          _actionChip('燃烧 10 年', () {
+            widget.ctx.handle('burnlife 10');
+            Navigator.pop(context);
+          }),
+        ]),
+      ],
+    );
+  }
+
+  // ---- 以毒攻毒材料列表 ----
+  Widget _poisonAttackList(p) {
+    final attackMats = <MapEntry<String, int>>[];
+    for (final it in p.inventory) {
+      final (n, c) = MatParser.parse(it);
+      if (['毒囊', '蛇蜕', '黑莲花瓣'].contains(n)) {
+        attackMats.add(MapEntry(n, c));
+      }
+    }
+    if (attackMats.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Text('背包无可用于攻毒的毒物（毒囊/蛇蜕/黑莲花瓣）。',
+            style: TextStyle(color: Colors.white54, fontSize: 12)),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('选择毒物以毒攻毒（失败则该毒叠加于身）：',
+            style: TextStyle(color: Colors.white, fontSize: 13)),
+        const SizedBox(height: 6),
+        ...attackMats.map((e) => _actionRow(e.key, 'x${e.value}', () {
+          widget.ctx.handle('poisonattack ${e.key}');
+          Navigator.pop(context);
+        })),
+      ],
+    );
+  }
+
+  Widget _actionRow(String title, String sub, VoidCallback onTap) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: _panelItemBg,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: _panelAccent.withOpacity(0.4), width: 1),
+          ),
+          child: Row(children: [
+            Expanded(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                Text(sub, style: const TextStyle(color: Colors.white54, fontSize: 11)),
+              ],
+            )),
+            const Icon(Icons.chevron_right, color: Colors.white38, size: 18),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget _actionChip(String label, VoidCallback onTap) {
+    return ActionChip(
+      label: Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
+      backgroundColor: _panelAccent,
+      onPressed: onTap,
     );
   }
 }

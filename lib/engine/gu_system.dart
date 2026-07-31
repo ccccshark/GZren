@@ -6,6 +6,7 @@ import 'package:gzren/data_model/recipe_model.dart';
 import 'package:gzren/data_model/player_model.dart';
 import 'package:gzren/data_model/scene_model.dart';
 import 'player_core.dart' show levelRank;
+import 'poison_system.dart' show PoisonSystem;
 
 final _rng = Random();
 
@@ -293,6 +294,14 @@ List<String> useGu(Player p, String guName) {
       p.physique = min(p.physique + power, 200);
       p.healInjure('轻伤');
       log.add('你催动 ${target.name}，体魄恢复 $power。');
+      break;
+    case 'detox':
+      // 解毒蛊（主流解毒手段）：低阶(rank<=2)仅解 fierce；中阶(rank 3-4)可解 odd；高阶(rank>=5)可解 dao
+      // 强力解毒蛊(rank>=3)催动会消耗气血真元。凡蛊绝对无法解道毒。
+      final detoxRank = target.rank;
+      final detoxLogs = PoisonSystem.detoxByGu(p, detoxRank, power);
+      log.add('你催动 ${target.name}，蛊力游走经脉，搜刮毒素……');
+      log.addAll(detoxLogs);
       break;
     case 'extend_life':
       p.lifeLeft = min(p.lifeMax, p.lifeLeft + 30);

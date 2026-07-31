@@ -7,6 +7,8 @@ import 'package:gzren/data_model/gu_model.dart';
 import 'package:gzren/data_model/npc_model.dart';
 import 'gu_system.dart' show makeGuInstance;
 import 'player_core.dart' show levelRank;
+import 'poison_system.dart' show PoisonSystem;
+import '../data_model/poison_model.dart' show PoisonRank;
 
 class CombatEngine {
   final Map<String, GuTemplate> guList;
@@ -158,7 +160,20 @@ class CombatEngine {
     var msg = '${npc.name} 催动 ${gu.name}，对你造成 $realDmg 点伤害！';
     if (isPoison) {
       msg += '（你中毒了！）';
-      if (!p.injure.contains('毒伤')) p.addInjure('毒伤');
+      // 接入【毒素中毒系统】：根据攻击蛊威力注入对应等级毒素。
+      // 蛊 rank<=2 → 轻微毒素；rank 3-4 → 烈性毒素；rank>=5 → 奇毒。
+      final guRank = gu.rank;
+      final pRank = guRank <= 2 ? PoisonRank.minor
+          : (guRank <= 4 ? PoisonRank.fierce : PoisonRank.odd);
+      final pPower = ((gu.combat['power'] as num? ?? 10).toDouble() * 0.5).toInt().clamp(2, 30);
+      PoisonSystem.applyPoison(p,
+        pid: 'combat_${npc.nid}_${gu.gid}',
+        name: '${gu.name}之毒',
+        rank: pRank,
+        power: pPower,
+        tickHours: 8,
+        source: '${npc.name} 战斗命中',
+      );
     }
     s.log.add(msg);
   }

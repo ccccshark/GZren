@@ -3,6 +3,7 @@
 import 'dart:math' show max;
 import 'package:gzren/data_model/player_model.dart';
 import 'player_core.dart' show levelRank, daoConflictDamage;
+import 'poison_system.dart' show PoisonSystem;
 
 const double hoursPerYear = 1440.0;
 
@@ -29,10 +30,25 @@ class WorldTimer {
     final events = <String>[];
     p.worldTime += hours;
 
+    // 毒素周期性发作（接入【毒素中毒系统】，先于寿元流逝结算）
+    // 这样毒发产生的 '暗伤' 标记可在本次寿元流逝时加速折寿。
+    final poisonLogs = PoisonSystem.tick(p, hours);
+    for (final l in poisonLogs) {
+      log.add(l);
+    }
+    // 毒发致死兜底
+    if (!p.alive) return events;
+    if (p.physique <= 0 && p.lifeLeft > 0) {
+      p.alive = false;
+      log.add('【毒发身亡】你因毒素发作气血枯竭，魂归天地……');
+      return events;
+    }
+
     // 自然寿元流逝
     double years = (hours / hoursPerYear) * accel;
     if (p.injure.contains('魂伤')) years *= 1.5;
     if (p.injure.contains('空窍损伤')) years *= 1.3;
+    if (p.injure.contains('暗伤')) years *= 1.2; // 长期中毒留下的永久暗伤加速折寿
     if (years > 0) {
       p.lifeLeft -= years;
       if (p.lifeLeft <= 0) {

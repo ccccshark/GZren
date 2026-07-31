@@ -14,7 +14,10 @@
     "星砂": {"mid": "m012", "rarity": 3, "desc": "陨星坠地留下的砂粒，星道蛊材", "price": 25},
     "寿桃": {"mid": "m013", "rarity": 4, "desc": "传说延寿的灵桃，寿道奇珍", "price": 100},
     "黑莲花瓣": {"mid": "m014", "rarity": 4, "desc": "黑莲一片花瓣，魔道至宝", "price": 80},
-    "原石": {"mid": "m015", "rarity": 2, "desc": "未雕琢的蛊材原石，可能含未知蛊虫", "price": 15}
+    "原石": {"mid": "m015", "rarity": 2, "desc": "未雕琢的蛊材原石，可能含未知蛊虫", "price": 15},
+    "青茅草": {"mid": "m016", "rarity": 1, "desc": "青茅山常见的解毒草药，可解轻微毒素，压制烈性毒素", "price": 4, "effect": {"type": "detox", "power": 6}},
+    "银针花": {"mid": "m017", "rarity": 2, "desc": "银色针状花瓣，药力强于青茅草，对烈性毒素有压制之效", "price": 12, "effect": {"type": "detox", "power": 14}},
+    "解毒散": {"mid": "m018", "rarity": 3, "desc": "古方调配的解毒散，药力雄浑，对烈性毒素有奇效（凡药不可解奇毒/道毒）", "price": 30, "effect": {"type": "detox", "power": 25}}
   },
   "ores": {
     "原石": {"drop_gu_rank_max": 2, "drop_rate": 0.25}

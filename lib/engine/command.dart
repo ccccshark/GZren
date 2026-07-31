@@ -17,6 +17,8 @@ import 'world_timer.dart' show WorldTimer, actionHours;
 import 'npc_ai.dart' show NPCAI, spawnNpcs, npcsInRoom;
 import 'combat.dart' show CombatEngine, CombatResult, CombatStatus, TribulationResult;
 import 'save_system.dart' as sv;
+import 'poison_system.dart' show PoisonSystem;
+import '../data_model/poison_model.dart' show PoisonStore, PoisonRank;
 
 enum MsgType { system, scene, combat, fortune, danger, gu }
 
@@ -118,6 +120,18 @@ class GameContext extends ChangeNotifier {
     // 空窍受损（slotBonus < 0 视为受损；原引擎死亡惩罚会 slotMax-=1，此处用 flags 标记）
     if (p.flags['slot_damaged'] == true) {
       w.add('空窍受创：蛊槽上限受损，影响装备蛊虫数量。');
+    }
+    // 中毒预警（接入【毒素中毒系统】）
+    final poisons = PoisonStore.list(p);
+    if (poisons.isNotEmpty) {
+      final hasDao = poisons.any((x) => x.rank == PoisonRank.dao);
+      final hasOdd = poisons.any((x) => x.rank == PoisonRank.odd);
+      final hasFierce = poisons.any((x) => x.rank == PoisonRank.fierce);
+      final sev = hasDao ? '道毒缠身，危及道基'
+          : (hasOdd ? '奇毒攻心，寻常草药蛊虫难解'
+          : (hasFierce ? '烈性毒素发作中' : '轻微毒素入体'));
+      w.add('中毒状态：${poisons.map((x) => x.name).join("、")}（$sev）。'
+          '可静坐代谢/服解毒草药/催动解毒蛊/燃烧寿元逼毒。');
     }
     return w;
   }
@@ -289,7 +303,11 @@ class GameContext extends ChangeNotifier {
     final tlog = <String>[];
     final ev = worldTimer.advance(player!, hours, tlog);
     for (final l in tlog) {
-      out(l, l.contains('劫') || l.contains('耗尽') ? MsgType.danger : MsgType.system);
+      // 毒发/寿元耗尽/劫数 用 danger（橙）色突出
+      final danger = l.contains('劫') || l.contains('耗尽')
+          || l.contains('毒发') || l.contains('毒解') || l.contains('暗伤')
+          || l.contains('祛毒') || l.contains('逼毒') || l.contains('药到');
+      out(l, danger ? MsgType.danger : MsgType.system);
     }
     if (trigger != null) _maybeRandomEvent(trigger);
     npcAi.tick(npcs, player!, rooms, tlog, worldTimer, allowAmbush: allowAmbush);
@@ -338,7 +356,35 @@ class GameContext extends ChangeNotifier {
     if (eff['soul_power'] != null) p.soulPower = (p.soulPower + (eff['soul_power'] as num)).clamp(1, 9999).toInt();
     if (eff['life_left'] != null) p.lifeLeft = dmax(0, p.lifeLeft + (eff['life_left'] as num).toDouble());
     if (eff['luck'] != null) p.luck = imax(0, p.luck + (eff['luck'] as int));
-    if (eff['injure'] != null) p.addInjure(eff['injure'] as String);
+    if (eff['injure'] != null) {
+      final inj = eff['injure'] as String;
+      p.addInjure(inj);
+      // 联动【毒素中毒系统】：若事件添加 '毒伤'，同时注入一层轻微毒素。
+      if (inj == '毒伤' && !PoisonStore.hasAny(p)) {
+        PoisonSystem.applyPoison(p,
+          pid: 'event_${ev['eid']}_poison',
+          name: '瘴气之毒',
+          rank: PoisonRank.minor,
+          power: 4,
+          tickHours: 12,
+          source: '随机事件 ${ev['name']}',
+        );
+      }
+    }
+    // 接入【毒素中毒系统】：effect.poison 字段直接注入毒素。
+    if (eff['poison'] != null) {
+      final pj = eff['poison'] as Map<String, dynamic>;
+      PoisonSystem.applyPoison(p,
+        pid: pj['pid'] ?? 'event_${ev['eid']}_poison',
+        name: pj['name'] ?? '瘴气之毒',
+        rank: PoisonRank.fromName(pj['rank'] as String?),
+        power: (pj['power'] as num? ?? 5).toInt(),
+        tickHours: (pj['tick_hours'] as num? ?? 12).toInt(),
+        durationHours: (pj['duration_hours'] as num?)?.toDouble(),
+        source: '随机事件 ${ev['name']}',
+      );
+      out('  ⚠ 你中毒了：${pj['name'] ?? '瘴气之毒'}！', MsgType.danger);
+    }
     if (eff['dao_mark'] != null) {
       final dm = eff['dao_mark'] as Map<String, dynamic>;
       dm.forEach((k, v) => p.addDaoMark(k, (v as num).toDouble()));
@@ -410,6 +456,11 @@ class GameContext extends ChangeNotifier {
       case 'attack': doAttack(args); break;
       case 'rest': doRest(); break;
       case 'gather': doGather(); break;
+      // 接入【毒素中毒系统】解毒指令
+      case 'herb': case '服草药': case '解毒草药': doConsumeHerb(args); break;
+      case 'burnlife': case '燃烧寿元': case '逼毒': doBurnLife(args); break;
+      case 'poisonattack': case '以毒攻毒': doPoisonAttack(args); break;
+      case 'detox': case '祛毒': case '解毒': doDetoxHelp(); break;
       case 'flee': out('你并未身处战斗，无需逃亡。', MsgType.scene); break;
       case 'save': doSave(args); break;
       case 'load': doLoad(args); break;
@@ -474,6 +525,17 @@ class GameContext extends ChangeNotifier {
       out('  道痕：${p.daoMark.entries.map((e) => '${e.key}:${e.value.toInt()}').join('、')}', MsgType.gu);
     }
     out('  伤势：${p.injure.isEmpty ? '无' : p.injure.join('、')}', p.injure.isEmpty ? MsgType.system : MsgType.danger);
+    // 接入【毒素中毒系统】毒素详情
+    final poisons = PoisonStore.list(p);
+    if (poisons.isEmpty) {
+      out('  毒素：无', MsgType.system);
+    } else {
+      out('  毒素（共${poisons.length}种）：', MsgType.danger);
+      for (final x in poisons) {
+        out('    · ${x.brief()}', MsgType.danger);
+      }
+      out('  解毒：herb [草药名] / use [解毒蛊] / burnlife [年数] / poisonattack [毒物]', MsgType.system);
+    }
     out('  劫数：${p.tribulation.toInt()}（积满触发天劫）', MsgType.scene);
     out('  杀戮：${p.kills}　炼蛊造诣：${p.refineProficiency.toInt()}', MsgType.system);
     out('  世界时间：已过 ${p.worldTime.toInt()} 小时（约 ${(p.worldTime / 1440).toStringAsFixed(2)} 年）', MsgType.system);
@@ -702,6 +764,9 @@ class GameContext extends ChangeNotifier {
     p.physique = imin(100 + levelRank(p.level) * 20, p.physique + 5);
     if (p.injure.contains('轻伤') && DateTime.now().millisecond % 2 == 0) p.healInjure('轻伤');
     out('你静坐修炼，恢复 $recover 真元，体魄略有恢复。', MsgType.fortune);
+    // 接入【毒素中毒系统】途径①：静坐可缓慢代谢轻微毒素，高阶仅延缓。
+    final detoxLogs = PoisonSystem.detoxByRest(p, actionHours['rest']!);
+    for (final l in detoxLogs) out(l, l.contains('成功') || l.contains('化解') ? MsgType.fortune : MsgType.system);
     tick(actionHours['rest']!, trigger: 'rest', allowAmbush: true);
   }
 
@@ -717,6 +782,132 @@ class GameContext extends ChangeNotifier {
       out('额外发现原石x1！原石是通用货币。', MsgType.fortune);
     }
     tick(actionHours['gather']!, trigger: 'gather', allowAmbush: true);
+  }
+
+  // ===================== 【毒素中毒系统】解毒指令 =====================
+
+  /// 解毒帮助：列出当前毒素与可用解毒手段。
+  void doDetoxHelp() {
+    final p = player!;
+    final poisons = PoisonStore.list(p);
+    out('═══ 祛毒指南 ═══', MsgType.fortune);
+    if (poisons.isEmpty) {
+      out('  你体内无毒，一身轻松。', MsgType.system);
+    } else {
+      out('  当前中毒（共${poisons.length}种）：', MsgType.danger);
+      for (final x in poisons) out('    · ${x.brief()}', MsgType.danger);
+    }
+    out('  解毒途径：', MsgType.system);
+    out('    ① rest 静坐休养 —— 缓慢代谢轻微毒素，高阶仅延缓', MsgType.system);
+    out('    ② herb [草药名] —— 解毒草药，解轻微压制烈性（重复效果衰减）', MsgType.system);
+    out('    ③ use [解毒蛊名] —— 解毒蛊虫，主流手段（凡蛊不解道毒）', MsgType.system);
+    out('    ④ burnlife [年数] —— 燃烧寿元强行逼毒（永久削寿，失败叠加）', MsgType.system);
+    out('    ⑤ poisonattack [毒物名] —— 以毒攻毒（失败毒素叠加）', MsgType.system);
+    out('  可向老槐翁购入解毒草药（青茅草、银针花、解毒散）。', MsgType.scene);
+  }
+
+  /// 服用解毒草药。读取 material.json 的 effect.detox 字段判定药力。
+  /// 凡蛊/草药硬限制：无法解除奇毒与道毒。
+  void doConsumeHerb(List<String> args) {
+    final p = player!;
+    if (args.isEmpty) {
+      out('用法：herb [草药名]（如 青茅草/银针花/解毒散）', MsgType.danger);
+      out('可服用的解毒草药需从老槐翁处购入。', MsgType.system);
+      return;
+    }
+    final name = args.join(' ');
+    if (!gu.hasMaterial(p, name, 1)) {
+      out('背包中没有 $name。', MsgType.danger);
+      return;
+    }
+    // 读取 material.json 的 effect 字段
+    final matInfo = (materials['materials'] ?? {}) as Map;
+    final info = (matInfo[name] ?? {}) as Map;
+    final effect = info['effect'];
+    if (effect == null || (effect is Map && effect['type'] != 'detox')) {
+      out('$name 并非解毒草药，无法服用解毒。', MsgType.danger);
+      return;
+    }
+    final herbPower = ((effect as Map)['power'] ?? 5) as num;
+    gu.consumeMaterial(p, name, 1);
+    final uses = PoisonSystem.herbUsesToday(p);
+    final logs = PoisonSystem.detoxByHerb(p, herbPower.toInt(), usesToday: uses);
+    PoisonSystem.incHerbUses(p);
+    for (final l in logs) {
+      out(l, l.contains('成功') || l.contains('药到') || l.contains('化解') ? MsgType.fortune : MsgType.system);
+    }
+    tick(actionHours['use_gu']!, allowAmbush: true);
+  }
+
+  /// 燃烧寿元强行逼毒（高危手段，永久削减寿元，失败毒素叠加）。
+  void doBurnLife(List<String> args) {
+    final p = player!;
+    double years;
+    if (args.isEmpty) {
+      years = 2.0; // 默认燃烧 2 年
+    } else {
+      final v = double.tryParse(args[0]);
+      if (v == null || v <= 0) {
+        out('用法：burnlife [年数]（如 burnlife 3，默认 2 年）', MsgType.danger);
+        return;
+      }
+      years = v;
+    }
+    if (!PoisonStore.hasAny(p)) {
+      out('你体内无毒，何须燃烧寿元逼毒。', MsgType.danger);
+      return;
+    }
+    if (p.lifeLeft <= years + 1) {
+      out('寿元仅剩 ${p.lifeLeft.toStringAsFixed(1)} 年，不敢燃烧 $years 年，恐当场陨落。', MsgType.danger);
+      return;
+    }
+    final logs = PoisonSystem.detoxByBurnLife(p, years);
+    for (final l in logs) {
+      out(l, l.contains('成功') ? MsgType.fortune
+          : (l.contains('失败') || l.contains('反扑') ? MsgType.danger : MsgType.system));
+    }
+    tick(actionHours['rest']!, allowAmbush: true);
+  }
+
+  /// 以毒攻毒：使用一种毒素材料/蛊去攻体内最高阶毒素，失败则叠加。
+  /// 仅支持持有"毒囊""蛇蜕""黑莲花瓣"三种毒素材料，或持有毒道蛊虫。
+  void doPoisonAttack(List<String> args) {
+    final p = player!;
+    if (args.isEmpty) {
+      out('用法：poisonattack [毒物名]（如 毒囊/蛇蜕/黑莲花瓣）', MsgType.danger);
+      return;
+    }
+    final name = args.join(' ');
+    if (!gu.hasMaterial(p, name, 1)) {
+      out('背包中没有 $name，无法以毒攻毒。', MsgType.danger);
+      return;
+    }
+    // 内置毒物映射表（不依赖 material.json 扩展字段，保持兼容）
+    final (pName, pRank, pPower) = switch (name) {
+      '毒囊'       => ('毒囊之毒', PoisonRank.fierce, 15),
+      '蛇蜕'       => ('蛇瘴之毒', PoisonRank.minor, 8),
+      '黑莲花瓣'   => ('黑莲奇毒', PoisonRank.odd, 25),
+      _            => ('', PoisonRank.minor, 0),
+    };
+    if (pPower == 0) {
+      out('$name 不含可用之毒，无法以毒攻毒。', MsgType.danger);
+      return;
+    }
+    if (!PoisonStore.hasAny(p)) {
+      out('你体内无毒，以毒攻毒多此一举。', MsgType.danger);
+      return;
+    }
+    gu.consumeMaterial(p, name, 1);
+    final logs = PoisonSystem.detoxByPoisonAttack(p,
+      attackPid: 'attack_$name',
+      attackName: pName,
+      attackRank: pRank,
+      poisonPower: pPower,
+    );
+    for (final l in logs) {
+      out(l, l.contains('成功') ? MsgType.fortune : MsgType.danger);
+    }
+    tick(actionHours['use_gu']!, allowAmbush: true);
   }
 
   void doSave(List<String> args) {

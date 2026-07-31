@@ -7,12 +7,13 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 import '../engine/command.dart';
 import '../data_model/npc_model.dart';
+import '../data_model/poison_model.dart' show PoisonStore, PoisonRank;
 import 'action_dialogs.dart';
 import 'combat_ui.dart';
 import 'save_menu.dart';
 import 'save_code_dialog.dart';
 import 'help_page.dart';
-import 'panels.dart'; // 第一阶段新增面板集合（地图/快捷栏/预警/背包分类/新手引导）
+import 'panels.dart'; // 第一阶段新增面板集合（地图/快捷栏/预警/背包分类/新手引导 + 毒素系统面板）
 
 class MainGamePage extends StatefulWidget {
   final GameContext ctx;
@@ -125,6 +126,48 @@ class _MainGamePageState extends State<MainGamePage> {
     );
   }
 
+  /// 接入【毒素中毒系统】常驻中毒状态栏：显示中毒标签 + 严重度颜色，点击展开详情。
+  Widget _poisonStatusBar() {
+    final p = ctx.player!;
+    final poisons = PoisonStore.list(p);
+    final hasDao = poisons.any((x) => x.rank == PoisonRank.dao);
+    final hasOdd = poisons.any((x) => x.rank == PoisonRank.odd);
+    final hasFierce = poisons.any((x) => x.rank == PoisonRank.fierce);
+    final color = hasDao ? const Color(0xFF9D5CD0)
+        : (hasOdd ? const Color(0xFFE74C3C)
+        : (hasFierce ? const Color(0xFFE67E22) : const Color(0xFF27AE60)));
+    final severity = hasDao ? '道毒缠身'
+        : (hasOdd ? '奇毒攻心'
+        : (hasFierce ? '烈性毒素' : '轻微中毒'));
+    final nextTick = poisons.map((x) => x.hoursLeft).reduce((a, b) => a < b ? a : b);
+    return Material(
+      color: color.withOpacity(0.18),
+      child: InkWell(
+        onTap: () => showPoisonDetailPanel(context, ctx),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: color.withOpacity(0.5), width: 1)),
+          ),
+          child: Row(children: [
+            Icon(Icons.science, color: color, size: 16),
+            const SizedBox(width: 6),
+            Text('[$severity] 中${poisons.length}种毒',
+                style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold)),
+            const SizedBox(width: 8),
+            Expanded(child: Text(
+              '${poisons.map((x) => x.name).join("、")}　下次毒发 ${nextTick.toStringAsFixed(0)}h 后',
+              style: const TextStyle(color: Colors.white70, fontSize: 11),
+              maxLines: 1, overflow: TextOverflow.ellipsis,
+            )),
+            const Icon(Icons.chevron_right, color: Colors.white38, size: 16),
+          ]),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // 战斗/渡劫弹窗
@@ -195,6 +238,9 @@ class _MainGamePageState extends State<MainGamePage> {
       ),
       body: Column(
         children: [
+          // 接入【毒素中毒系统】状态栏：仅中毒时显示常驻标签，点击展开毒素详情面板。
+          if (ctx.player != null && PoisonStore.hasAny(ctx.player!))
+            _poisonStatusBar(),
           // 上方文字输出区（NPC/野生蛊行可点击）
           Expanded(
             flex: 5,
@@ -446,6 +492,16 @@ class _MainGamePageState extends State<MainGamePage> {
                     if (ws.isEmpty) ctx.out('当前状态良好，无需预警。', MsgType.fortune);
                     else showStatusWarningDialog(context, ctx);
                   }),
+                  _moreBtn(c, '祛毒解毒', Icons.healing, () {
+                    // 接入【毒素中毒系统】统一操作面板
+                    final ps = PoisonStore.list(ctx.player!);
+                    if (ps.isEmpty) {
+                      ctx.out('你体内无毒，无需祛毒。', MsgType.fortune);
+                    } else {
+                      showDetoxActionPanel(context, ctx, initialCmd: 'herb');
+                    }
+                  }),
+                  _moreBtn(c, '毒素详情', Icons.science, () => showPoisonDetailPanel(context, ctx)),
                   _moreBtn(c, '新手引导', Icons.school, () => showTutorialGuide(context, ctx, forceShow: true)),
                   _moreBtn(c, '存读档', Icons.save, _showSaveMenu),
                   _moreBtn(c, '存档码备份', Icons.qr_code, () => showSaveCodeBackup(context, ctx)),

@@ -159,6 +159,22 @@
       "desc": "九节竹虫化蛊，攻防兼备的中阶蛊",
       "evolve_gid": "", "habitat": ["竹林深处"],
       "combat": {"type": "attack", "power": 30}
+    },
+    {
+      "gid": "g021", "name": "青蒲蛊", "rank": 2, "school": "气道",
+      "cost_zhen": 11, "cost_life": 0, "durability_max": 110,
+      "feed_material": ["青茅草根", "青茅草"], "side_effect": "催动时微耗体魄",
+      "desc": "低阶解毒蛊，吞噬体内轻微与烈性毒素，凡蛊不解奇毒道毒",
+      "evolve_gid": "g022", "habitat": ["沼泽", "湿地"],
+      "combat": {"type": "detox", "power": 18}
+    },
+    {
+      "gid": "g022", "name": "玉蟾蛊", "rank": 4, "school": "毒道",
+      "cost_zhen": 25, "cost_life": 0, "durability_max": 90,
+      "feed_material": ["毒囊", "银针花", "解毒散"], "side_effect": "强力催动反噬气血真元",
+      "desc": "中阶解毒蛊，以毒攻毒之集大成者，可解奇毒，对道毒仍无能为力",
+      "evolve_gid": "", "habitat": ["毒林深处", "禁地"],
+      "combat": {"type": "detox", "power": 40}
     }
   ],
   "evolve_rules": {
