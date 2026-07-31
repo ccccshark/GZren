@@ -123,6 +123,7 @@ void applyDeathPenalty(Player p, List<String> log) {
   if (Random().nextDouble() < 0.4 && p.slotMax > 1) {
     p.slotMax -= 1;
     slotDamaged = true;
+    p.flags['slot_damaged'] = true; // 标记空窍受损，供 UI 状态预警读取（旧存档无此键→不预警，兼容）
   }
 
   log.add('【死亡惩罚】你险死还生，付出惨痛代价：');

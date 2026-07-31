@@ -2,8 +2,10 @@
 // 指令解析与分发 + 游戏全局上下文（ChangeNotifier）。
 // 实现：移动/场景、角色状态、蛊虫操作、NPC交互、生存行为、系统指令、境界突破。
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 import 'package:gzren/data_model/player_model.dart';
 import 'package:gzren/data_model/gu_model.dart';
 import 'package:gzren/data_model/scene_model.dart';
@@ -64,6 +66,62 @@ class GameContext extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ---------- 自定义蛊虫快捷栏（存于 player.flags，旧存档 flags 为空→无快捷栏，100%兼容） ----------
+  /// 读取快捷栏蛊名列表（最多 3 个）。flags 无此键时返回空列表。
+  List<String> get quickBar {
+    final raw = player?.flags['quick_bar'];
+    if (raw is List) return raw.map((e) => e.toString()).toList();
+    return [];
+  }
+
+  /// 设置快捷栏（最多 3 个蛊名）。越界自动截断。
+  void setQuickBar(List<String> names) {
+    if (player == null) return;
+    player!.flags['quick_bar'] = names.take(3).toList();
+    notifyListeners();
+  }
+
+  // ---------- 新手引导进度（存于 player.flags） ----------
+  /// 引导步骤完成集合。flags 无此键时返回空集。
+  Set<String> get tutorialDone {
+    final raw = player?.flags['tutorial_done'];
+    if (raw is List) return raw.map((e) => e.toString()).toSet();
+    return {};
+  }
+
+  void markTutorialDone(String step) {
+    if (player == null) return;
+    final done = tutorialDone..add(step);
+    player!.flags['tutorial_done'] = done.toList();
+    notifyListeners();
+  }
+
+  // ---------- 状态预警计算（只读，不改游戏状态） ----------
+  /// 返回当前需要主动提示的预警列表。空列表表示状态健康。
+  /// 用于 UI 主动弹窗：寿元低 / 真元不足 / 有伤势 / 空窍受损(slotBonus<0 或 slotMax 受损标志)。
+  List<String> warnings() {
+    if (player == null) return [];
+    final p = player!;
+    final w = <String>[];
+    // 寿元低于最大值 20%
+    if (p.lifeMax > 0 && p.lifeLeft / p.lifeMax < 0.2) {
+      w.add('寿元告急：仅剩 ${p.lifeLeft.toStringAsFixed(0)} 年（不足两成），请尽快突破或服用寿元蛊。');
+    }
+    // 真元不足（低于 20%）
+    if (p.trueyuanMax > 0 && p.trueyuan / p.trueyuanMax < 0.2) {
+      w.add('真元不足：仅剩 ${p.trueyuan}/${p.trueyuanMax}，静坐恢复或避免催动高消耗蛊虫。');
+    }
+    // 有伤势
+    if (p.injure.isNotEmpty) {
+      w.add('身负伤势：${p.injure.join("、")}，影响战斗与行动，建议疗伤。');
+    }
+    // 空窍受损（slotBonus < 0 视为受损；原引擎死亡惩罚会 slotMax-=1，此处用 flags 标记）
+    if (p.flags['slot_damaged'] == true) {
+      w.add('空窍受创：蛊槽上限受损，影响装备蛊虫数量。');
+    }
+    return w;
+  }
+
   // 死亡回滚快照
   Map<String, dynamic>? _snapshot;
 
@@ -115,6 +173,44 @@ class GameContext extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 将当前游戏日志导出为 txt 文件到 APP 私有目录，返回文件路径。
+  /// 日志按类型加前缀标签，便于离线查阅。仅写入本地，无网络。
+  Future<String?> saveLogToFile() async {
+    if (log.isEmpty) return null;
+    try {
+      final doc = await _docDir();
+      final stamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.').first;
+      final f = File('${doc.path}/game_log_$stamp.txt');
+      final buf = StringBuffer();
+      buf.writeln('蛊真人单机MUD · 游戏日志');
+      buf.writeln('角色：${player?.name ?? "-"}　导出时间：$stamp');
+      buf.writeln('----------------------------------------');
+      for (final m in log) {
+        buf.writeln('[${_logTag(m.type)}] ${m.text}');
+      }
+      f.writeAsStringSync(buf.toString());
+      return f.path;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<Directory> _docDir() async {
+    final doc = await getApplicationDocumentsDirectory();
+    return doc;
+  }
+
+  String _logTag(MsgType t) {
+    switch (t) {
+      case MsgType.combat: return '战斗';
+      case MsgType.fortune: return '机缘';
+      case MsgType.danger: return '危险';
+      case MsgType.gu: return '蛊';
+      case MsgType.scene: return '场景';
+      case MsgType.system: return '系统';
+    }
+  }
+
   // ---------- 场景/NPC ----------
   Room curRoom() => rooms[player!.location]!;
   List<Npc> npcsInCurRoom() => npcsInRoom(npcs, player!.location);
@@ -127,6 +223,7 @@ class GameContext extends ChangeNotifier {
     p.lifeMax = p.lifeLeft;
     p.inventory = ['探路蛊蛊方', '青茅蛊蛊方', '露水x5', '青茅草根x3', '野草露水x5', '原石x10'];
     p.guBag.add(gu.makeGuInstance('g002', guList));
+    p.flags['need_tutorial'] = true; // 标记需要新手引导（UI 据此自动弹出）
     player = p;
     npcs = spawnNpcs(npcTemplates, rooms);
     takeSnapshot();
