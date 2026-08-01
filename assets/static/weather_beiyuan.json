@@ -1,0 +1,10 @@
+{
+  "region": "北原",
+  "weather_refresh_minute": 120,
+  "weather_list": [
+    {"weather": "晴朗", "weight": 25, "buff": {}, "debuff": {}, "desc": "冬日暖阳，雪原泛金"},
+    {"weather": "飞雪", "weight": 30, "buff": {"冰道": 1.15, "水道": 1.05}, "debuff": {"视界模糊": true}, "desc": "细雪纷飞，冰道蛊虫威能提升"},
+    {"weather": "暴风雪", "weight": 25, "buff": {"冰道": 1.35, "水道": 1.10}, "debuff": {"捕捉成功率": 0.65, "真元大量消耗": true, "视界模糊": true}, "desc": "暴风雪肆虐，冰道蛊虫威能暴涨，野外高危野怪刷新概率上升"},
+    {"weather": "寒夜", "weight": 20, "buff": {"月道": 1.15, "鬼道": 1.10, "冰道": 1.10}, "debuff": {"体魄缓慢消耗": true}, "desc": "入夜寒气刺骨，月道鬼道蛊虫威能提升"}
+  ]
+}

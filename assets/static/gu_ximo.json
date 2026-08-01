@@ -1,0 +1,311 @@
+{
+  "region": "西漠",
+  "gu_list": [
+    {
+      "gid": "g_wind_walk",
+      "name": "风行蛊",
+      "rank": 4,
+      "school": "气道",
+      "cost_zhen": 30,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "风沙琥珀",
+        "沙晶"
+      ],
+      "side_effect": "催动时轻微消耗体魄",
+      "desc": "西漠古蛊师所炼风道奇蛊，御风行沙，破西漠禁制之钥。持有者可于沙暴中如履平地。",
+      "evolve_gid": "",
+      "habitat": [
+        "西漠秘境"
+      ],
+      "combat": {
+        "type": "flee",
+        "power": 0
+      }
+    },
+    {
+      "gid": "g_sand_dodge",
+      "name": "沙遁蛊",
+      "rank": 4,
+      "school": "地道",
+      "cost_zhen": 30,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "沙晶",
+        "盐晶骨"
+      ],
+      "side_effect": "遁行时真元持续消耗",
+      "desc": "西漠古蛊师所炼土道奇蛊，穿沙入地，破西漠禁制之钥。持有者可遁入流沙避祸。",
+      "evolve_gid": "",
+      "habitat": [
+        "西漠秘境"
+      ],
+      "combat": {
+        "type": "flee",
+        "power": 0
+      }
+    },
+    {
+      "gid": "g_sand_worm",
+      "name": "沙虫蛊",
+      "rank": 2,
+      "school": "地道",
+      "cost_zhen": 12,
+      "cost_life": 0,
+      "durability_max": 100,
+      "feed_material": [
+        "沙晶",
+        "兽血"
+      ],
+      "side_effect": "无",
+      "desc": "西漠沙虫炼制而成的土道蛊，专破沙土防御",
+      "evolve_gid": "g_sand_giant",
+      "habitat": [
+        "戈壁"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 18
+      }
+    },
+    {
+      "gid": "g_dust_devil",
+      "name": "风沙蛊",
+      "rank": 3,
+      "school": "风沙道",
+      "cost_zhen": 18,
+      "cost_life": 0,
+      "durability_max": 85,
+      "feed_material": [
+        "风沙琥珀",
+        "旱蜃涎"
+      ],
+      "side_effect": "催动时沙尘迷眼，降低己方视界",
+      "desc": "以戈壁风沙炼制的风沙道蛊，可卷沙成刃伤敌",
+      "evolve_gid": "g_sandstorm_lord",
+      "habitat": [
+        "戈壁深处"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 28
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_salt_crystal",
+      "name": "盐晶蛊",
+      "rank": 3,
+      "school": "土道",
+      "cost_zhen": 16,
+      "cost_life": 0,
+      "durability_max": 120,
+      "feed_material": [
+        "盐晶骨",
+        "沙晶"
+      ],
+      "side_effect": "无",
+      "desc": "盐湖晶盐炼制的土道防御蛊，坚如磐石",
+      "evolve_gid": "",
+      "habitat": [
+        "盐湖"
+      ],
+      "combat": {
+        "type": "defense",
+        "power": 40
+      }
+    },
+    {
+      "gid": "g_mirage",
+      "name": "蜃景蛊",
+      "rank": 4,
+      "school": "气道",
+      "cost_zhen": 28,
+      "cost_life": 0,
+      "durability_max": 70,
+      "feed_material": [
+        "旱蜃涎",
+        "蜃气珠"
+      ],
+      "side_effect": "幻象反噬，魂力受损",
+      "desc": "旱蜃之涎炼制的气道蛊，可造幻象迷敌，亦能于沙暴中显路",
+      "evolve_gid": "",
+      "habitat": [
+        "海市蜃楼"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 38
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_desert_ghost",
+      "name": "沙鬼蛊",
+      "rank": 4,
+      "school": "鬼道",
+      "cost_zhen": 30,
+      "cost_life": 1,
+      "durability_max": 75,
+      "feed_material": [
+        "沙盗铜钱",
+        "盐晶骨"
+      ],
+      "side_effect": "催动消耗寿元",
+      "desc": "沙窟古战场亡魂炼制的鬼道蛊，可吞噬敌魂",
+      "evolve_gid": "",
+      "habitat": [
+        "沙窟深处"
+      ],
+      "combat": {
+        "type": "attack_poison",
+        "power": 42
+      }
+    },
+    {
+      "gid": "g_sand_giant",
+      "name": "沙巨人蛊",
+      "rank": 5,
+      "school": "土道",
+      "cost_zhen": 42,
+      "cost_life": 0,
+      "durability_max": 110,
+      "feed_material": [
+        "沙晶",
+        "盐晶骨",
+        "兽血"
+      ],
+      "side_effect": "体魄过载，移动迟缓",
+      "desc": "沙虫蛊进化的土道至高蛊，聚沙成巨，力大无穷",
+      "evolve_gid": "",
+      "habitat": [
+        "沙漠秘境"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 65
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_sandstorm_lord",
+      "name": "沙暴蛊",
+      "rank": 6,
+      "school": "风沙道",
+      "cost_zhen": 60,
+      "cost_life": 1,
+      "durability_max": 60,
+      "feed_material": [
+        "风沙琥珀",
+        "旱蜃涎",
+        "蜃气珠"
+      ],
+      "side_effect": "催动消耗寿元，反噬剧烈",
+      "desc": "风沙蛊进化的风沙道至高蛊，一念之间可卷起漫天沙暴，西漠至强蛊之一",
+      "evolve_gid": "",
+      "habitat": [
+        "风沙古墓"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 85
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_liusha",
+      "name": "流沙蛊",
+      "rank": 2,
+      "school": "地道",
+      "cost_zhen": 16,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "沙晶",
+        "干枯蛊材"
+      ],
+      "side_effect": "催动时真元持续消耗",
+      "desc": "西漠古蛊师所炼地道奇蛊，可驾驭流沙、穿行沙海。持此蛊者可开启流沙沟壑的流沙古穴秘境入口，亦能于流沙沟壑中安然穿行，不受沙陷吞噬之害。",
+      "evolve_gid": "",
+      "habitat": [
+        "西漠",
+        "流沙"
+      ],
+      "combat": {
+        "type": "flee",
+        "power": 0
+      }
+    },
+    {
+      "gid": "gu_007",
+      "name": "流沙蛊",
+      "rank": 2,
+      "school": "地道",
+      "cost_zhen": 10,
+      "cost_life": 0,
+      "durability_max": 80,
+      "feed_material": [
+        "黄沙精"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "流沙蛊，操控流沙制造陷阱困敌。西漠篇章，土道蛊师常用攻击蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "西漠",
+        "沙地"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 18
+      }
+    },
+    {
+      "gid": "gu_chensha",
+      "name": "沉沙蛊",
+      "rank": 2,
+      "school": "地道",
+      "cost_zhen": 8,
+      "cost_life": 0,
+      "durability_max": 85,
+      "feed_material": [
+        "岩尘"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "沉沙蛊，加重沙土束缚目标行动。西漠篇章，土道辅助困敌蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "西漠",
+        "沙地"
+      ],
+      "combat": {
+        "type": "debuff",
+        "power": 0
+      }
+    },
+    {
+      "gid": "gu_shaxie",
+      "name": "沙蝎蛊",
+      "rank": 2,
+      "school": "毒道",
+      "cost_zhen": 11,
+      "cost_life": 0,
+      "durability_max": 75,
+      "feed_material": [
+        "黄沙精"
+      ],
+      "side_effect": "催动时微量毒素入体",
+      "desc": "沙蝎蛊，毒刺近战袭击，附带毒道侵蚀。西漠篇章，沙漠毒道攻击蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "西漠",
+        "荒漠"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 22
+      }
+    }
+  ]
+}

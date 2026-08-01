@@ -1,0 +1,10 @@
+{
+  "region": "南疆",
+  "weather_refresh_minute": 120,
+  "weather_list": [
+    {"weather": "晴朗", "weight": 40, "buff": {}, "debuff": {}, "desc": "万里晴空，惠风和畅"},
+    {"weather": "小雨", "weight": 25, "buff": {"水道": 1.05}, "debuff": {}, "desc": "细雨蒙蒙，水汽氤氲"},
+    {"weather": "浓雾", "weight": 20, "buff": {"隐匿提升": true}, "debuff": {"捕捉成功率": 0.85}, "desc": "大雾弥漫，视界模糊"},
+    {"weather": "梅雨", "weight": 15, "buff": {"水道": 1.10}, "debuff": {"真元缓慢消耗": true}, "desc": "连绵梅雨，阴湿入骨"}
+  ]
+}

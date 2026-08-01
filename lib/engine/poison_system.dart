@@ -317,4 +317,11 @@ class PoisonSystem {
     final cur = herbUsesToday(p);
     p.flags['herb_uses'] = {'day': day, 'count': cur + 1};
   }
+
+  // ===================== 5. 第二阶段：食物/静座辅助解轻微毒（仅解 minor） =====================
+  /// 由 phase2_core 调用：食物温补、静坐饱食状态辅助解 minor 毒。
+  static List<String> detoxMinorByFoodOnly(Player p, int power) {
+    if (power <= 0) return const [];
+    return PoisonStore.reduce(p, power, maxRank: PoisonRank.minor);
+  }
 }

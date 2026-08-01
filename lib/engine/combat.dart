@@ -9,6 +9,7 @@ import 'gu_system.dart' show makeGuInstance;
 import 'player_core.dart' show levelRank;
 import 'poison_system.dart' show PoisonSystem;
 import '../data_model/poison_model.dart' show PoisonRank;
+import '../data_model/killer_move_model.dart' show KillerMoveStore; // V1.3：战斗内杀招一键释放
 
 class CombatEngine {
   final Map<String, GuTemplate> guList;
@@ -35,22 +36,22 @@ class CombatEngine {
     final p = s.player;
     final npc = s.npc;
     s.round += 1;
-    s.log.add('\n—— 第 ${s.round} 回合 ——');
-    s.log.add('你：体魄 ${p.physique} | 真元 ${p.trueyuan}    敌：${npc.name} 体魄 ${npc.physique}');
+    s.addLog('\n—— 第 ${s.round} 回合 ——');
+    s.addLog('你：体魄 ${p.physique} | 真元 ${p.trueyuan}    敌：${npc.name} 体魄 ${npc.physique}');
 
     bool defending = false;
     final act = action.toLowerCase();
 
     if (act == 'defend' || act == '防御') {
       defending = true;
-      s.log.add('你全力催动防御蛊护体。');
+      s.addLog('你全力催动防御蛊护体。');
     } else if (act == 'flee' || act == '逃亡') {
       if (_tryFlee(p, npc)) {
-        s.log.add('你成功逃离战斗！');
+        s.addLog('你成功逃离战斗！');
         s.status = CombatStatus.flee;
         return s;
       } else {
-        s.log.add('逃亡失败！你承受了敌人的追击。');
+        s.addLog('逃亡失败！你承受了敌人的追击。');
         _npcAttack(s, freeHit: true);
         if (_checkEnd(s)) return s;
       }
@@ -60,15 +61,15 @@ class CombatEngine {
         attackGus = attackGus.where((g) => g.name == guName || g.instId == guName).toList();
       }
       if (attackGus.isEmpty) {
-        s.log.add('你没有可用的攻击蛊！只能防御或逃亡。');
+        s.addLog('你没有可用的攻击蛊！只能防御或逃亡。');
         defending = true;
       } else {
         final gu = attackGus.first;
         if (gu.durability <= 0) {
-          s.log.add('${gu.name} 耐久耗尽，无法催动！');
+          s.addLog('${gu.name} 耐久耗尽，无法催动！');
           defending = true;
         } else if (p.trueyuan < gu.costZhen) {
-          s.log.add('真元不足，无法催动 ${gu.name}！');
+          s.addLog('真元不足，无法催动 ${gu.name}！');
           defending = true;
         } else {
           p.spendTrueyuan(gu.costZhen);
@@ -80,12 +81,58 @@ class CombatEngine {
             s.npcPoison += 1;
             msg += '（附毒）';
           }
-          s.log.add(msg);
+          s.addLog(msg);
           p.addDaoMark(gu.school, 0.5);
         }
       }
+    } else if (act.startsWith('killmove') || act.startsWith('杀招')) {
+      // V1.3 新增【战斗内杀招一键释放】：整套蛊虫组合释放，同流派协同加成。
+      // guName 参数携带杀招名；cast() 消耗真元/耐久并返回综合伤害，此处套用到 NPC。
+      final kmName = guName ?? '';
+      final km = KillerMoveStore.find(p, kmName);
+      if (km == null) {
+        s.addLog('未找到杀招「$kmName」，无法释放。');
+        defending = true;
+      } else {
+        final (kmDmg, kmLogs, backlash) = km.cast(p);
+        for (final l in kmLogs) {
+          s.addLog(l);
+        }
+        if (kmDmg > 0) {
+          // 环境增益套用：场景环境对杀招总威力按主导流派倍率放大
+          final schools = <String, int>{};
+          for (final id in km.guInstIds) {
+            for (final g in p.guInSlot) {
+              if (g.instId == id) {
+                schools[g.school] = (schools[g.school] ?? 0) + 1;
+                break;
+              }
+            }
+          }
+          String? mainSchool;
+          int mainCnt = 0;
+          for (final e in schools.entries) {
+            if (e.value > mainCnt) { mainCnt = e.value; mainSchool = e.key; }
+          }
+          double envMul = 1.0;
+          if (mainSchool != null) {
+            envMul = s.env[mainSchool] ?? 1.0;
+          }
+          final finalDmg = (kmDmg * envMul).toInt();
+          npc.physique = max(0, npc.physique - finalDmg);
+          s.addLog('你对 ${npc.name} 释放杀招【${km.name}】，造成 $finalDmg 点综合伤害！'
+              '${envMul > 1.01 ? "（环境加成×${envMul.toStringAsFixed(2)}）" : ""}');
+        }
+        if (backlash) {
+          s.addLog('【反噬】杀招失控，你体魄受损！');
+          if (p.physique <= 0) {
+            _onLose(s);
+            return s;
+          }
+        }
+      }
     } else {
-      s.log.add('未知战斗指令，默认防御。');
+      s.addLog('未知战斗指令，默认防御。');
       defending = true;
     }
 
@@ -98,12 +145,12 @@ class CombatEngine {
     if (s.npcPoison > 0) {
       final pdmg = s.npcPoison * 2;
       npc.physique = max(0, npc.physique - pdmg);
-      s.log.add('${npc.name} 毒发，掉血 $pdmg。');
+      s.addLog('${npc.name} 毒发，掉血 $pdmg。');
     }
     if (s.playerPoison > 0) {
       final pdmg = s.playerPoison * 2;
       p.physique = max(0, p.physique - pdmg);
-      s.log.add('你毒发，掉血 $pdmg。');
+      s.addLog('你毒发，掉血 $pdmg。');
       if (p.physique <= 0) {
         _onLose(s);
         return s;
@@ -122,7 +169,7 @@ class CombatEngine {
         p.guBag.add(g);
         g.durability = 0;
         p.physique = 1;
-        s.log.add('【替身】${g.name} 替你挡下致命一击后损毁！你勉强存活。');
+        s.addLog('【替身】${g.name} 替你挡下致命一击后损毁！你勉强存活。');
       } else {
         _onLose(s);
         return s;
@@ -136,26 +183,68 @@ class CombatEngine {
   void _npcTurn(CombatResult s) {
     final npc = s.npc;
     final p = s.player;
-    // 低血遁逃
-    if (npc.physique < s.npcHpMax * 0.2 && _fleeGus(npc.combatGus).isNotEmpty) {
-      if (Random().nextDouble() < 0.6) {
-        s.log.add('${npc.name} 催动遁蛊逃走了！');
+    final nRank = levelRank(npc.level);
+    // V1.4 新增【3~6转NPC战术AI】：
+    //  - 低血量（<25%）：高阶NPC优先逃亡；smart型若防御蛊可用则转为防御回血
+    //  - smart型NPC：玩家真元见底时全力猛攻；玩家高血量时优先放毒消耗
+    final lowHp = npc.physique < s.npcHpMax * 0.25;
+    if (lowHp) {
+      // 高阶NPC更倾向逃亡（rank>=3 逃亡概率提升）
+      final fleeChance = nRank >= 3 ? 0.75 : 0.6;
+      if (_fleeGus(npc.combatGus).isNotEmpty && Random().nextDouble() < fleeChance) {
+        s.addLog('${npc.name} 催动遁蛊逃走了！');
         npc.physique = 0;
         s.status = CombatStatus.flee;
         return;
       }
+      // smart型低血量优先防御回血
+      if (npc.aiType == 'smart' && _defenseGus(npc.combatGus).isNotEmpty) {
+        final defGu = _defenseGus(npc.combatGus).first;
+        if (defGu.durability > 0) {
+          defGu.durability = max(0, defGu.durability - 3);
+          npc.trueyuan = min(npc.trueyuanMax, npc.trueyuan + 10);
+          npc.physique = min(npc.physiqueMax, npc.physique + 8);
+          s.addLog('${npc.name} 催动 ${defGu.name} 防御回血，体魄 +8、真元 +10。');
+          return;
+        }
+      }
     }
     final attackGus = _attackGus(npc.combatGus).where((g) => g.durability > 0).toList();
     if (attackGus.isEmpty) {
-      s.log.add('${npc.name} 无攻击蛊可用，转为防御。');
+      s.addLog('${npc.name} 无攻击蛊可用，转为防御。');
       return;
     }
-    final gu = attackGus.reduce((a, b) =>
-        (b.combat['power'] as num? ?? 0) > (a.combat['power'] as num? ?? 0) ? b : a);
+    // V1.4 新增【smart型战术选择】：
+    //  - 玩家真元 <20%：优先用最强蛊猛攻（趁虚）
+    //  - 玩家体魄 >70% 且 smart型：优先用毒蛊消耗（rank>=3）
+    //  - 其他：选最强攻击蛊
+    GuInstance gu;
+    if (npc.aiType == 'smart' && p.trueyuan < p.trueyuanMax * 0.2) {
+      // 趁虚猛攻
+      gu = attackGus.reduce((a, b) =>
+          (b.combat['power'] as num? ?? 0) > (a.combat['power'] as num? ?? 0) ? b : a);
+      s.addLog('${npc.name} 察觉你真元空虚，趁机猛攻！');
+    } else if (npc.aiType == 'smart' && p.physique > p.lifeMax * 0.7 && nRank >= 3) {
+      // 优先放毒消耗
+      final poisonGus = attackGus.where((g) => g.combat['type'] == 'attack_poison').toList();
+      gu = poisonGus.isNotEmpty
+          ? poisonGus.reduce((a, b) =>
+              (b.combat['power'] as num? ?? 0) > (a.combat['power'] as num? ?? 0) ? b : a)
+          : attackGus.reduce((a, b) =>
+              (b.combat['power'] as num? ?? 0) > (a.combat['power'] as num? ?? 0) ? b : a);
+    } else {
+      gu = attackGus.reduce((a, b) =>
+          (b.combat['power'] as num? ?? 0) > (a.combat['power'] as num? ?? 0) ? b : a);
+    }
     gu.durability = max(0, gu.durability - 2);
     final (dmg, isPoison) = _calcAttack(npc, npc.combatGus, gu, p, s.env, false);
+    // V1.4 新增：高阶NPC攻击伤害随rank提升（rank>=3 额外+10%/rank）
+    var finalDmg = dmg;
+    if (nRank >= 3) {
+      finalDmg = (dmg * (1 + (nRank - 2) * 0.1)).toInt();
+    }
     final defense = (_defenseValue(p) * 0.3).toInt();
-    final realDmg = max(1, dmg - defense);
+    final realDmg = max(1, finalDmg - defense);
     p.physique = max(0, p.physique - realDmg);
     var msg = '${npc.name} 催动 ${gu.name}，对你造成 $realDmg 点伤害！';
     if (isPoison) {
@@ -175,7 +264,7 @@ class CombatEngine {
         source: '${npc.name} 战斗命中',
       );
     }
-    s.log.add(msg);
+    s.addLog(msg);
   }
 
   void _npcAttack(CombatResult s, {bool freeHit = false}) {
@@ -188,7 +277,7 @@ class CombatEngine {
     var realDmg = dmg;
     if (freeHit) realDmg = (dmg * 1.3).toInt();
     p.physique = max(0, p.physique - realDmg);
-    s.log.add('${npc.name} 追击，对你造成 $realDmg 点伤害！');
+    s.addLog('${npc.name} 追击，对你造成 $realDmg 点伤害！');
   }
 
   bool _tryFlee(Player p, Npc npc) {
@@ -206,7 +295,7 @@ class CombatEngine {
 
   void _onWin(CombatResult s) {
     s.status = CombatStatus.win;
-    s.log.add('\n═══ 战斗结束：你击败了 ${s.npc.name}！ ═══');
+    s.addLog('\n═══ 战斗结束：你击败了 ${s.npc.name}！ ═══');
     s.player.kills += 1;
     s.player.tribulation += 5;
     _loot(s);
@@ -214,22 +303,22 @@ class CombatEngine {
 
   void _onLose(CombatResult s) {
     s.status = CombatStatus.lose;
-    s.log.add('【你被击败了！】');
+    s.addLog('【你被击败了！】');
   }
 
   void _loot(CombatResult s) {
     final npc = s.npc;
     final p = s.player;
-    s.log.add('\n你搜查 ${npc.name} 的遗物：');
+    s.addLog('\n你搜查 ${npc.name} 的遗物：');
     for (final it in npc.inventory) {
       p.inventory.add(it);
-      s.log.add('  获得材料：$it');
+      s.addLog('  获得材料：$it');
     }
     for (final gid in List<String>.from(npc.guInSlot)) {
       if (Random().nextDouble() < 0.5) {
         final inst = makeGuInstance(gid, guList, durability: 40 + Random().nextInt(51));
         p.guBag.add(inst);
-        s.log.add('  掠夺蛊虫：${inst.name}（耐久 ${inst.durability}）');
+        s.addLog('  掠夺蛊虫：${inst.name}（耐久 ${inst.durability}）');
       }
     }
     npc.inventory.clear();
@@ -300,7 +389,7 @@ class CombatEngine {
     if (t.finished) return t;
     final p = t.player;
     t.round += 1;
-    t.log.add('\n—— 天劫第 ${t.round}/${t.totalRounds} 轮 ——');
+    t.addLog('\n—— 天劫第 ${t.round}/${t.totalRounds} 轮 ——');
     final act = action.toLowerCase();
     final defending = act.contains('defend') || act.contains('防御');
     var baseDmg = 15 + t.rank * 8 + (t.round - 1) * 6;
@@ -312,7 +401,7 @@ class CombatEngine {
       }
     }
     p.physique = max(0, p.physique - dmg);
-    t.log.add('天雷轰顶！造成 $dmg 点伤害，你剩余体魄 ${p.physique}。');
+    t.addLog('天雷轰顶！造成 $dmg 点伤害，你剩余体魄 ${p.physique}。');
     if (p.physique <= 0) {
       final sub = _substituteGus(p.guInSlot);
       if (sub.isNotEmpty) {
@@ -321,11 +410,11 @@ class CombatEngine {
         p.guBag.add(g);
         g.durability = 0;
         p.physique = 1;
-        t.log.add('【替身】${g.name} 替你挡下天雷后损毁！');
+        t.addLog('【替身】${g.name} 替你挡下天雷后损毁！');
       } else {
         t.survived = false;
         t.finished = true;
-        t.log.add('\n💀【渡劫失败】天劫之威非你所能抗，魂飞魄散，就此陨落……');
+        t.addLog('\n💀【渡劫失败】天劫之威非你所能抗，魂飞魄散，就此陨落……');
         p.alive = false;
         return t;
       }
@@ -333,7 +422,7 @@ class CombatEngine {
     if (t.round >= t.totalRounds) {
       t.finished = true;
       t.survived = true;
-      t.log.add('\n🌟【渡劫成功】你扛过天劫，劫数消散，道心更坚！体魄与魂力大涨。');
+      t.addLog('\n🌟【渡劫成功】你扛过天劫，劫数消散，道心更坚！体魄与魂力大涨。');
       p.physique += 20 + t.rank * 5;
       p.soulPower += 10 + t.rank * 3;
       p.luck += 2;
@@ -343,6 +432,9 @@ class CombatEngine {
 }
 
 enum CombatStatus { ongoing, win, flee, lose }
+
+/// 战斗/渡劫日志最大保存条数，超出自动丢弃旧记录。
+const int maxCombatLogEntries = 200;
 
 class CombatResult {
   final Player player;
@@ -365,6 +457,14 @@ class CombatResult {
     required this.npcPoison,
     required this.log,
   });
+
+  /// 追加战斗日志，超过上限自动丢弃最旧记录。
+  void addLog(String line) {
+    log.add(line);
+    if (log.length > maxCombatLogEntries) {
+      log.removeRange(0, log.length - maxCombatLogEntries);
+    }
+  }
 }
 
 class TribulationResult {
@@ -384,4 +484,12 @@ class TribulationResult {
     required this.finished,
     required this.log,
   });
+
+  /// 追加渡劫日志，超过上限自动丢弃最旧记录。
+  void addLog(String line) {
+    log.add(line);
+    if (log.length > maxCombatLogEntries) {
+      log.removeRange(0, log.length - maxCombatLogEntries);
+    }
+  }
 }

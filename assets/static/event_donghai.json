@@ -1,0 +1,73 @@
+{
+  "events": [
+    {
+      "eid": "evd01", "name": "劫难·海雾迷航", "type": "disaster",
+      "weight": 13, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["donghai_entry", "donghai_cliff"],
+      "desc": "海雾骤起，能见度降至数尺，咸湿的水汽让你迷失方向。你在礁石间兜兜转转，真元大量耗损，险些跌入暗流。",
+      "effect": {"physique": -18, "trueyuan": -16, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "evd02", "name": "机缘·渔村篝火", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "rest",
+      "scene_rids": ["donghai_fishing_village"],
+      "desc": "你于渔村码头的篝火边静坐，暖意驱散了海风的咸湿，灵气充沛，体魄与真元大幅恢复，海蛇蜕的药香令人心旷神怡。",
+      "effect": {"physique": 26, "trueyuan": 36, "luck": 1}
+    },
+    {
+      "eid": "evd03", "name": "劫难·海妖侵袭", "type": "disaster",
+      "weight": 11, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["donghai_cliff"],
+      "desc": "暗流翻涌，一头海妖自断崖下的浪涛中扑出，獠牙森白，水雾弥漫！你且战且退，仍被擦伤，丢弃部分物资才脱身。",
+      "effect": {"physique": -22, "injure": "轻伤", "lose_random_material": 2, "luck": -1}
+    },
+    {
+      "eid": "evd04", "name": "机缘·断崖寻宝", "type": "fortune",
+      "weight": 8, "min_rank": 2, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["donghai_cliff"],
+      "desc": "你在碧波断崖的一处礁缝中，发现一枚浑圆的海珍珠，珠光莹莹，蕴含浓郁水道灵韵，连忙收入囊中。",
+      "effect": {"add_item": ["海珍珠x2", "珊瑚碎片x3"], "dao_mark": {"水道": 2}, "luck": 1}
+    },
+    {
+      "eid": "evd05", "name": "机缘·海妖洞窟遗方", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["donghai_sea_demon_cave"],
+      "desc": "海妖洞窟深处一方石台上摊着半卷蛊方残片，正是东海散修遗落的『水遁蛊蛊方』！石台边还散落着海妖骨。",
+      "effect": {"add_item": ["水遁蛊蛊方x1", "海妖骨x1"], "dao_mark": {"水道": 5, "兽道": 2}, "luck": 2}
+    },
+    {
+      "eid": "evd06", "name": "抉择·搁浅的海兽", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["donghai_entry", "donghai_cliff"],
+      "desc": "礁岸上搁浅着一条受伤的小海兽，气息奄奄，眼中透着哀求。它的鳞片在阳光下泛着水道灵光。",
+      "effect": {},
+      "choices": [
+        {"text": "救治并放归大海", "effect": {"add_item_cost": ["灵蜜x1"], "add_item": ["原石x18", "海珍珠x3"], "dao_mark": {"运道": 2}, "luck": 3}, "weight": 1},
+        {"text": "取其鳞片离去", "effect": {"add_item": ["海珍珠x2", "珊瑚碎片x4"], "luck": -1}, "weight": 1},
+        {"text": "就地宰杀取材", "effect": {"add_item": ["海妖骨x1", "兽血x3"], "luck": -4}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evd07", "name": "劫难·台风肆虐", "type": "disaster",
+      "weight": 10, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["donghai_entry", "donghai_cliff"],
+      "desc": "天际乌云压顶，台风骤至！巨浪滔天，狂风裹挟着碎石扑面，你伏在礁石后死死抓牢，真元几近枯竭，险些被卷入深海。",
+      "effect": {"physique": -26, "trueyuan": -22, "injure": "轻伤", "lose_random_material": 1, "luck": -1}
+    },
+    {
+      "eid": "evd08", "name": "机缘·珊瑚矿脉", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["donghai_entry", "donghai_cliff"],
+      "desc": "你在一处礁岩下发现一片灵珊瑚矿脉，珊瑚在波光中折射出迷人光彩，连忙敲下几块。",
+      "effect": {"add_item": ["珊瑚碎片x5"], "dao_mark": {"水道": 2}, "luck": 1}
+    }
+  ]
+}

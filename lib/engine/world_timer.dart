@@ -4,6 +4,7 @@ import 'dart:math' show max;
 import 'package:gzren/data_model/player_model.dart';
 import 'player_core.dart' show levelRank, daoConflictDamage;
 import 'poison_system.dart' show PoisonSystem;
+import 'phase2_core.dart' show phase2DailyTick; // 第二阶段：容量/饥饿/伤势反复
 
 const double hoursPerYear = 1440.0;
 
@@ -57,6 +58,15 @@ class WorldTimer {
         log.add('【寿元耗尽】你的寿元已尽，大限将至，魂归天地……');
         return events;
       }
+    }
+
+    // 第二阶段：空窍超限暗伤、饥饿、伤势反复恶化 每日结算
+    final p2Logs = phase2DailyTick(p, hours);
+    for (final l in p2Logs) log.add(l);
+    if (p.physique <= 0 && p.alive) {
+      p.alive = false;
+      log.add('你因空窍过载/饥饿油尽灯枯……');
+      return events;
     }
 
     // 道痕冲突持续道伤（每旬结算）

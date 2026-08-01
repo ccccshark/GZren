@@ -14,6 +14,9 @@ class GuTemplate {
   final String evolveGid;
   final List<String> habitat;
   final Map<String, dynamic> combat;
+  // V1.4 新增【蛊虫变异机制】：is_mutate=true 标记此蛊为易变异蛊，
+  // 炼制时变异概率显著提升（5%→15%），变异后威力加成更高。旧JSON无此字段默认 false。
+  final bool isMutate;
 
   GuTemplate({
     required this.gid,
@@ -29,6 +32,7 @@ class GuTemplate {
     this.evolveGid = '',
     this.habitat = const [],
     this.combat = const {},
+    this.isMutate = false,
   });
 
   factory GuTemplate.fromJson(Map<String, dynamic> j) => GuTemplate(
@@ -45,6 +49,7 @@ class GuTemplate {
         evolveGid: j['evolve_gid'] ?? '',
         habitat: List<String>.from(j['habitat'] ?? []),
         combat: Map<String, dynamic>.from(j['combat'] ?? {}),
+        isMutate: j['is_mutate'] ?? false,
       );
 }
 
@@ -108,6 +113,8 @@ class GuInstance {
         feedMaterial: List<String>.from(j['feed_material'] ?? []),
         sideEffect: j['side_effect'] ?? '无明显副作用',
         combat: Map<String, dynamic>.from(j['combat'] ?? {}),
-        mutated: j['mutated'] ?? false,
+        // 第三阶段新增【8.6 变异蛊标记预留】：兼容 mutated 与 is_mutate 两种字段名，
+        // 缺失时默认 false，旧存档/旧JSON无此字段不报错，适配后续变异系统。
+        mutated: (j['mutated'] ?? j['is_mutate'] ?? false) as bool,
       );
 }

@@ -1,0 +1,10 @@
+{
+  "region": "东海",
+  "weather_refresh_minute": 120,
+  "weather_list": [
+    {"weather": "晴朗", "weight": 30, "buff": {}, "debuff": {}, "desc": "碧海晴空，波光粼粼"},
+    {"weather": "海雾", "weight": 25, "buff": {"水道": 1.10}, "debuff": {"捕捉成功率": 0.80, "视界模糊": true}, "desc": "海雾弥漫，水道蛊虫威能提升，蛊虫藏匿"},
+    {"weather": "暴雨", "weight": 25, "buff": {"水道": 1.25, "雷道": 1.10}, "debuff": {"捕捉成功率": 0.70, "真元大量消耗": true, "视界模糊": true}, "desc": "暴雨倾盆，水道蛊虫威能暴涨，海妖活跃度上升"},
+    {"weather": "台风", "weight": 20, "buff": {"水道": 1.35, "风道": 1.15}, "debuff": {"捕捉成功率": 0.60, "真元大量消耗": true, "视界模糊": true, "移动受阻": true}, "desc": "台风肆虐，巨浪滔天，移动与战斗均受重创"}
+  ]
+}

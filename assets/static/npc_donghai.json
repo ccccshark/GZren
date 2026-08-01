@@ -1,0 +1,47 @@
+{
+  "npcs": [
+    {
+      "nid": "npc_donghai_merchant", "name": "渔村商人·海伯", "align": "中立", "level": "四转中阶",
+      "life_left": 200, "trueyuan": 240, "trueyuan_max": 240, "physique": 120, "soul_power": 65,
+      "slot_max": 6, "gu_in_slot": ["g005", "g003", "g055"],
+      "dao_mark": {"水道": 38, "气道": 22},
+      "inventory": ["海珍珠x6", "珊瑚碎片x12", "海蛇蜕x5", "原石x25"],
+      "is_hostile": false, "is_merchant": true, "is_beast": false,
+      "ai_type": "calm", "faction": "donghai_village",
+      "dialogue": ["海伯的渔船走遍东海，海珍珠、珊瑚、水遁蛊方，应有尽有。", "海妖王那孽畜只在暴雨台风天才现身，没水遁蛊连洞窟都进不去。", "这卷水遁蛊蛊方是老蛊师从海妖洞窟里带出的孤本，价值不菲。", "台风来时连老练渔民都不敢出海，外乡人务必当心。"],
+      "trade_goods": {"海珍珠": 22, "珊瑚碎片": 6, "海蛇蜕": 8, "咸湿蛊材": 3, "原石": 15, "灵蜜": 12, "解毒散": 30, "水遁蛊蛊方": 60, "玉髓": 20, "兽血": 7}
+    },
+    {
+      "nid": "npc_donghai_wanderer", "name": "流浪水道蛊师·沧澜", "align": "中立", "level": "三转中阶",
+      "life_left": 135, "trueyuan": 160, "trueyuan_max": 160, "physique": 88, "soul_power": 48,
+      "slot_max": 5, "gu_in_slot": ["g006", "g003", "g014"],
+      "dao_mark": {"水道": 26, "毒道": 12, "气道": 10},
+      "inventory": ["海珍珠x3", "珊瑚碎片x5", "海蛇蜕x4", "原石x10"],
+      "is_hostile": false, "is_merchant": false, "is_beast": false,
+      "ai_type": "calm", "faction": "donghai_village",
+      "dialogue": ["沧澜抹了把脸上的海水：碧波断崖下的海妖洞窟藏着古蛊师的痕迹。", "东海蛊虫多属水道，与南疆毒道、北原冰道大不相同。", "想切磋？可以，点到为止，输了的请喝一囊渔村酿的清酒。", "海妖王只在暴雨台风天现身，讨伐它得备齐水遁蛊。"]
+    },
+    {
+      "nid": "npc_donghai_sea_snake", "name": "海蛇", "align": "中立", "level": "三转初阶",
+      "life_left": 110, "trueyuan": 50, "trueyuan_max": 50, "physique": 80, "soul_power": 15,
+      "slot_max": 3, "gu_in_slot": ["g006", "g006"],
+      "dao_mark": {"水道": 25, "毒道": 15},
+      "inventory": ["海蛇蜕x2", "珊瑚碎片x2", "原石x3"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "aggressive", "faction": "",
+      "dialogue": ["一条海蛇自礁石缝隙中窜出，獠牙滴着毒液，嘶嘶作声！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_donghai_sea_demon_boss", "name": "海妖王", "align": "邪道", "level": "五转中阶",
+      "life_left": 350, "trueyuan": 290, "trueyuan_max": 290, "physique": 180, "soul_power": 85,
+      "slot_max": 5, "gu_in_slot": ["g012", "g011", "g055", "g006"],
+      "dao_mark": {"水道": 65, "兽道": 35, "毒道": 25},
+      "inventory": ["海妖骨x2", "海珍珠x5", "原石x45", "水遁蛊蛊方x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "smart", "faction": "",
+      "dialogue": ["海妖王自暗流深处浮起，周身水雾凝为实质，咆哮如惊雷，掀起的巨浪拍碎窟壁！"],
+      "trade_goods": {}
+    }
+  ]
+}

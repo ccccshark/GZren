@@ -7,6 +7,10 @@ class Recipe {
   final List<String> material; // ["露水x3","青茅草根x1"]
   final double baseSuccess;
   final String outputGid;
+  // V1.3 新增【炼蛊环境需求】：env_required 指定炼蛊所需场景流派倍率或时段/天气。
+  // 示例：{"min_school": "毒道", "min_mul": 1.20} 需毒道≥1.20的场景；
+  //       {"phase": "夜晚"} 需夜晚时段。缺失→无环境限制（旧JSON兼容）。
+  final Map<String, dynamic> envRequired;
 
   Recipe({
     required this.rid,
@@ -15,6 +19,7 @@ class Recipe {
     this.material = const [],
     this.baseSuccess = 0.5,
     required this.outputGid,
+    this.envRequired = const {},
   });
 
   factory Recipe.fromJson(Map<String, dynamic> j) => Recipe(
@@ -24,6 +29,7 @@ class Recipe {
         material: List<String>.from(j['material'] ?? []),
         baseSuccess: (j['base_success'] ?? 0.5).toDouble(),
         outputGid: j['output_gid'] ?? '',
+        envRequired: Map<String, dynamic>.from(j['env_required'] ?? const {}),
       );
 }
 
@@ -52,30 +58,37 @@ class EvolveRecipe {
 }
 
 // 解析 "露水x3" -> ("露水", 3)
-// 兼容两种格式：
-//   1. 标准格式 "原石x10"（带 'x' 分隔符，初始背包/蛊方/修复后写入均用此格式）
-//   2. 旧版损坏格式 "原石10"（旧 addMaterial/consumeMaterial 漏写 'x' 产生，
-//      兼容已有存档，避免交易面板读到数量 0）
+// V1.9 修复【商人交易读取原石为0 BUG】：旧版仅认 ASCII 小写 'x'，
+//   库存条目若带前后空格 / 全角× / 大写X（JSON 拼接或旧存档残留），
+//   解析出的名字会夹杂分隔符（如 "原石x10 "），与 "原石" 不等 → countMaterial 归零。
+//   现统一 trim + 兼容 x/X/× 三种分隔符 + 名称去空格，彻底消除读取为 0。
 class MatParser {
   static (String, int) parse(String s) {
-    // 1. 优先匹配标准 "名称x数量" 格式
-    final xIdx = s.lastIndexOf('x');
-    if (xIdx > 0) {
-      final cnt = int.tryParse(s.substring(xIdx + 1));
-      if (cnt != null) return (s.substring(0, xIdx), cnt);
+    final s0 = s.trim();
+    if (s0.isEmpty) return (s, 1);
+    // 1. 匹配 "名称<分隔符>数量"：分隔符支持 x / X / ×（全角），从右向左找最后一个
+    //    材料名/蛊方名均为中文，不含 ASCII 字母，故匹配字母分隔符安全。
+    for (int i = s0.length - 1; i > 0; i--) {
+      final ch = s0[i];
+      if (ch == 'x' || ch == 'X' || ch == '×') {
+        final cnt = int.tryParse(s0.substring(i + 1).trim());
+        if (cnt != null && cnt > 0) {
+          final name = s0.substring(0, i).trim();
+          if (name.isNotEmpty) return (name, cnt);
+        }
+      }
     }
-    // 2. 兼容旧版 "名称数量" 格式：从末尾向前扫描连续数字
-    //    材料名（露水/原石/月光石…）与蛊方名均不含 ASCII 数字，安全。
-    int end = s.length;
+    // 2. 兼容旧版 "名称数量" 格式：从末尾向前扫描连续 ASCII 数字
+    int end = s0.length;
     while (end > 0) {
-      final code = s.codeUnitAt(end - 1);
+      final code = s0.codeUnitAt(end - 1);
       if (code < 48 || code > 57) break; // 非 '0'~'9'
       end--;
     }
-    if (end > 0 && end < s.length) {
-      final cnt = int.tryParse(s.substring(end));
-      if (cnt != null && cnt > 0) return (s.substring(0, end), cnt);
+    if (end > 0 && end < s0.length) {
+      final cnt = int.tryParse(s0.substring(end));
+      if (cnt != null && cnt > 0) return (s0.substring(0, end).trim(), cnt);
     }
-    return (s, 1);
+    return (s0, 1);
   }
 }

@@ -1,0 +1,90 @@
+{
+  "npcs": [
+    {
+      "nid": "npc_beiyuan_guide", "name": "部族斥候·阿木尔", "align": "中立", "level": "三转中阶",
+      "life_left": 150, "trueyuan": 180, "trueyuan_max": 180, "physique": 95, "soul_power": 50,
+      "slot_max": 5, "gu_in_slot": ["g_xuehu", "g_bingxiong", "g_hanyue"],
+      "dao_mark": {"冰道": 35, "月道": 20},
+      "inventory": ["寒冰原石x8", "雪原草药x3", "原石x10"],
+      "is_hostile": false, "is_merchant": false, "is_beast": false,
+      "ai_type": "calm", "faction": "beiyuan_tribe",
+      "dialogue": ["外乡人，北原可不是闹着玩的，没备好御寒蛊别往雪原深处走。", "暴风雪来时连雪匪都要找地方躲避，你若听到风声变尖，赶紧寻避风处。", "前面是冰岩峡谷，地形狭窄，一旦撞上野兽便无路可逃，唯有死战。", "永冻冰窟的冰麟蛊王只在暴风雪之夜现身，要去讨伐可得备齐御寒蛊与冰遁蛊。"]
+    },
+    {
+      "nid": "npc_beiyuan_merchant", "name": "部族商人·娜仁", "align": "中立", "level": "四转中阶",
+      "life_left": 220, "trueyuan": 260, "trueyuan_max": 260, "physique": 130, "soul_power": 70,
+      "slot_max": 6, "gu_in_slot": ["g_bingxiong", "g_hanyue", "g_xuedun", "g055"],
+      "dao_mark": {"冰道": 40, "气道": 25},
+      "inventory": ["寒冰原石x15", "冰晶骨x8", "原石x30", "灵蜜x3"],
+      "is_hostile": false, "is_merchant": true, "is_beast": false,
+      "ai_type": "calm", "faction": "beiyuan_tribe",
+      "dialogue": ["娜仁的商队走遍北原，寒冰原石、冰晶骨、御寒蛊方，应有尽有。", "雪匪那群疯子最近又劫了几支商队，独行客可要当心。", "永冻冰窟？那可是冰麟蛊王的地盘，没冰遁蛊连入口都进不去。", "这卷冰遁蛊蛊方是部族萨满从永冻冰窟中带出的孤本，价格不菲，但物有所值。", "御寒蛊是北原保命的根本，寒月蛊、雪遁蛊都能御寒护体，外乡人务必备齐。"],
+      "trade_goods": {"寒冰原石": 6, "冰晶骨": 18, "冰魂砂": 55, "永冻冰髓": 130, "雪原草药": 3, "冻藏蛊材": 5, "原石": 15, "灵蜜": 12, "解毒散": 30, "御寒蛊方": 50, "冰遁蛊蛊方": 60, "寒雾晶": 16, "兽血": 8}
+    },
+    {
+      "nid": "npc_beiyuan_tribe_guishi", "name": "部族蛊师·巴图", "align": "中立", "level": "三转中阶",
+      "life_left": 140, "trueyuan": 170, "trueyuan_max": 170, "physique": 90, "soul_power": 50,
+      "slot_max": 5, "gu_in_slot": ["g_hanlin", "g_xuehu", "g_bingxiong", "g014"],
+      "dao_mark": {"冰道": 28, "力道": 15, "气道": 10},
+      "inventory": ["寒冰原石x6", "冰晶骨x2", "雪原草药x4", "原石x12"],
+      "is_hostile": false, "is_merchant": false, "is_beast": false,
+      "ai_type": "calm", "faction": "beiyuan_tribe",
+      "dialogue": ["巴图抹了把胡须上的冰碴：冰岩峡谷下面藏着古蛊师的痕迹，我在这儿寻了好几日。", "北原的蛊虫多属冰道、水道，与南疆的毒道、西漠的风沙道大不相同。", "想切磋？可以，点到为止，输了的请喝一囊部族酿的马奶酒。", "永冻冰窟的冰麟蛊王只在暴风雪之夜现身，要去讨伐可得备齐御寒蛊与冰遁蛊。"]
+    },
+    {
+      "nid": "npc_beiyuan_tribe_warrior", "name": "部族猎手·苏和", "align": "中立", "level": "四转初阶",
+      "life_left": 200, "trueyuan": 180, "trueyuan_max": 180, "physique": 150, "soul_power": 40,
+      "slot_max": 5, "gu_in_slot": ["g_bingxiong", "g_hanlin", "g013", "g055"],
+      "dao_mark": {"冰道": 30, "力道": 25, "地道": 15},
+      "inventory": ["寒冰原石x5", "兽血x4", "冰晶骨x2", "原石x15"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "aggressive", "faction": "beiyuan_hunter",
+      "dialogue": ["苏和冷冷盯着你：这片猎场是部族的，外人休想染指！", "你的蛊材不错，留下吧，饶你不死！", "北原是部族的北原，外乡人别想活着出去！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_beiyuan_ice_beast", "name": "冰原野兽", "align": "中立", "level": "三转初阶",
+      "life_left": 140, "trueyuan": 60, "trueyuan_max": 60, "physique": 110, "soul_power": 15,
+      "slot_max": 3, "gu_in_slot": ["g_bingxiong", "g_bingxiong"],
+      "dao_mark": {"冰道": 30, "力道": 15},
+      "inventory": ["兽血x3", "寒冰原石x2", "冰晶骨x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "aggressive", "faction": "",
+      "dialogue": ["冰原野兽自雪中扑出，獠牙森白，嘶吼如雷！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_beiyuan_snow_bandit", "name": "雪匪蛊师", "align": "邪道", "level": "三转初阶",
+      "life_left": 120, "trueyuan": 140, "trueyuan_max": 140, "physique": 85, "soul_power": 35,
+      "slot_max": 4, "gu_in_slot": ["g_hanlin", "g_xuehu", "g013"],
+      "dao_mark": {"冰道": 22, "地道": 15},
+      "inventory": ["原石x8", "寒冰原石x4", "冻藏蛊材x2", "雪匪铜钱x3"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "aggressive", "faction": "beiyuan_bandit",
+      "dialogue": ["雪匪蛊师裹着兽皮阴笑：留下蛊材和原石，饶你不死！", "北原是雪匪的猎场，外乡人别想活着走出去！", "识相的把御寒蛊交出来，老子或许留你全尸！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_beiyuan_snow_bandit_lord", "name": "雪匪首领·白毛", "align": "魔道", "level": "五转中阶",
+      "life_left": 330, "trueyuan": 310, "trueyuan_max": 310, "physique": 165, "soul_power": 90,
+      "slot_max": 6, "gu_in_slot": ["g_bingpo", "g_xueyao", "g_bingxiong", "g055", "g054"],
+      "dao_mark": {"冰道": 50, "鬼道": 30, "月道": 20},
+      "inventory": ["原石x50", "雪匪铜钱x20", "冰魂砂x3", "永冻冰髓x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "smart", "faction": "beiyuan_bandit",
+      "dialogue": ["白毛阴恻恻地笑：又一只肥羊自己送上门来！", "把蛊材和原石都留下，饶你不死！", "北原是雪匪的北原，外人别想活着出去！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_beiyuan_binglin_boss", "name": "冰麟蛊王", "align": "中立", "level": "六转中阶",
+      "life_left": 420, "trueyuan": 280, "trueyuan_max": 280, "physique": 260, "soul_power": 80,
+      "slot_max": 5, "gu_in_slot": ["g_binglin_wang", "g_bingpo", "g_hanyue", "g055"],
+      "dao_mark": {"冰道": 75, "月道": 35, "水道": 30},
+      "inventory": ["永冻冰髓x2", "冰魂砂x3", "冰麟角x2", "原石x50", "冰晶骨x5"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "smart", "faction": "",
+      "dialogue": ["冰麟蛊王自万年玄冰中拔地而起，周身寒气凝为实质，每一步都令冰窟震颤，咆哮如冰裂！"],
+      "trade_goods": {}
+    }
+  ]
+}

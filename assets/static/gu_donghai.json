@@ -1,0 +1,75 @@
+{
+  "region": "东海",
+  "gu_list": [
+    {
+      "gid": "g_shuidun",
+      "name": "水遁蛊",
+      "rank": 2,
+      "school": "水道",
+      "cost_zhen": 16,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "海珍珠",
+        "咸湿蛊材"
+      ],
+      "side_effect": "催动时真元持续消耗",
+      "desc": "东海散修所炼水道奇蛊，可遁入水流、穿行深海。持此蛊者可开启碧波断崖下的海妖洞窟秘境入口，亦能于洞窟暗流中安然穿行，不受海妖暗流拖拽之害。原著遁蛊体系：土遁、沙遁、冰遁、水遁并立。",
+      "evolve_gid": "",
+      "habitat": [
+        "东海",
+        "深海"
+      ],
+      "combat": {
+        "type": "flee",
+        "power": 0
+      }
+    },
+    {
+      "gid": "gu_langxi",
+      "name": "浪息蛊",
+      "rank": 2,
+      "school": "水道",
+      "cost_zhen": 10,
+      "cost_life": 0,
+      "durability_max": 80,
+      "feed_material": [
+        "海雾晶"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "浪息蛊，操控近岸海浪攻击。东海篇章，水道蛊师海域常用",
+      "evolve_gid": "",
+      "habitat": [
+        "东海",
+        "海域"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 18
+      }
+    },
+    {
+      "gid": "gu_yingshen",
+      "name": "蜃影蛊",
+      "rank": 2,
+      "school": "幻道",
+      "cost_zhen": 9,
+      "cost_life": 0,
+      "durability_max": 75,
+      "feed_material": [
+        "海雾晶"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "蜃影蛊，制造幻象迷惑敌人。东海篇章，幻道辅助蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "东海",
+        "海域"
+      ],
+      "combat": {
+        "type": "debuff",
+        "power": 0
+      }
+    }
+  ]
+}

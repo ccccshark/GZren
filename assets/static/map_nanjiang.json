@@ -1,0 +1,1371 @@
+{
+  "regions": [
+    "南疆"
+  ],
+  "start_rid": "nanjiang_entry",
+  "rooms": [
+    {
+      "rid": "nanjiang_entry",
+      "name": "南疆入口·青茅山南麓",
+      "description": "青茅山南麓草木渐疏，郁绿褪为灰黄，山风裹挟着若有若无的腥甜瘴气扑面而来。脚下石阶被苔藓与藤蔓吞没，越向南行空气越显粘稠，似有无数细小蛊虫在雾中窥伺。",
+      "exits": {
+        "north": "nanjiang_miasma_forest_01",
+        "south": "qingmao_swamp"
+      },
+      "env_effect": {
+        "毒道": 1.05,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "青茅草根",
+        "露水"
+      ],
+      "wild_gu": [
+        "g006"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_miasma_forest_01",
+      "name": "瘴林外围",
+      "description": "进入瘴林外围，林间雾气浓重如纱，色泽泛着幽绿。腐叶之下毒虫穿行，瘴灵草丛生其间，散发幽幽冷香。深入者须以蛊护体，方能踏足此地。",
+      "exits": {
+        "south": "nanjiang_entry",
+        "north": "nanjiang_miasma_forest_02",
+        "east": "nanjiang_valley_01"
+      },
+      "env_effect": {
+        "毒道": 1.15,
+        "气道": 0.95
+      },
+      "refresh_resource": [
+        "瘴灵草",
+        "毒囊"
+      ],
+      "wild_gu": [
+        "g006",
+        "g009"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_miasma_forest_02",
+      "name": "瘴林深处",
+      "description": "瘴林深处雾浓欲滴，遮天蔽日，视线不过数尺。巨木盘根错节，毒菇丛生如花，地上随处可见褪下的蛇蜕。传闻有巨蟒蛊盘踞于此，嘶鸣之声隐隐可闻。",
+      "exits": {
+        "south": "nanjiang_miasma_forest_01",
+        "north": "nanjiang_miasma_forest_03"
+      },
+      "env_effect": {
+        "毒道": 1.25
+      },
+      "refresh_resource": [
+        "瘴灵草",
+        "毒菇",
+        "蛇蜕"
+      ],
+      "wild_gu": [
+        "g012",
+        "g006"
+      ],
+      "npc_list": [],
+      "secret": "flag_deep_miasma"
+    },
+    {
+      "rid": "nanjiang_miasma_forest_03",
+      "name": "瘴林秘境",
+      "description": "瘴林最深处是一片诡秘秘境，毒雾浓稠欲凝，常人入内即七窍渗血。雾中偶见黑莲花于腐土绽放，月华透过毒雾投下幽冷光斑。若无玉蟾蛊解毒，断不可踏入半步。",
+      "exits": {
+        "south": "nanjiang_miasma_forest_02"
+      },
+      "env_effect": {
+        "毒道": 1.35,
+        "月道": 1.1
+      },
+      "refresh_resource": [
+        "毒囊",
+        "黑莲花瓣"
+      ],
+      "wild_gu": [
+        "g012"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g022"
+    },
+    {
+      "rid": "nanjiang_valley_01",
+      "name": "落雁谷入口",
+      "description": "落雁谷入口两山夹峙，形如雁翼，谷口清风徐来，驱散了瘴林的毒雾。石壁上生着石壳菌，露水自岩缝滴落，是过路商旅歇脚的所在。",
+      "exits": {
+        "west": "nanjiang_miasma_forest_01",
+        "east": "nanjiang_valley_02",
+        "north": "nanjiang_qingmao_camp"
+      },
+      "env_effect": {
+        "气道": 1.05
+      },
+      "refresh_resource": [
+        "石壳菌",
+        "野草露水"
+      ],
+      "wild_gu": [
+        "g002",
+        "g018"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_valley_02",
+      "name": "落雁谷·商道",
+      "description": "落雁谷中是一条蜿蜒商道，南疆各处部族、商队由此往来。道旁散落原石与铁矿石，时有护卫押运蛊材的车队经过，刀光剑影间暗流涌动。",
+      "exits": {
+        "west": "nanjiang_valley_01",
+        "east": "nanjiang_swamp_01"
+      },
+      "env_effect": {
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "原石",
+        "铁矿石"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_caravan_guard"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_qingmao_camp",
+      "name": "青茅山宗族·前哨营地",
+      "description": "青茅山宗族在南疆设下的前哨营地，篝火昼夜不熄，茅草帐篷环列。守营蛊师警惕地注视着往来行人，一位族中长老坐镇其内，目光如炬。",
+      "exits": {
+        "south": "nanjiang_valley_01",
+        "north": "nanjiang_qingmao_hall"
+      },
+      "env_effect": {
+        "气道": 1.1
+      },
+      "refresh_resource": [
+        "青茅草根",
+        "露水"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_qingmao_guard",
+        "npc_qingmao_elder"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_qingmao_hall",
+      "name": "青茅山宗族·议事堂",
+      "description": "议事堂古朴庄重，堂中青茅真液香气氤氲，象征宗族底蕴。族长端坐主位，壁上悬挂着历代先祖的蛊虫图卷，凡南疆大事皆于此议定。",
+      "exits": {
+        "south": "nanjiang_qingmao_camp",
+        "east": "nanjiang_qingmao_medicine"
+      },
+      "env_effect": {
+        "气道": 1.15
+      },
+      "refresh_resource": [
+        "青茅真液"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_qingmao_patriarch"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_qingmao_medicine",
+      "name": "青茅山药堂",
+      "description": "药堂药香扑鼻，架上青茅草、银针花分类陈设，解毒散堆积如山。坐堂药师精通南疆百毒，为族人解毒炼药，亦是过路蛊师求取解毒之方的好去处。",
+      "exits": {
+        "west": "nanjiang_qingmao_hall"
+      },
+      "env_effect": {
+        "气道": 1.05,
+        "毒道": 1.05
+      },
+      "refresh_resource": [
+        "青茅草",
+        "银针花",
+        "解毒散",
+        "酒液",
+        "杨梅酒",
+        "黄金蜜酒",
+        "苦贝酒",
+        "白粮液"
+      ],
+      "wild_gu": [
+        "gu_002"
+      ],
+      "npc_list": [
+        "npc_qingmao_apothecary"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_swamp_01",
+      "name": "南疆沼泽·外围",
+      "description": "南疆沼泽外围泥水浑浊，腐草浮沉，一脚下去没至膝盖。沼中铁矿裸露，蛇蜕散落泥中，毒虫鸣声此起彼伏，稍不留神便会陷入泥潭。",
+      "exits": {
+        "west": "nanjiang_valley_02",
+        "north": "nanjiang_swamp_02",
+        "east": "nanjiang_heiya_path"
+      },
+      "env_effect": {
+        "毒道": 1.2,
+        "气道": 0.9
+      },
+      "refresh_resource": [
+        "沼铁原矿",
+        "蛇蜕"
+      ],
+      "wild_gu": [
+        "g006",
+        "g012"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_swamp_02",
+      "name": "南疆沼泽·深处",
+      "description": "沼泽深处毒雾翻涌如沸，黑莲花于腐泥中怒放，沼铁原矿深埋泥底。一头盘踞此地的沼泽兽王虎视眈眈，寻常蛊师不敢轻入，唯有胆大之辈方敢涉足采药。",
+      "exits": {
+        "south": "nanjiang_swamp_01",
+        "north": "nanjiang_swamp_secret"
+      },
+      "env_effect": {
+        "毒道": 1.3,
+        "气道": 0.85
+      },
+      "refresh_resource": [
+        "沼铁原矿",
+        "毒囊",
+        "黑莲花瓣"
+      ],
+      "wild_gu": [
+        "g012"
+      ],
+      "npc_list": [
+        "npc_beast_swamp_king"
+      ],
+      "secret": "flag_swamp_deep",
+      "boss_info": {
+        "npc_id": "npc_beast_swamp_king",
+        "boss_name": "沼泽兽王",
+        "respawn_game_time": 120,
+        "limit_daytime": [],
+        "limit_weather": []
+      }
+    },
+    {
+      "rid": "nanjiang_heiya_path",
+      "name": "黑崖寨·山道",
+      "description": "通往黑崖寨的山道崎岖陡峭，两侧崖壁如削，铁矿石与石壳菌嵌于岩缝。寨中巡逻蛊师三五成群，手持蛊兵戒备森严，外人未经传唤不得擅入。",
+      "exits": {
+        "west": "nanjiang_swamp_01",
+        "north": "nanjiang_heiya_gate",
+        "east": "nanjiang_sanxiu_camp"
+      },
+      "env_effect": {
+        "地道": 1.1
+      },
+      "refresh_resource": [
+        "铁矿石",
+        "石壳菌"
+      ],
+      "wild_gu": [
+        "g013"
+      ],
+      "npc_list": [
+        "npc_heiya_patrol"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_heiya_gate",
+      "name": "黑崖寨·寨门",
+      "description": "黑崖寨寨门以沼铁铸就，沉重如山，门上兽首狰狞。守门力士身形魁梧，蛊力浑厚，无帖者休想越过此门半步。",
+      "exits": {
+        "south": "nanjiang_heiya_path",
+        "north": "nanjiang_heiya_hall"
+      },
+      "env_effect": {
+        "地道": 1.15,
+        "力道": 1.1
+      },
+      "refresh_resource": [
+        "沼铁原矿"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_heiya_gatekeeper"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_heiya_hall",
+      "name": "黑崖寨·聚义厅",
+      "description": "聚义厅内火把高燃，黑崖寨群豪分列两侧，煞气冲天。寨主端坐虎皮交椅，锈蚀蛊料堆于案上，凡寨中大事、蛊兵调度皆由此处决断。",
+      "exits": {
+        "south": "nanjiang_heiya_gate",
+        "east": "nanjiang_heiya_smithy"
+      },
+      "env_effect": {
+        "地道": 1.2,
+        "力道": 1.15
+      },
+      "refresh_resource": [
+        "锈蚀蛊料",
+        "原石"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_heiya_chieftain"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_heiya_smithy",
+      "name": "黑崖寨·蛊兵锻造坊",
+      "description": "锻造坊炉火通红，铁砧叮当作响，匠师以玉髓、铁矿石熔铸蛊兵，锈蚀蛊料散落满地。南疆半数蛊兵皆出此坊，烟尘之中火星四溅。",
+      "exits": {
+        "west": "nanjiang_heiya_hall"
+      },
+      "env_effect": {
+        "地道": 1.15,
+        "火道": 1.1
+      },
+      "refresh_resource": [
+        "铁矿石",
+        "玉髓",
+        "锈蚀蛊料"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_heiya_smith"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_sanxiu_camp",
+      "name": "南疆散修·营地",
+      "description": "散修营地帐篷错落，三教九流汇聚于此。营地首领维持着脆弱的秩序，游商兜售着来路不明的蛊材，原石与野草露水是这里最常见的交易之物。",
+      "exits": {
+        "west": "nanjiang_heiya_path",
+        "north": "nanjiang_sanxiu_market"
+      },
+      "env_effect": {
+        "气道": 1.05
+      },
+      "refresh_resource": [
+        "原石",
+        "野草露水"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_sanxiu_leader",
+        "npc_sanxiu_merchant"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_sanxiu_market",
+      "name": "散修集市",
+      "description": "散修集市熙攘喧嚣，地摊上摆满原石、蛊材与来路不明的物件。摊主多为游方散修，讨价还价之声不绝于耳，亦有不少见不得光的交易暗中进行。",
+      "exits": {
+        "south": "nanjiang_sanxiu_camp",
+        "east": "nanjiang_bounty_board"
+      },
+      "env_effect": {
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "原石",
+        "酒液",
+        "杨梅酒",
+        "黄金蜜酒",
+        "苦贝酒",
+        "白粮液"
+      ],
+      "wild_gu": [
+        "gu_002"
+      ],
+      "npc_list": [
+        "npc_sanxiu_trader"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_bounty_board",
+      "name": "悬赏榜·木牌",
+      "description": "集市尽头立着一块斑驳木牌，上钉各色悬赏令：剿蛊兽、采奇药、寻失踪之人。赏金高低不一，亦有不少令上沾着干涸血迹，似是前任接令者再未归来。",
+      "exits": {
+        "west": "nanjiang_sanxiu_market"
+      },
+      "env_effect": {
+        "气道": 1.0
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_swamp_secret",
+      "name": "沼泽秘境·古蛊师洞府",
+      "description": "沼泽最深处藏着一座古蛊师洞府，洞门毒藤缠绕，内里阵法森严。洞中黑莲花盛开，寿桃悬于枝头，更有上古寿蛊蛰伏。毒瘴之烈非常人可挡，须持玉蟾蛊方能踏入。",
+      "exits": {
+        "south": "nanjiang_swamp_02"
+      },
+      "env_effect": {
+        "毒道": 1.4,
+        "地道": 1.2
+      },
+      "refresh_resource": [
+        "黑莲花瓣",
+        "寿桃",
+        "原石"
+      ],
+      "wild_gu": [
+        "g016"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g022"
+    },
+    {
+      "rid": "nanjiang_cave_hidden",
+      "name": "隐秘洞天",
+      "description": "一处与世隔绝的隐秘洞天，洞顶星辉璀璨如河，月华凝为实质。月光石、星砂铺满地面，玉髓生于岩壁。月刃蛊与月光蛊在此栖息，踏入者再难寻原路，唯有机缘方能脱身。",
+      "exits": {
+        "south": "nanjiang_valley_02"
+      },
+      "env_effect": {
+        "月道": 1.3,
+        "气道": 1.2
+      },
+      "refresh_resource": [
+        "月光石",
+        "星砂",
+        "玉髓",
+        "月兰花瓣"
+      ],
+      "wild_gu": [
+        "g003",
+        "g011",
+        "gu_001"
+      ],
+      "npc_list": [],
+      "secret": "flag_cave_hidden"
+    },
+    {
+      "rid": "qingmao_valley_east",
+      "name": "青茅山·东谷",
+      "description": "青茅山东侧山谷，溪流潺潺，青茅草漫山遍野。谷中露水丰沛，气机温润，是初阶蛊师采药修行的佳地，偶有青茅蛊与月光蛊出没。",
+      "exits": {
+        "west": "nanjiang_entry",
+        "east": "qingmao_spring",
+        "north": "qingmao_cave_mouth"
+      },
+      "env_effect": {
+        "气道": 1.08,
+        "水道": 1.05
+      },
+      "refresh_resource": [
+        "青茅草根",
+        "露水",
+        "野草露水",
+        "竹节"
+      ],
+      "wild_gu": [
+        "g002",
+        "g006"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_spring",
+      "name": "青茅山·灵泉水源",
+      "description": "一汪清冽灵泉自岩壁涌出，泉水含天地灵气，饮之可缓缓恢复真元。泉边生着稀有的银针花与石壳菌，水道蛊虫在此汲灵，传闻泉底深处藏有水脉蛊蛰伏。",
+      "exits": {
+        "west": "qingmao_valley_east",
+        "south": "qingmao_waterfall"
+      },
+      "env_effect": {
+        "水道": 1.2,
+        "气道": 1.05
+      },
+      "refresh_resource": [
+        "露水",
+        "银针花",
+        "石壳菌"
+      ],
+      "wild_gu": [
+        "g018"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_waterfall",
+      "name": "青茅山·飞瀑潭",
+      "description": "一道飞瀑自百丈悬崖倾泻而下，轰鸣震耳，潭水碧绿幽深。瀑布之后隐现一洞口，水汽弥漫难辨虚实。潭底沉有月华凝结的月光石，唯水性好者方可一探。",
+      "exits": {
+        "north": "qingmao_spring"
+      },
+      "env_effect": {
+        "水道": 1.25,
+        "月道": 1.08
+      },
+      "refresh_resource": [
+        "月光石",
+        "露水"
+      ],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "need_gu_g018"
+    },
+    {
+      "rid": "qingmao_cave_mouth",
+      "name": "青茅山·古洞口",
+      "description": "青茅山北麓一处幽深洞口，藤蔓垂落如帘，洞内寒气渗人。岩壁上刻有上古蛊文，依稀可辨『蛊师禁地』四字。洞中时有蛊鸣回荡，似有巨蛊蛰伏深处。",
+      "exits": {
+        "south": "qingmao_valley_east",
+        "north": "qingmao_cave_deep"
+      },
+      "env_effect": {
+        "地道": 1.1,
+        "鬼道": 1.05
+      },
+      "refresh_resource": [
+        "石壳菌",
+        "铁矿石"
+      ],
+      "wild_gu": [
+        "g013"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "qingmao_cave_deep",
+      "name": "青茅山·古洞深处",
+      "description": "古洞深处暗无天日，磷火点点如鬼眼闪烁。洞壁遍布锈蚀蛊料与玉髓矿脉，地上散落白骨与破碎蛊器。一头古蛊蛰伏于此，吞噬误入者精血，其呼吸之声如闷雷回荡。",
+      "exits": {
+        "south": "qingmao_cave_mouth"
+      },
+      "env_effect": {
+        "鬼道": 1.25,
+        "地道": 1.15
+      },
+      "refresh_resource": [
+        "锈蚀蛊料",
+        "玉髓",
+        "星砂"
+      ],
+      "wild_gu": [
+        "g011"
+      ],
+      "npc_list": [
+        "npc_beast_ancient_gu"
+      ],
+      "secret": "flag_cave_deep",
+      "boss_info": {
+        "npc_id": "npc_beast_ancient_gu",
+        "boss_name": "青茅古蛊",
+        "respawn_game_time": 240,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": []
+      }
+    },
+    {
+      "rid": "nanjiang_stone_forest",
+      "name": "南疆·万骨石林",
+      "description": "一片诡谲石林拔地而起，石柱形似白骨森森，力道蛊气在此凝而不散。石林深处力道蛊虫威能暴涨，地上散落兽骨与力道蛊蜕，传闻有石巨人蛊盘踞其间。",
+      "exits": {
+        "west": "nanjiang_swamp_01",
+        "east": "nanjiang_stone_core"
+      },
+      "env_effect": {
+        "力道": 1.2,
+        "地道": 1.08
+      },
+      "refresh_resource": [
+        "石壳菌",
+        "铁矿石",
+        "兽骨"
+      ],
+      "wild_gu": [
+        "g013",
+        "gu_004"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_stone_core",
+      "name": "石林·力道秘境",
+      "description": "石林核心处力道蛊气浓郁欲滴，巨石悬浮排列如阵。一头石巨人蛊镇守此地，力大无穷，寻常攻击难以伤其分毫。唯有以巧破力，方能撼动这尊磐石之主。",
+      "exits": {
+        "west": "nanjiang_stone_forest"
+      },
+      "env_effect": {
+        "力道": 1.35,
+        "地道": 1.2
+      },
+      "refresh_resource": [
+        "兽骨",
+        "玉髓",
+        "石壳菌"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_beast_stone_giant"
+      ],
+      "secret": "need_gu_g009",
+      "boss_info": {
+        "npc_id": "npc_beast_stone_giant",
+        "boss_name": "石巨人蛊",
+        "respawn_game_time": 180,
+        "limit_daytime": [],
+        "limit_weather": [
+          "晴朗"
+        ]
+      }
+    },
+    {
+      "rid": "nanjiang_moon_pond",
+      "name": "月华寒潭·秘境",
+      "description": "深山之中一汪寒潭，月华凝聚于水面化为实质光华。潭底月光石与星砂堆积如星河，月道蛊虫在此汲取月华修炼。潭水刺骨寒心，无月道蛊护体者触之即冻。",
+      "exits": {
+        "east": "nanjiang_valley_01"
+      },
+      "env_effect": {
+        "月道": 1.4,
+        "气道": 1.1
+      },
+      "refresh_resource": [
+        "月光石",
+        "星砂",
+        "月兰花瓣"
+      ],
+      "wild_gu": [
+        "g003",
+        "g011",
+        "gu_001"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g003"
+    },
+    {
+      "rid": "border_north_pass",
+      "name": "北原古道·南疆关口",
+      "description": "通往北原的古老通道，寒风凛冽刺骨，古道石阶覆满霜雪。前方一道古老禁制如琉璃壁垒横亘，封死了去路，禁制上符文隐现，似在诉说着昔日的纷争。禁制破除后，北侧雪原豁然开朗，可踏入北原之地。",
+      "exits": {
+        "south": "qm2_north_valley",
+        "north": "beiyuan_entry"
+      },
+      "env_effect": {
+        "冰道": 1.05,
+        "气道": 1.0
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "border_locked"
+    },
+    {
+      "rid": "border_west_pass",
+      "name": "西漠古道·南疆关口",
+      "description": "通往西漠的沙土古道，黄沙漫漫，热浪扑面如炙。古道尽头一道禁制封锁，沙暴日日冲击其上，禁制纹丝不动，仿佛自开天辟地便矗立于此。禁制破除后，西侧沙海豁然开朗，可踏入西漠之地。南侧有一条岔路通往残破驿站。",
+      "exits": {
+        "east": "qm2_main_peak",
+        "west": "ximo_entry",
+        "south": "nanjiang_xisha_clue"
+      },
+      "env_effect": {
+        "火道": 1.1
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "border_locked"
+    },
+    {
+      "rid": "border_east_pass",
+      "name": "东海古道·南疆关口",
+      "description": "通往东海的滨海古道，咸湿海风裹挟着隐隐潮声扑面而来。古道尽头禁制如水波流转，封锁了去路，海雾弥漫其间，望不见对岸半点渔火。禁制破除后，东侧碧波万顷的东海豁然开朗，可踏入滨海礁岸。",
+      "exits": {
+        "west": "nanjiang_valley_02",
+        "east": "donghai_entry"
+      },
+      "env_effect": {
+        "水道": 1.1
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "border_locked"
+    },
+    {
+      "rid": "border_center_pass",
+      "name": "中州古道·南疆关口",
+      "description": "通往中州的官道残段，石板碎裂，杂草丛生。道旁一通古旧石碑矗立，碑文已不可辨，前方禁制封锁了去路，似在昭示南疆与中州昔日的恩怨纠葛。禁制破除后，北侧青石官道豁然开朗，可踏入中州腹地。",
+      "exits": {
+        "south": "nanjiang_qingmao_camp",
+        "north": "zhongzhou_entry"
+      },
+      "env_effect": {
+        "气道": 1.05
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "border_locked"
+    },
+    {
+      "rid": "nanjiang_night_market",
+      "name": "夜市·黑市入口",
+      "description": "白日里此处空无一人，唯有一堵残墙静立。待到夜幕降临，残墙之下便会浮现一道幽暗门户，直通南疆最大的地下黑市，奇珍异宝与禁忌之物皆可在此寻得。",
+      "exits": {
+        "north": "nanjiang_sanxiu_camp",
+        "down": "nanjiang_blackmarket"
+      },
+      "env_effect": {
+        "气道": 1.0
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "night_only"
+    },
+    {
+      "rid": "nanjiang_blackmarket",
+      "name": "南疆·地下黑市",
+      "description": "黑市藏于地下溶洞之中，火把昏黄摇曳，空气里弥漫着霉味与血腥。摊位上摆满禁忌蛊方、来路不明的蛊虫与赃物，买卖双方皆蒙面低语，无人追问来历。每逢蛊潮将至，黑市货品便会周期性刷新一次。",
+      "exits": {
+        "up": "nanjiang_night_market"
+      },
+      "env_effect": {
+        "鬼道": 1.1,
+        "气道": 0.95
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_blackmarket_broker"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_deep_swamp",
+      "name": "南疆·万毒沼泽深处",
+      "description": "沼泽最深处毒雾浓稠如墨，腐泥中黑莲花成片怒放，沼铁原矿与千年毒囊深埋泥底。空气中每一次呼吸都似在吞噬寿元，传闻此地乃是南疆毒道蛊师的试炼禁地，毒物横行，无三转以上修为者入内即陨。",
+      "exits": {
+        "south": "nanjiang_swamp_02",
+        "east": "nanjiang_poison_den"
+      },
+      "env_effect": {
+        "毒道": 1.45,
+        "气道": 0.8
+      },
+      "refresh_resource": [
+        "黑莲花瓣",
+        "沼铁原矿",
+        "千年毒囊",
+        "腐骨"
+      ],
+      "wild_gu": [
+        "g012",
+        "g054"
+      ],
+      "npc_list": [
+        "npc_beast_venom_lord"
+      ],
+      "secret": "need_gu_g022",
+      "boss_info": {
+        "npc_id": "npc_beast_venom_lord",
+        "boss_name": "万毒蟒君",
+        "respawn_game_time": 360,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": [
+          "梅雨"
+        ]
+      }
+    },
+    {
+      "rid": "nanjiang_poison_den",
+      "name": "毒瘴秘境·腐骨窟",
+      "description": "腐骨窟是一处天然毒瘴秘境，窟中白骨堆积如山，毒菇丛生于骨缝之间，空气中飘浮着淡紫色的毒孢子。窟底深处藏有上古腐骨蛊与万毒蛊的蛊方残片，唯有持有玉蟾蛊者方能深入此地。",
+      "exits": {
+        "west": "nanjiang_deep_swamp"
+      },
+      "env_effect": {
+        "毒道": 1.5,
+        "鬼道": 1.15
+      },
+      "refresh_resource": [
+        "腐骨",
+        "千年毒囊",
+        "黑莲花瓣",
+        "毒菇"
+      ],
+      "wild_gu": [
+        "g053",
+        "g054"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g022"
+    },
+    {
+      "rid": "nanjiang_heiya_abyss",
+      "name": "黑崖寨·万丈深渊",
+      "description": "黑崖寨背后的万丈深渊，崖壁如刀削般直立，深不见底。崖壁上嵌着锈蚀蛊料与玉髓矿脉，崖底传出阵阵鬼哭狼嚎，似有上古鬼道蛊兽蛰伏其中。寨中犯事者多被推下此崖，尸骨无存。",
+      "exits": {
+        "south": "nanjiang_heiya_hall",
+        "down": "nanjiang_ghost_abyss"
+      },
+      "env_effect": {
+        "地道": 1.2,
+        "鬼道": 1.15
+      },
+      "refresh_resource": [
+        "锈蚀蛊料",
+        "玉髓",
+        "兽骨"
+      ],
+      "wild_gu": [
+        "g036"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_ghost_abyss",
+      "name": "鬼道秘境·幽冥深渊",
+      "description": "深渊之底是一片幽冥鬼域，磷火飘忽如星河倒悬，鬼道蛊气浓郁欲滴。此处栖息着南疆最强的鬼道蛊兽——幽冥鬼主，传闻其吞噬过无数蛊师魂魄，魂力已臻化境。无鬼道蛊护体者入内即魂飞魄散。",
+      "exits": {
+        "up": "nanjiang_heiya_abyss"
+      },
+      "env_effect": {
+        "鬼道": 1.55,
+        "地道": 1.2
+      },
+      "refresh_resource": [
+        "幽冥鬼砂",
+        "磷火晶",
+        "锈蚀蛊料",
+        "星砂"
+      ],
+      "wild_gu": [
+        "g036",
+        "g037"
+      ],
+      "npc_list": [
+        "npc_beast_ghost_lord"
+      ],
+      "secret": "need_gu_g036",
+      "boss_info": {
+        "npc_id": "npc_beast_ghost_lord",
+        "boss_name": "幽冥鬼主",
+        "respawn_game_time": 480,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": []
+      }
+    },
+    {
+      "rid": "nanjiang_morin_lair",
+      "name": "魔道据点·血煞宗分舵",
+      "description": "血煞宗在南疆设立的分舵，藏于深山密林之中，入口以血煞蛊阵遮蔽，外人难以察觉。舵内血腥气浓重，血池中浸泡着炼制血煞蛊的素材，魔修弟子往来其间，目光阴鸷。非魔道中人擅入者，必被炼为血食。",
+      "exits": {
+        "east": "nanjiang_deep_swamp",
+        "north": "nanjiang_blood_altar"
+      },
+      "env_effect": {
+        "鬼道": 1.2,
+        "毒道": 1.1
+      },
+      "refresh_resource": [
+        "兽血",
+        "黑莲花瓣",
+        "血煞晶"
+      ],
+      "wild_gu": [
+        "g030",
+        "gu_xuemou",
+        "gu_shenxue"
+      ],
+      "npc_list": [
+        "npc_bloodsect_disciple",
+        "npc_bloodsect_elder"
+      ],
+      "secret": "align_evil"
+    },
+    {
+      "rid": "nanjiang_blood_altar",
+      "name": "血煞宗·血祭祭坛",
+      "description": "血煞宗核心祭坛，巨大的血池中央矗立着一尊血色蛊像，蛊像双眼滴血不止。祭坛四周刻满血色蛊文，每逢月圆之夜，血煞宗弟子便会在此举行血祭，以鲜血祭炼高阶血道蛊虫。祭坛深处藏有血煞宗镇宗蛊方——冥血蛊蛊方。",
+      "exits": {
+        "south": "nanjiang_morin_lair"
+      },
+      "env_effect": {
+        "鬼道": 1.35,
+        "毒道": 1.15
+      },
+      "refresh_resource": [
+        "血煞晶",
+        "黑莲花瓣",
+        "兽血",
+        "星砂"
+      ],
+      "wild_gu": [
+        "g030",
+        "g031",
+        "gu_xuemou",
+        "gu_shenxue"
+      ],
+      "npc_list": [
+        "npc_bloodsect_patriarch"
+      ],
+      "secret": "align_evil",
+      "boss_info": {
+        "npc_id": "npc_bloodsect_patriarch",
+        "boss_name": "血煞宗主",
+        "respawn_game_time": 600,
+        "limit_daytime": [
+          "夜晚"
+        ],
+        "limit_weather": [
+          "梅雨"
+        ]
+      }
+    },
+    {
+      "rid": "nanjiang_guchao_west",
+      "name": "蛊潮领地·西荒原",
+      "description": "南疆西部一片荒芜原野，平日里死寂无声。每隔数日，此处便会爆发一次蛊潮——无数野生蛊虫受某种神秘力量驱使，疯狂涌向此地，形成令人胆寒的蛊潮领地。蛊潮期间，此地蛊虫密度剧增，捕捉概率大幅提升，但同样危机四伏，稍有不慎便会被蛊群吞噬。",
+      "exits": {
+        "east": "nanjiang_deep_swamp"
+      },
+      "env_effect": {
+        "气道": 1.0
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "guchao_zone"
+    },
+    {
+      "rid": "nanjiang_guchao_east",
+      "name": "蛊潮领地·东密林",
+      "description": "南疆东部密林是蛊潮的另一处爆发地，林中古木参天，藤蔓如蛇。蛊潮来临时，林中蛊虫嘶鸣震耳，地面毒虫翻涌如潮水。此地盛产稀有毒道与气道蛊虫，是冒险者捕捉高阶蛊虫的绝佳去处，亦是非生即死的修罗场。",
+      "exits": {
+        "west": "nanjiang_stone_forest"
+      },
+      "env_effect": {
+        "气道": 1.1,
+        "毒道": 1.1
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [],
+      "secret": "guchao_zone"
+    },
+    {
+      "rid": "nanjiang_temp_realm_moon",
+      "name": "临时秘境·月华幻境",
+      "description": "一处只在特定月相下浮现的临时秘境，入口如水中月华般虚幻。秘境内部月华凝为实质，月光石与星砂堆积如星河，月道蛊虫在此汲取月华修炼。秘境停留时间有限，月相一变便会消散，将其中之人随机传送至南疆某处。",
+      "exits": {
+        "south": "nanjiang_moon_pond"
+      },
+      "env_effect": {
+        "月道": 1.6,
+        "气道": 1.15
+      },
+      "refresh_resource": [
+        "月光石",
+        "星砂",
+        "月华露"
+      ],
+      "wild_gu": [
+        "g003",
+        "g011"
+      ],
+      "npc_list": [],
+      "secret": "temp_realm_moon"
+    },
+    {
+      "rid": "nanjiang_temp_realm_fire",
+      "name": "临时秘境·炎窟地脉",
+      "description": "南疆火山地脉深处偶尔开启的临时秘境，窟中岩浆奔涌，火道蛊气炽烈。炎窟内栖息着稀有的火道蛊兽，藏有火道蛊方残片与火道秘材。无火道蛊护体者入内即被焚为灰烬，秘境停留时间有限，地脉冷却后便会封闭。",
+      "exits": {
+        "north": "nanjiang_heiya_smithy"
+      },
+      "env_effect": {
+        "火道": 1.6,
+        "地道": 1.15
+      },
+      "refresh_resource": [
+        "炎晶",
+        "地脉火石",
+        "玉髓",
+        "锈蚀蛊料"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_beast_fire_lord"
+      ],
+      "secret": "temp_realm_fire",
+      "boss_info": {
+        "npc_id": "npc_beast_fire_lord",
+        "boss_name": "炎窟火主",
+        "respawn_game_time": 300,
+        "limit_daytime": [],
+        "limit_weather": [
+          "晴朗"
+        ]
+      }
+    },
+    {
+      "rid": "nanjiang_xisha_clue",
+      "name": "西漠古道·残破驿站",
+      "description": "西漠通道南疆一侧的残破驿站，曾是往来商旅歇脚之地，如今已被风沙掩埋大半。驿站废墟中立着一块风化的石碑，碑文依稀可辨：『欲通西漠，需寻南疆古蛊师遗物——风行蛊与沙遁蛊，二者缺一不可。』碑旁还刻着一行小字：『遗物藏于万毒沼泽与幽冥深渊之中，有缘者得之。』西漠通道的禁制依旧坚不可摧，但此处似是通往西漠的关键线索所在。",
+      "exits": {
+        "north": "border_west_pass"
+      },
+      "env_effect": {
+        "气道": 1.0,
+        "火道": 1.05
+      },
+      "refresh_resource": [],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_xisha_hermit"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "nanjiang_ancient_ruin",
+      "name": "南疆·古蛊师遗迹",
+      "description": "一处深藏于南疆腹地的古蛊师遗迹，断壁残垣间依稀可见昔日辉煌。遗迹中央有一座残破的炼蛊鼎，鼎身刻满上古蛊文，记载着通往西漠的古法：『以风行蛊御风沙，以沙遁蛊穿沙海，二蛊合一，方可破西漠禁制。』遗迹深处似有古蛊师残魂徘徊，守护着此处秘宝。",
+      "exits": {
+        "south": "nanjiang_poison_den",
+        "north": "nanjiang_ghost_abyss"
+      },
+      "env_effect": {
+        "气道": 1.15,
+        "鬼道": 1.1,
+        "地道": 1.1
+      },
+      "refresh_resource": [
+        "古蛊师遗骨",
+        "星砂",
+        "玉髓",
+        "锈蚀蛊料"
+      ],
+      "wild_gu": [
+        "g036",
+        "g037"
+      ],
+      "npc_list": [
+        "npc_ancient_master_soul"
+      ],
+      "secret": "need_gu_g036",
+      "boss_info": {
+        "npc_id": "npc_ancient_master_soul",
+        "boss_name": "古蛊师残魂",
+        "respawn_game_time": 540,
+        "limit_daytime": [
+          "凌晨"
+        ],
+        "limit_weather": []
+      }
+    },
+    {
+      "rid": "qm2_south_slope",
+      "name": "青茅山南坡谷地",
+      "description": "青茅山南坡一片开阔谷地，野草没膝，露水盈盈。谷地东侧清溪潺潺，西侧石径蜿蜒通往青茅山山脚旧道。南坡阳光充沛，气道蛊虫栖息其间，偶有野猪蛊与白豕蛊在草丛中拱食。谷地中央立着一方风化石碑，上刻『青茅』二字，指引着往来的蛊师。",
+      "exits": {
+        "east": "qingmao_01",
+        "north": "qm2_main_peak",
+        "west": "qm2_stream"
+      },
+      "env_effect": {
+        "气道": 1.08,
+        "毒道": 1.0
+      },
+      "refresh_resource": [
+        "野草露水",
+        "青茅草根",
+        "露水",
+        "蚁巢土"
+      ],
+      "wild_gu": [
+        "g002",
+        "g004",
+        "g018",
+        "gu_003",
+        "gu_009",
+        "gu_010"
+      ],
+      "npc_list": [
+        "npc_qm2_herb_gatherer"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "qm2_main_peak",
+      "name": "青茅山主峰",
+      "description": "青茅山主峰高耸入云，峰顶青茅草如海翻涌，月华之夜尤为浓郁。峰顶建有一座青茅山宗族的望峰亭，亭中常驻一位贩卖蛊材的老商贾。主峰地势开阔，可俯瞰整片青茅山域，北麓山谷、东麓密林尽收眼底。峰顶一方石盘上刻有八卦方位，石盘中央有一道下沉的裂口，似通往地底，需以土遁蛊方能开启入口。裂口边缘偶有地脉晶裸露，是炼制地道蛊虫的珍材。主峰西侧有一条古道通往西漠边境通道，禁制破除后可踏入黄沙大漠。",
+      "exits": {
+        "south": "qm2_south_slope",
+        "north": "qm2_north_valley",
+        "east": "qm2_east_forest",
+        "west": "border_west_pass",
+        "down": "qm2_secret_underground"
+      },
+      "env_effect": {
+        "月道": 1.15,
+        "气道": 1.05
+      },
+      "refresh_resource": [
+        "月光石",
+        "青茅草根",
+        "星砂",
+        "地脉晶",
+        "蚁巢土"
+      ],
+      "wild_gu": [
+        "g003",
+        "g002",
+        "g010",
+        "gu_001",
+        "gu_003",
+        "gu_005"
+      ],
+      "npc_list": [
+        "npc_qm2_peak_merchant",
+        "npc_qm2_wandering_guishi"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "qm2_north_valley",
+      "name": "青茅山北麓山谷",
+      "description": "青茅山北麓的山谷终年背阴，寒气逼人，谷中乱石嶙峋，枯木横陈。谷地北侧是一片荒凉的乱葬岗，坟茔散布，阴气森森，传闻有幽魂蛊与鬼影蛊出没其间。谷地中央有一座塌陷的古墓入口，墓门以阴气禁制封锁，唯有持阴视蛊者方能照见禁制破绽，开启古坟秘境。谷地北侧尽头是一道通往北原的古道关口，寒风自关口呼啸而入。",
+      "exits": {
+        "south": "qm2_main_peak",
+        "west": "qm2_cold_mist_cave",
+        "down": "qm2_secret_tomb",
+        "north": "border_north_pass"
+      },
+      "env_effect": {
+        "鬼道": 1.15,
+        "月道": 1.05,
+        "气道": 0.95
+      },
+      "refresh_resource": [
+        "蛇蜕",
+        "兽血",
+        "阴魂砂"
+      ],
+      "wild_gu": [
+        "g036",
+        "g038",
+        "g034"
+      ],
+      "npc_list": [
+        "npc_qm2_grave_keeper",
+        "npc_qm2_beast_ghost"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "qm2_cold_mist_cave",
+      "name": "寒雾洞窟",
+      "description": "青茅山北麓的寒雾洞窟，洞口终年弥漫浓雾，寒气刺骨。洞内钟乳倒悬，水滴叮咚，雾气浓稠欲滴，视线不过数尺。洞窟深处栖息着一只凶悍的寒雾蛇王，唯有夜晚且浓雾天气方会现身，寻常蛊师白日入内只见空窟。洞壁上凝结的寒雾晶是炼制冰道、水道蛊虫的珍材。",
+      "exits": {
+        "east": "qm2_north_valley"
+      },
+      "env_effect": {
+        "鬼道": 1.1,
+        "水道": 1.15,
+        "毒道": 1.05
+      },
+      "refresh_resource": [
+        "寒雾晶",
+        "蛇蜕",
+        "毒囊"
+      ],
+      "wild_gu": [
+        "g009",
+        "g006"
+      ],
+      "npc_list": [
+        "npc_qm2_snakeking"
+      ],
+      "secret": "",
+      "boss_info": {
+        "npc_id": "npc_qm2_snakeking",
+        "boss_name": "寒雾蛇王",
+        "respawn_game_time": 240,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": [
+          "浓雾"
+        ]
+      }
+    },
+    {
+      "rid": "qm2_east_forest",
+      "name": "东麓密林",
+      "description": "青茅山东麓的密林遮天蔽日，古木盘根错节，藤蔓如帘。林间常年雾气缭绕，毒蛇蛊与竹叶青蛊隐于叶间，浓雾天气时蛊虫藏匿概率大增，极难捕捉。密林深处有一片被毒瘴笼罩的禁区，瘴气翻涌如墨，唯有持探隐蛊者方能洞穿瘴雾，开启毒瘴秘境入口。",
+      "exits": {
+        "west": "qm2_main_peak",
+        "south": "qm2_stream",
+        "down": "qm2_secret_miasma"
+      },
+      "env_effect": {
+        "毒道": 1.15,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "蛇蜕",
+        "毒囊",
+        "青茅草根"
+      ],
+      "wild_gu": [
+        "g006",
+        "g009",
+        "g020",
+        "gu_003",
+        "gu_005",
+        "gu_009",
+        "gu_010"
+      ],
+      "npc_list": [
+        "npc_qm2_forest_hunter",
+        "npc_qm2_beast_wolf"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "qm2_stream",
+      "name": "溪流水源地",
+      "description": "青茅山东麓的溪流水源地，清泉自岩缝涌出，汇成一条蜿蜒溪流。溪水甘甜，蕴含微弱水道灵韵，露水与野草露水在此丰沛。溪边水草丰美，时有野猪蛊与灵狐蛊来此饮水，是采集露水与休憩的佳处。溪流北侧通往东麓密林，东侧接南坡谷地。",
+      "exits": {
+        "east": "qm2_south_slope",
+        "north": "qm2_east_forest"
+      },
+      "env_effect": {
+        "水道": 1.1,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "露水",
+        "野草露水",
+        "青茅草根"
+      ],
+      "wild_gu": [
+        "g018",
+        "g032",
+        "g002"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "qm2_secret_underground",
+      "name": "青茅山地下蛊窟",
+      "description": "青茅山主峰地下的隐秘蛊窟，需以土遁蛊穿地而入。窟中地道纵横，岩壁上生着罕见的石壳菌与地脉晶，地底深处藏有古蛊师遗留的蛊方残片与一只沉睡的遁地蛊王。窟中地道蛊气浓郁，是修炼地道蛊虫的绝佳之地。",
+      "exits": {
+        "up": "qm2_main_peak"
+      },
+      "env_effect": {
+        "地道": 1.3,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "石壳菌",
+        "地脉晶",
+        "铁矿石",
+        "玉髓"
+      ],
+      "wild_gu": [
+        "g013",
+        "g008",
+        "g023"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g_qm_tudun"
+    },
+    {
+      "rid": "qm2_secret_miasma",
+      "name": "毒瘴秘境",
+      "description": "东麓密林深处的毒瘴秘境，瘴气浓稠如墨，常人入内即七窍渗血。秘境中毒菇丛生如花，黑莲花于腐土绽放，毒囊与腐骨散落其间。唯有持探隐蛊者方能洞穿瘴雾，于毒瘴中寻得古蛊师遗留的毒道蛊方残片。秘境深处似有腐骨蛊盘踞，阴冷毒气弥漫。",
+      "exits": {
+        "up": "qm2_east_forest"
+      },
+      "env_effect": {
+        "毒道": 1.35,
+        "气道": 0.85
+      },
+      "refresh_resource": [
+        "毒囊",
+        "毒菇",
+        "黑莲花瓣"
+      ],
+      "wild_gu": [
+        "g052",
+        "g053",
+        "g006"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g_qm_tanyin"
+    },
+    {
+      "rid": "qm2_secret_tomb",
+      "name": "古坟秘境",
+      "description": "青茅山北麓山谷深处的古坟秘境，一片荒凉的乱葬岗，坟茔散布，阴气森森。古坟中葬着一位上古鬼道蛊师，其残魂千年不散，守护着鬼道至高蛊方残片。坟间游荡着幽魂蛊与鬼影蛊，阴气浓郁至极。唯有持阴视蛊者方能照见禁制破绽，踏入这片阴阳交界之地。",
+      "exits": {
+        "up": "qm2_north_valley"
+      },
+      "env_effect": {
+        "鬼道": 1.35,
+        "月道": 1.1,
+        "气道": 0.85
+      },
+      "refresh_resource": [
+        "阴魂砂",
+        "蛇蜕",
+        "兽血"
+      ],
+      "wild_gu": [
+        "g036",
+        "g038",
+        "g037"
+      ],
+      "npc_list": [],
+      "secret": "need_gu_g_qm_yinshi"
+    }
+  ]
+}

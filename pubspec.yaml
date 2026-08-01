@@ -1,7 +1,7 @@
 name: gzren
 description: 蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。
 publish_to: 'none'
-version: 1.0.4+1
+version: 1.5.0+3
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -37,6 +37,36 @@ flutter:
     - assets/static/gu_list.json
     - assets/static/recipe.json
     - assets/static/map.json
+    - assets/static/map_nanjiang.json
     - assets/static/npc_template.json
     - assets/static/material.json
     - assets/static/random_event.json
+    - assets/static/battle_config.json
+    - assets/static/time_config.json
+    - assets/static/weather_config.json
+    - assets/static/kill_move.json
+    - assets/static/map_ximo.json
+    - assets/static/gu_ximo.json
+    - assets/static/material_ximo.json
+    - assets/static/npc_ximo.json
+    - assets/static/event_ximo.json
+    - assets/static/weather_ximo.json
+    - assets/static/map_beiyuan.json
+    - assets/static/gu_beiyuan.json
+    - assets/static/material_beiyuan.json
+    - assets/static/npc_beiyuan.json
+    - assets/static/event_beiyuan.json
+    - assets/static/weather_beiyuan.json
+    - assets/static/map_donghai.json
+    - assets/static/gu_donghai.json
+    - assets/static/material_donghai.json
+    - assets/static/npc_donghai.json
+    - assets/static/event_donghai.json
+    - assets/static/weather_donghai.json
+    - assets/static/map_zhongzhou.json
+    - assets/static/gu_zhongzhou.json
+    - assets/static/material_zhongzhou.json
+    - assets/static/npc_zhongzhou.json
+    - assets/static/event_zhongzhou.json
+    - assets/static/weather_zhongzhou.json
+    - assets/static/event_global.json

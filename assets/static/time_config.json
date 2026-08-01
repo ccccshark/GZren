@@ -1,0 +1,9 @@
+{
+  "cycle_total_minute": 480,
+  "phase_setting": [
+    {"phase": "白天", "start": 0, "end": 180, "desc": "阳光洒落山林，大部分蛊虫活跃", "buff": {"气道": 1.10, "光道": 1.10}, "debuff": {}},
+    {"phase": "黄昏", "start": 180, "end": 240, "desc": "夕阳垂落，光线逐渐暗淡", "buff": {}, "debuff": {}},
+    {"phase": "夜晚", "start": 240, "end": 400, "desc": "夜幕笼罩，鬼道蛊威力提升", "buff": {"鬼道": 1.15}, "debuff": {"捕捉成功率": 0.80}},
+    {"phase": "凌晨", "start": 400, "end": 480, "desc": "夜色最深，寒气弥漫", "buff": {"月道": 1.10}, "debuff": {"捕捉成功率": 0.70}}
+  ]
+}

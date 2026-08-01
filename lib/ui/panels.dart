@@ -17,6 +17,8 @@ import '../data_model/scene_model.dart';
 import '../data_model/gu_model.dart';
 import '../data_model/recipe_model.dart'; // MatParser
 import '../data_model/poison_model.dart' show PoisonStore, PoisonRank, PoisonInstance;
+import '../data_model/killer_move_model.dart' show KillerMoveStore, KillerMove;
+import 'detail_dialogs.dart'; // 第三阶段新增：材料/蛊虫详情浮窗 + 域外通道封锁弹窗
 
 // 通用配色（与 action_dialogs.dart 保持一致风格）
 const Color _panelBg = Color(0xFF1E1E1E);
@@ -112,6 +114,9 @@ class _MapNavContent extends StatelessWidget {
             )
           else
             // 出口网格：每个出口一张可点击卡片，显示方向 + 目标场景名
+            // 第三阶段新增【14】：border_ 前缀目标显示封锁标识，点击弹出封锁提示
+            // V1.6 加固【秘境入口提示】：目标 secret 以 need_gu_ 开头时，出口卡片显示锁形标识，
+            //   点击仍走 go 指令（由引擎拦截并提示需持有对应蛊虫），不直接传送。
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -123,10 +128,18 @@ class _MapNavContent extends StatelessWidget {
                 final dirCN = _dirCN[e.key] ?? e.key;
                 final target = ctx.rooms[e.value];
                 final targetName = target?.name ?? e.value;
+                final isBorder = e.value.startsWith('border_');
+                // 秘境入口判定：目标房间 secret 字段以 need_gu_ 开头
+                final isSecretLocked = target != null && target.secret.startsWith('need_gu_');
                 return _exitCard(dirCN, e.key, targetName, () {
-                  Navigator.pop(context);
-                  ctx.handle('go ${e.key}');
-                });
+                  if (isBorder) {
+                    // 域外通道：弹出封锁提示，不执行传送
+                    showBorderLockedDialog(context, targetName);
+                  } else {
+                    Navigator.pop(context);
+                    ctx.handle('go ${e.key}');
+                  }
+                }, isBorder: isBorder, isSecretLocked: isSecretLocked);
               }).toList(),
             ),
           const SizedBox(height: 6),
@@ -142,25 +155,39 @@ class _MapNavContent extends StatelessWidget {
     );
   }
 
-  Widget _exitCard(String dirCN, String dirKey, String targetName, VoidCallback onTap) {
+  Widget _exitCard(String dirCN, String dirKey, String targetName, VoidCallback onTap,
+      {bool isBorder = false, bool isSecretLocked = false}) {
+    // 第三阶段新增【14】：域外通道出口用红色封锁样式标识
+    // V1.6 加固：秘境入口（need_gu_）用紫色虚线样式标识，提示需钥匙蛊
+    final lockColor = const Color(0xFF8E44AD);
+    final cardColor = isBorder
+        ? const Color(0xFFE74C3C).withOpacity(0.15)
+        : (isSecretLocked ? lockColor.withOpacity(0.12) : _panelItemBg);
+    final borderColor = isBorder
+        ? const Color(0xFFE74C3C)
+        : (isSecretLocked ? lockColor : _panelAccent.withOpacity(0.4));
+    final dirColor = isBorder
+        ? const Color(0xFFE74C3C)
+        : (isSecretLocked ? lockColor : _panelAccent);
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          // 第三阶段新增【13】：放大触控区域，垂直 padding 从 8 增至 12
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
           decoration: BoxDecoration(
-            color: _panelItemBg,
+            color: cardColor,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: _panelAccent.withOpacity(0.4), width: 1),
+            border: Border.all(color: borderColor, width: 1),
           ),
           child: Row(children: [
             Container(
               width: 36, height: 36,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: _panelAccent, shape: BoxShape.circle,
+                color: dirColor, shape: BoxShape.circle,
               ),
               child: Text(dirCN, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
             ),
@@ -171,11 +198,17 @@ class _MapNavContent extends StatelessWidget {
               children: [
                 Text('向$dirCN', style: const TextStyle(color: Colors.white70, fontSize: 11)),
                 Text(targetName,
-                    style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: isBorder ? const Color(0xFFE74C3C) : Colors.white,
+                        fontSize: 13, fontWeight: FontWeight.bold),
                     maxLines: 1, overflow: TextOverflow.ellipsis),
+                if (isBorder)
+                  const Text('[禁制封锁]', style: TextStyle(color: Color(0xFFE74C3C), fontSize: 10)),
+                if (isSecretLocked)
+                  const Text('[秘境·需钥匙蛊]', style: TextStyle(color: Color(0xFF8E44AD), fontSize: 10)),
               ],
             )),
-            const Icon(Icons.chevron_right, color: Colors.white38, size: 18),
+            Icon(isBorder ? Icons.lock : (isSecretLocked ? Icons.vpn_key : Icons.chevron_right),
+                color: isBorder ? const Color(0xFFE74C3C) : (isSecretLocked ? lockColor : Colors.white38), size: 18),
           ]),
         ),
       ),
@@ -377,13 +410,15 @@ class QuickBarStrip extends StatelessWidget {
 
   Widget _stripSlot(BuildContext context, int idx, GuInstance? g) {
     final empty = g == null;
+    // 第三阶段新增【13】：放大快捷栏触控区域，minimumSize 确保最小高度 48dp
     return GestureDetector(
       onLongPress: onEdit,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: empty ? const Color(0xFF1A1A1A) : const Color(0xFF1ABC9C).withOpacity(0.18),
           foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+          minimumSize: const Size(0, 48),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           side: BorderSide(
               color: empty ? Colors.white12 : const Color(0xFF1ABC9C), width: 1),
@@ -395,7 +430,7 @@ class QuickBarStrip extends StatelessWidget {
               },
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Icon(empty ? Icons.add : Icons.flash_on,
-              color: empty ? Colors.white30 : const Color(0xFF1ABC9C), size: 16),
+              color: empty ? Colors.white30 : const Color(0xFF1ABC9C), size: 18),
           const SizedBox(height: 2),
           Text(
             empty ? '设快捷' : g.name,
@@ -494,9 +529,27 @@ Future<void> showInventoryClassifiedPanel(BuildContext context, GameContext ctx)
   );
 }
 
-class _InventoryClassifiedContent extends StatelessWidget {
+class _InventoryClassifiedContent extends StatefulWidget {
   final GameContext ctx;
   const _InventoryClassifiedContent({required this.ctx});
+
+  @override
+  State<_InventoryClassifiedContent> createState() => _InventoryClassifiedContentState();
+}
+
+class _InventoryClassifiedContentState extends State<_InventoryClassifiedContent> {
+  // V1.3 新增【背包优化】：分类标签切换 + 名称模糊搜索
+  String _tab = 'all'; // all / material / recipe / gu
+  final _searchCtrl = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  GameContext get ctx => widget.ctx;
 
   @override
   Widget build(BuildContext context) {
@@ -512,31 +565,81 @@ class _InventoryClassifiedContent extends StatelessWidget {
         materials[n] = (materials[n] ?? 0) + c;
       }
     }
+    // 模糊搜索过滤
+    final q = _query.trim().toLowerCase();
+    bool match(String s) => q.isEmpty || s.toLowerCase().contains(q);
+    final matsF = materials.entries.where((e) => match(e.key)).toList();
+    final recipesF = recipes.entries.where((e) => match(e.key)).toList();
+    final slotGuF = p.guInSlot.where((g) => match(g.name)).toList();
+    final bagGuF = p.guBag.where((g) => match(g.name)).toList();
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _section('材料（采集/掉落/购买所得）', Icons.grain, const Color(0xFF27AE60),
-              materials.isEmpty
-                  ? ['空空如也']
-                  : materials.entries.map((e) => '· ${e.key} x${e.value}').toList()),
-          const SizedBox(height: 10),
-          _section('蛊方（炼蛊配方，需配合材料）', Icons.menu_book, const Color(0xFFE67E22),
-              recipes.isEmpty
-                  ? ['尚无蛊方']
-                  : recipes.entries.map((e) => '· ${e.key} x${e.value}').toList()),
-          const SizedBox(height: 10),
-          _section('空窍蛊（已装备，可催动/投喂）', Icons.bolt, const Color(0xFF1ABC9C),
-              p.guInSlot.isEmpty
-                  ? ['空窍空空，尚未安放蛊虫']
-                  : p.guInSlot.map((g) => '· ${g.name}${g.mutated ? "[变异]" : ""}　${g.rank}转/${g.school}　耐久 ${g.durability}/${g.durabilityMax}　消耗${g.costZhen}真元').toList(),
-              highlight: true),
-          const SizedBox(height: 10),
-          _section('背包蛊（寄存，需装备入空窍方可催动）', Icons.bug_report, const Color(0xFF9B59B6),
-              p.guBag.isEmpty
-                  ? ['无寄存蛊虫']
-                  : p.guBag.map((g) => '· ${g.name}${g.mutated ? "[变异]" : ""}　${g.rank}转/${g.school}　耐久 ${g.durability}/${g.durabilityMax}').toList()),
+          // V1.3 新增【模糊搜索框】
+          TextField(
+            controller: _searchCtrl,
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: '搜索材料/蛊方/蛊虫名称…',
+              hintStyle: const TextStyle(color: Colors.white38, fontSize: 13),
+              prefixIcon: const Icon(Icons.search, color: Colors.white54, size: 18),
+              suffixIcon: _query.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.clear, color: Colors.white54, size: 18),
+                      onPressed: () { _searchCtrl.clear(); setState(() => _query = ''); },
+                    ) : null,
+              enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24)),
+              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: _panelAccent)),
+            ),
+            onChanged: (v) => setState(() => _query = v),
+          ),
+          const SizedBox(height: 8),
+          // V1.3 新增【分类标签切换】
+          _tabBar(),
+          const SizedBox(height: 8),
+          // V1.3 新增【批量操作快捷栏】（仅材料标签显示批量出售）
+          if (_tab == 'all' || _tab == 'material')
+            _batchActionBar(materials),
+          if (_tab == 'all' || _tab == 'material') ...[
+            _sectionClickable('材料（采集/掉落/购买所得）', Icons.grain, const Color(0xFF27AE60),
+                matsF.isEmpty
+                    ? (q.isEmpty ? ['空空如也'] : ['未匹配到材料'])
+                    : matsF.map((e) => '· ${e.key} x${e.value}').toList(),
+                onTapItem: matsF.isEmpty ? null : (idx) {
+                  showMaterialDetailDialog(context, ctx, matsF[idx].key);
+                }),
+            const SizedBox(height: 10),
+          ],
+          if (_tab == 'all' || _tab == 'recipe') ...[
+            _section('蛊方（炼蛊配方，需配合材料）', Icons.menu_book, const Color(0xFFE67E22),
+                recipesF.isEmpty
+                    ? (q.isEmpty ? ['尚无蛊方'] : ['未匹配到蛊方'])
+                    : recipesF.map((e) => '· ${e.key} x${e.value}').toList()),
+            const SizedBox(height: 10),
+          ],
+          if (_tab == 'all' || _tab == 'gu') ...[
+            // 第三阶段新增【13】：空窍蛊行可点击查看详情
+            _sectionClickable('空窍蛊（已装备，可催动/投喂，点击查看详情）', Icons.bolt, const Color(0xFF1ABC9C),
+                slotGuF.isEmpty
+                    ? (q.isEmpty ? ['空窍空空，尚未安放蛊虫'] : ['未匹配到蛊虫'])
+                    : slotGuF.map((g) => '· ${g.name}${g.mutated ? "[变异]" : ""}　${g.rank}转/${g.school}　耐久 ${g.durability}/${g.durabilityMax}　消耗${g.costZhen}真元').toList(),
+                onTapItem: slotGuF.isEmpty ? null : (idx) {
+                  showGuInstanceDetailDialog(context, ctx, slotGuF[idx]);
+                }, highlight: true),
+            const SizedBox(height: 10),
+            // 第三阶段新增【13】：背包蛊行可点击查看详情
+            _sectionClickable('背包蛊（寄存，需装备入空窍方可催动，点击查看详情）', Icons.bug_report, const Color(0xFF9B59B6),
+                bagGuF.isEmpty
+                    ? (q.isEmpty ? ['无寄存蛊虫'] : ['未匹配到蛊虫'])
+                    : bagGuF.map((g) => '· ${g.name}${g.mutated ? "[变异]" : ""}　${g.rank}转/${g.school}　耐久 ${g.durability}/${g.durabilityMax}').toList(),
+                onTapItem: bagGuF.isEmpty ? null : (idx) {
+                  showGuInstanceDetailDialog(context, ctx, bagGuF[idx]);
+                }),
+          ],
           const SizedBox(height: 4),
           Row(children: [
             const Icon(Icons.info_outline, color: Colors.white38, size: 14),
@@ -544,6 +647,119 @@ class _InventoryClassifiedContent extends StatelessWidget {
             Expanded(child: Text('材料/蛊方合计 ${p.inventory.length} 项；空窍 ${p.guInSlot.length}/${p.effectiveSlotMax}。',
                 style: const TextStyle(color: Colors.white38, fontSize: 11))),
           ]),
+        ],
+      ),
+    );
+  }
+
+  /// V1.3 新增【分类标签栏】：全部/材料/蛊方/蛊虫 触屏切换。
+  Widget _tabBar() {
+    final tabs = [
+      ('all', '全部', Icons.grid_view),
+      ('material', '材料', Icons.grain),
+      ('recipe', '蛊方', Icons.menu_book),
+      ('gu', '蛊虫', Icons.bug_report),
+    ];
+    return SizedBox(
+      height: 38,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: tabs.map((t) {
+          final active = _tab == t.$1;
+          return Padding(
+            padding: const EdgeInsets.only(right: 6),
+            child: ElevatedButton.icon(
+              icon: Icon(t.$3, size: 15),
+              label: Text(t.$2, style: const TextStyle(fontSize: 12)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: active ? const Color(0xFF8E44AD) : const Color(0xFF2C1E3A),
+                foregroundColor: active ? Colors.white : Colors.white70,
+                minimumSize: const Size(0, 34),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              onPressed: () => setState(() => _tab = t.$1),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  /// V1.3 新增【批量操作栏】：批量出售（卖给当前场景商人，黑名单物品自动跳过）。
+  Widget _batchActionBar(Map<String, int> materials) {
+    // 仅当场景存在商人且有非黑名单材料时显示
+    if (ctx.npcsInCurRoom().isEmpty || materials.isEmpty) return const SizedBox.shrink();
+    final hasMerchant = ctx.npcsInCurRoom().any((n) => n.isMerchant);
+    if (!hasMerchant) return const SizedBox.shrink();
+    final sellable = materials.entries.where((e) => !ctx.isTradeBlacklisted(e.key)).toList();
+    if (sellable.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(children: [
+        ElevatedButton.icon(
+          icon: const Icon(Icons.sell, size: 16),
+          label: const Text('批量出售', style: TextStyle(fontSize: 12)),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFE67E22), foregroundColor: Colors.white,
+            minimumSize: const Size(0, 38),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+          ),
+          onPressed: () => _confirmBatchSell(sellable),
+        ),
+        const SizedBox(width: 8),
+        const Expanded(child: Text('一键出售全部可售材料（货币类自动跳过）',
+            style: TextStyle(color: Colors.white38, fontSize: 10))),
+      ]),
+    );
+  }
+
+  /// V1.3 新增【批量出售确认】：列出将出售的材料与预估原石，确认后逐项出售。
+  void _confirmBatchSell(List<MapEntry<String, int>> sellable) {
+    final matInfo = (ctx.materials['materials'] ?? {}) as Map;
+    int total = 0;
+    final lines = <String>[];
+    for (final e in sellable) {
+      final priceInfo = ((matInfo[e.key] ?? {}) as Map)['price'] ?? 1;
+      final price = ((priceInfo as num) * 0.6).toInt().clamp(1, 9999) * e.value;
+      total += price;
+      lines.add('· ${e.key} x${e.value} → $price 原石');
+    }
+    showDialog(
+      context: context,
+      builder: (c) => AlertDialog(
+        backgroundColor: _panelBg,
+        title: const Text('批量出售确认', style: TextStyle(color: Colors.white, fontSize: 16)),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...lines.map((l) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1),
+                child: Text(l, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+              )),
+              const Divider(color: Colors.white24, height: 16),
+              Text('合计预估获得：$total 原石',
+                  style: const TextStyle(color: Color(0xFF27AE60), fontSize: 13, fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(c), child: const Text('取消')),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE67E22), foregroundColor: Colors.white),
+            onPressed: () {
+              Navigator.pop(c);
+              for (final e in sellable) {
+                ctx.doTradeAction('sell ${e.key} ${e.value}');
+              }
+              ctx.out('【批量出售】已出售 ${sellable.length} 种材料。', MsgType.fortune);
+              setState(() {});
+            },
+            child: const Text('确认出售'),
+          ),
         ],
       ),
     );
@@ -571,6 +787,50 @@ class _InventoryClassifiedContent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 1),
             child: Text(s, style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.35)),
           ),
+      ]),
+    );
+  }
+
+  // 第三阶段新增【13】：可点击的 section，每行点击触发 onTapItem 回调
+  Widget _sectionClickable(String title, IconData icon, Color color, List<String> items,
+      {bool highlight = false, void Function(int idx)? onTapItem}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.08),
+        border: Border.all(color: color.withOpacity(highlight ? 0.7 : 0.4), width: 1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Icon(icon, color: color, size: 18),
+          const SizedBox(width: 6),
+          Expanded(child: Text(title,
+              style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.bold))),
+        ]),
+        const SizedBox(height: 6),
+        if (onTapItem == null)
+          for (final s in items)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1),
+              child: Text(s, style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.35)),
+            )
+        else
+          for (int i = 0; i < items.length; i++)
+            // 第三阶段新增【13】：放大触控区域，垂直 padding 增至 6
+            InkWell(
+              onTap: () => onTapItem(i),
+              borderRadius: BorderRadius.circular(4),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                margin: const EdgeInsets.only(bottom: 2),
+                child: Text(items[i],
+                    style: const TextStyle(color: Colors.lightBlueAccent, fontSize: 12, height: 1.35,
+                        decoration: TextDecoration.underline, decorationColor: Colors.white24)),
+              ),
+            ),
       ]),
     );
   }
@@ -736,10 +996,7 @@ class _TutorialGuideDialogState extends State<_TutorialGuideDialog> {
             onPressed: () {
               widget.ctx.markTutorialDone(step.key);
               // 全部完成：清除自动弹出标记
-              if (widget.ctx.player != null) {
-                widget.ctx.player!.flags['need_tutorial'] = false;
-                widget.ctx.notifyListeners();
-              }
+              widget.ctx.clearTutorialNeeded();
               Navigator.pop(context);
             },
             child: const Text('开始游戏'),
@@ -1132,5 +1389,333 @@ class _DetoxActionDialogState extends State<_DetoxActionDialog> {
       backgroundColor: _panelAccent,
       onPressed: onTap,
     );
+  }
+}
+
+// ===================== V1.3 新增【杀招自定义面板】 =====================
+
+/// 杀招面板入口：列出已构筑杀招（释放/删除），支持新建组合（触屏勾选空窍+背包蛊）。
+/// 自动校验：杀招清单自动剔除已丢失/死亡的蛊虫（cast 时由 KillerMoveStore 解析，不在空窍中即失效）。
+/// 底层调用 ctx.handle('kmnew'/'km'/'kmdel')，与文字指令模式结果完全一致。
+Future<void> showKillerMovePanel(BuildContext context, GameContext ctx) async {
+  if (ctx.player == null) return;
+  await showDialog(
+    context: context,
+    builder: (c) => _KillerMoveDialog(ctx: ctx),
+  );
+}
+
+class _KillerMoveDialog extends StatefulWidget {
+  final GameContext ctx;
+  const _KillerMoveDialog({required this.ctx});
+  @override
+  State<_KillerMoveDialog> createState() => _KillerMoveDialogState();
+}
+
+class _KillerMoveDialogState extends State<_KillerMoveDialog> {
+  bool _creating = false;
+  final _nameCtrl = TextEditingController();
+  final Set<String> _selected = {}; // 选中的 instId
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.ctx.player!;
+    final moves = KillerMoveStore.list(p);
+    return AlertDialog(
+      backgroundColor: _panelBg,
+      title: Row(children: [
+        const Icon(Icons.flash_on, color: Color(0xFFE67E22), size: 22),
+        const SizedBox(width: 8),
+        const Expanded(child: Text('杀招面板',
+            style: TextStyle(color: Colors.white, fontSize: 17))),
+        Text('${moves.length}/${KillerMoveStore.maxSlots}',
+            style: const TextStyle(color: Colors.white54, fontSize: 12)),
+      ]),
+      contentPadding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: _creating
+            ? _buildCreateView(p)
+            : _buildListView(p, moves),
+      ),
+      actions: [
+        if (_creating)
+          TextButton(
+            onPressed: () => setState(() {
+              _creating = false;
+              _selected.clear();
+              _nameCtrl.clear();
+            }),
+            child: const Text('返回'),
+          )
+        else if (moves.length < KillerMoveStore.maxSlots)
+          ElevatedButton.icon(
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('构筑新杀招'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF27AE60), foregroundColor: Colors.white,
+              minimumSize: const Size(0, 44),
+            ),
+            onPressed: () => setState(() => _creating = true),
+          )
+        else
+          const Padding(padding: EdgeInsets.only(right: 8),
+              child: Text('杀招槽位已满', style: TextStyle(color: Colors.white54, fontSize: 12))),
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('关闭')),
+      ],
+    );
+  }
+
+  /// 已构筑杀招列表视图。
+  Widget _buildListView(p, List<KillerMove> moves) {
+    if (moves.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Icon(Icons.flash_off, color: Colors.white24, size: 48),
+          SizedBox(height: 12),
+          Text('尚未构筑任何杀招', style: TextStyle(color: Colors.white54, fontSize: 14)),
+          SizedBox(height: 6),
+          Text('杀招需组合 2~4 只蛊虫，同流派触发协同加成',
+              style: TextStyle(color: Colors.white38, fontSize: 11)),
+        ]),
+      );
+    }
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (int i = 0; i < moves.length; i++) ...[
+            _moveCard(p, moves[i], i),
+            const SizedBox(height: 8),
+          ],
+          const Padding(
+            padding: EdgeInsets.only(top: 4, bottom: 4),
+            child: Text('提示：杀招释放会消耗真元与蛊虫耐久；道痕冲突有反噬风险。',
+                style: TextStyle(color: Colors.white38, fontSize: 11)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _moveCard(p, KillerMove km, int idx) {
+    final names = km.guNames(p);
+    // 校验蛊虫是否仍在空窍/背包（已丢失/死亡的标记为红色）
+    final gus = <GuInstance>[];
+    for (final id in km.guInstIds) {
+      for (final g in [...p.guInSlot, ...p.guBag]) {
+        if (g.instId == id) { gus.add(g); break; }
+      }
+    }
+    final valid = gus.length == km.guInstIds.length;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF261C30),
+        border: Border.all(
+          color: valid ? const Color(0xFFE67E22).withOpacity(0.5) : const Color(0xFFE74C3C).withOpacity(0.6),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Text('[$idx] ${km.name}',
+              style: const TextStyle(color: Color(0xFFE67E22), fontSize: 14, fontWeight: FontWeight.bold)),
+          if (!valid) ...[
+            const SizedBox(width: 6),
+            const Text('蛊虫缺失', style: TextStyle(color: Color(0xFFE74C3C), fontSize: 10)),
+          ],
+          const Spacer(),
+          // 释放按钮
+          ElevatedButton.icon(
+            icon: const Icon(Icons.bolt, size: 16),
+            label: const Text('释放', style: TextStyle(fontSize: 12)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFE67E22), foregroundColor: Colors.white,
+              minimumSize: const Size(0, 36), padding: const EdgeInsets.symmetric(horizontal: 10),
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+              widget.ctx.handle('km ${km.name}');
+            },
+          ),
+          const SizedBox(width: 6),
+          // 删除按钮
+          IconButton(
+            icon: const Icon(Icons.delete_outline, color: Color(0xFFE74C3C), size: 18),
+            tooltip: '删除该杀招',
+            constraints: const BoxConstraints(minHeight: 36, minWidth: 36),
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              widget.ctx.handle('kmdel $idx');
+              setState(() {});
+            },
+          ),
+        ]),
+        const SizedBox(height: 4),
+        Text('组合：${names.join(" + ")}',
+            style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.3)),
+        Text(_comboPreview(p, gus),
+            style: const TextStyle(color: Colors.white54, fontSize: 11, height: 1.3)),
+      ]),
+    );
+  }
+
+  /// 协同加成预览（同流派≥2 +20%，道痕匹配）。
+  String _comboPreview(p, List<GuInstance> gus) {
+    if (gus.length < 2) return '需≥2只蛊方可触发协同';
+    final schoolCnt = <String, int>{};
+    for (final g in gus) {
+      schoolCnt[g.school] = (schoolCnt[g.school] ?? 0) + 1;
+    }
+    final top = schoolCnt.values.isEmpty ? 0 : schoolCnt.values.reduce((a, b) => a > b ? a : b);
+    final parts = <String>[];
+    if (top >= 2) {
+      parts.add('同流派协同 +${top >= 3 ? 35 : 20}%');
+      for (final e in schoolCnt.entries) {
+        if (e.value >= 2) {
+          final d = p.daoMark[e.key] ?? 0;
+          if (d > 0) parts.add('${e.key}道痕 +${d}%');
+        }
+      }
+    }
+    return parts.isEmpty ? '无协同加成（流派分散）' : parts.join('，');
+  }
+
+  /// 新建杀招视图：命名 + 触屏勾选空窍/背包蛊。
+  Widget _buildCreateView(p) {
+    final all = [...p.guInSlot, ...p.guBag];
+    return StatefulBuilder(
+      builder: (c, setState) => SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('杀招名称', style: TextStyle(color: _panelAccent, fontSize: 13, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 4),
+            TextField(
+              controller: _nameCtrl,
+              style: const TextStyle(color: Colors.white, fontSize: 14),
+              decoration: const InputDecoration(
+                hintText: '如：青茅连环击',
+                hintStyle: TextStyle(color: Colors.white38),
+                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: _panelAccent)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text('勾选组合蛊虫（2~4只，已选 ${_selected.length}）',
+                style: const TextStyle(color: _panelAccent, fontSize: 13, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 4),
+            if (all.isEmpty)
+              const Padding(padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Text('空窍与背包均无蛊虫，无法构筑杀招。',
+                      style: TextStyle(color: Colors.white54, fontSize: 12))),
+            for (final g in all)
+              _guCheckTile(g, () => setState(() {})),
+            const SizedBox(height: 8),
+            if (_selected.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text(_comboPreview(p, _selectedGus(p)),
+                    style: const TextStyle(color: Color(0xFF27AE60), fontSize: 11)),
+              ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.check, size: 18),
+                label: const Text('构筑杀招'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF27AE60), foregroundColor: Colors.white,
+                  minimumSize: const Size(0, 48),
+                ),
+                onPressed: (_selected.length >= 2 && _selected.length <= 4 && _nameCtrl.text.trim().isNotEmpty)
+                    ? () => _confirmCreate(p)
+                    : null,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text('校验：自动剔除已丢失/死亡的蛊虫；组合中蛊须在空窍或背包中。',
+                style: TextStyle(color: Colors.white38, fontSize: 11)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<GuInstance> _selectedGus(p) {
+    final out = <GuInstance>[];
+    for (final id in _selected) {
+      for (final g in [...p.guInSlot, ...p.guBag]) {
+        if (g.instId == id) { out.add(g); break; }
+      }
+    }
+    return out;
+  }
+
+  Widget _guCheckTile(GuInstance g, VoidCallback onChanged) {
+    final checked = _selected.contains(g.instId);
+    final inSlot = widget.ctx.player!.guInSlot.any((x) => x.instId == g.instId);
+    return InkWell(
+      onTap: () {
+        setState(() {
+          if (checked) {
+            _selected.remove(g.instId);
+          } else {
+            if (_selected.length >= 4) return;
+            _selected.add(g.instId);
+          }
+        });
+        onChanged();
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        margin: const EdgeInsets.only(bottom: 3),
+        decoration: BoxDecoration(
+          color: checked ? const Color(0xFF27AE60).withOpacity(0.12) : const Color(0xFF1E1E1E),
+          border: Border.all(
+            color: checked ? const Color(0xFF27AE60) : Colors.white12,
+            width: checked ? 1.2 : 0.8,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(children: [
+          Icon(checked ? Icons.check_box : Icons.check_box_outline_blank,
+              color: checked ? const Color(0xFF27AE60) : Colors.white54, size: 20),
+          const SizedBox(width: 8),
+          Expanded(child: Text(
+            '${g.name}${g.mutated ? "[变异]" : ""}　${g.rank}转/${g.school}'
+            '${inSlot ? "（空窍）" : "（背包）"}　耐久${g.durability}/${g.durabilityMax}',
+            style: const TextStyle(color: Colors.white, fontSize: 12, height: 1.3),
+          )),
+        ]),
+      ),
+    );
+  }
+
+  void _confirmCreate(p) {
+    final name = _nameCtrl.text.trim();
+    if (name.isEmpty || _selected.length < 2 || _selected.length > 4) return;
+    // 通过 instId 构造蛊名列表传给底层（KillerMoveStore.add 支持按 instId 精确匹配）
+    final gus = _selected.toList();
+    final ok = KillerMoveStore.add(p, name, gus);
+    if (ok) {
+      widget.ctx.out('【杀招构筑】「$name」构筑成功！组合 ${gus.length} 只蛊，可一键释放。', MsgType.fortune);
+      widget.ctx.notifyListeners();
+    } else {
+      widget.ctx.out('杀招构筑失败：组合中蛊虫需在空窍或背包中存在。', MsgType.danger);
+    }
+    Navigator.pop(context);
   }
 }

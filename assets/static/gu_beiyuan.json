@@ -1,0 +1,312 @@
+{
+  "region": "北原",
+  "gu_list": [
+    {
+      "gid": "g_bingdun",
+      "name": "冰遁蛊",
+      "rank": 2,
+      "school": "冰道",
+      "cost_zhen": 16,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "寒冰原石",
+        "冻藏蛊材"
+      ],
+      "side_effect": "催动时真元持续消耗",
+      "desc": "北原古蛊师所炼冰道奇蛊，可遁入玄冰、穿行冰窟。持此蛊者可开启冰岩峡谷的永冻冰窟秘境入口，亦能于永冻冰窟中安然穿行，不受玄冰寒气冻毙之害。",
+      "evolve_gid": "",
+      "habitat": [
+        "北原",
+        "冰窟"
+      ],
+      "combat": {
+        "type": "flee",
+        "power": 0
+      }
+    },
+    {
+      "gid": "g_xuehu",
+      "name": "雪狐蛊",
+      "rank": 2,
+      "school": "冰道",
+      "cost_zhen": 12,
+      "cost_life": 0,
+      "durability_max": 100,
+      "feed_material": [
+        "雪原草药",
+        "兽血"
+      ],
+      "side_effect": "无",
+      "desc": "北原雪狐炼制而成的冰道蛊，灵动迅捷，专破冰系防御",
+      "evolve_gid": "g_xueyao",
+      "habitat": [
+        "雪原林地"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 18
+      }
+    },
+    {
+      "gid": "g_hanyue",
+      "name": "寒月蛊",
+      "rank": 3,
+      "school": "月道",
+      "cost_zhen": 18,
+      "cost_life": 0,
+      "durability_max": 85,
+      "feed_material": [
+        "寒雾晶",
+        "寒冰原石"
+      ],
+      "side_effect": "催动时月华寒光，降低己方视界",
+      "desc": "北原寒夜月华炼制的月道蛊，可凝月光为寒刃伤敌，亦是御寒护体之蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "北原寒夜"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 28
+      },
+      "is_anti_cold": true
+    },
+    {
+      "gid": "g_bingxiong",
+      "name": "冰熊蛊",
+      "rank": 3,
+      "school": "冰道",
+      "cost_zhen": 16,
+      "cost_life": 0,
+      "durability_max": 120,
+      "feed_material": [
+        "兽血",
+        "冻藏蛊材"
+      ],
+      "side_effect": "无",
+      "desc": "北原冰熊炼制的冰道防御蛊，皮糙肉厚，坚如玄冰",
+      "evolve_gid": "",
+      "habitat": [
+        "冻土荒原"
+      ],
+      "combat": {
+        "type": "defense",
+        "power": 40
+      }
+    },
+    {
+      "gid": "g_hanlin",
+      "name": "寒鳞蛊",
+      "rank": 3,
+      "school": "冰道",
+      "cost_zhen": 20,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "冰晶骨",
+        "寒冰原石"
+      ],
+      "side_effect": "催动时寒气反噬，体魄微损",
+      "desc": "北原冰海寒鳞兽炼制的冰道蛊，可射寒鳞如刃伤敌",
+      "evolve_gid": "g_bingpo",
+      "habitat": [
+        "冰岩峡谷"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 32
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_xuedun",
+      "name": "雪遁蛊",
+      "rank": 3,
+      "school": "冰道",
+      "cost_zhen": 22,
+      "cost_life": 0,
+      "durability_max": 80,
+      "feed_material": [
+        "雪原草药",
+        "寒雾晶"
+      ],
+      "side_effect": "遁行时真元持续消耗",
+      "desc": "北原古蛊师所炼冰道奇蛊，可遁入风雪避祸，亦是御寒护体之蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "北原暴风雪"
+      ],
+      "combat": {
+        "type": "flee",
+        "power": 0
+      },
+      "is_anti_cold": true
+    },
+    {
+      "gid": "g_bingpo",
+      "name": "冰魄蛊",
+      "rank": 4,
+      "school": "冰道",
+      "cost_zhen": 30,
+      "cost_life": 0,
+      "durability_max": 75,
+      "feed_material": [
+        "冰魂砂",
+        "冰晶骨"
+      ],
+      "side_effect": "催动消耗体魄，寒气侵体",
+      "desc": "寒鳞蛊进化的冰道高阶蛊，可凝冰魄冻敌魂魄，北原至强蛊之一",
+      "evolve_gid": "",
+      "habitat": [
+        "永冻冰窟"
+      ],
+      "combat": {
+        "type": "attack_poison",
+        "power": 45
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_xueyao",
+      "name": "雪妖蛊",
+      "rank": 4,
+      "school": "冰道",
+      "cost_zhen": 28,
+      "cost_life": 1,
+      "durability_max": 70,
+      "feed_material": [
+        "冰魂砂",
+        "兽血"
+      ],
+      "side_effect": "催动消耗寿元",
+      "desc": "雪狐蛊进化的冰道高阶蛊，可造冰雪幻象迷敌，亦能吞噬敌魂",
+      "evolve_gid": "",
+      "habitat": [
+        "雪原深处"
+      ],
+      "combat": {
+        "type": "attack_poison",
+        "power": 42
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "g_binglin_wang",
+      "name": "冰麟蛊",
+      "rank": 6,
+      "school": "冰道",
+      "cost_zhen": 65,
+      "cost_life": 1,
+      "durability_max": 60,
+      "feed_material": [
+        "永冻冰髓",
+        "冰魂砂",
+        "冰晶骨"
+      ],
+      "side_effect": "催动消耗寿元，反噬剧烈",
+      "desc": "冰麟蛊王本体炼制的冰道至高蛊，一念之间可凝万年玄冰，北原至强蛊，胜冰麟蛊王方可得之",
+      "evolve_gid": "",
+      "habitat": [
+        "永冻冰窟深处"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 90
+      },
+      "is_mutate": true
+    },
+    {
+      "gid": "gu_006",
+      "name": "溪流蛊",
+      "rank": 2,
+      "school": "水道",
+      "cost_zhen": 9,
+      "cost_life": 0,
+      "durability_max": 85,
+      "feed_material": [
+        "露水精华"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "溪流蛊，操控水流攻防。原著第136节，北原水道蛊师入门蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "北原",
+        "水域"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 16
+      }
+    },
+    {
+      "gid": "gu_008",
+      "name": "水罩蛊",
+      "rank": 2,
+      "school": "水道",
+      "cost_zhen": 8,
+      "cost_life": 0,
+      "durability_max": 90,
+      "feed_material": [
+        "露水精华"
+      ],
+      "side_effect": "干旱环境威力衰减",
+      "desc": "水罩蛊，凝球形水护盾，潮湿环境防御增幅。原著第136节，北原水道防御蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "北原",
+        "水域"
+      ],
+      "combat": {
+        "type": "defense",
+        "power": 0
+      }
+    },
+    {
+      "gid": "gu_bearli",
+      "name": "熊力蛊",
+      "rank": 2,
+      "school": "力道",
+      "cost_zhen": 12,
+      "cost_life": 0,
+      "durability_max": 80,
+      "feed_material": [
+        "蜂蜜"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "熊力蛊，大幅强化肉身力量，力道中阶蛊。北原篇章，北原力道蛊师常用",
+      "evolve_gid": "",
+      "habitat": [
+        "北原",
+        "山林"
+      ],
+      "combat": {
+        "type": "buff",
+        "power": 0
+      }
+    },
+    {
+      "gid": "gu_bingpo",
+      "name": "冰魄蛊",
+      "rank": 2,
+      "school": "冰道",
+      "cost_zhen": 11,
+      "cost_life": 0,
+      "durability_max": 75,
+      "feed_material": [
+        "寒冰晶"
+      ],
+      "side_effect": "催动时寒气侵体",
+      "desc": "冰魄蛊，释放寒气冻结敌人。北原篇章，冰道攻击蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "北原",
+        "雪原"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 20
+      }
+    }
+  ]
+}

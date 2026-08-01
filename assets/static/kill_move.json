@@ -1,0 +1,62 @@
+{
+  "synergy_rules": [
+    {"type": "same_school", "min_count": 2, "power_mul": 1.20, "desc": "同流派≥2只，威力+20%"},
+    {"type": "same_school", "min_count": 3, "power_mul": 1.35, "desc": "同流派≥3只，威力+35%"},
+    {"type": "dao_mark_match", "power_mul_per_mark": 0.01, "desc": "道痕匹配，每道痕+1%"}
+  ],
+  "preset_combos": [
+    {"name": "青茅连环击", "schools": ["气道"], "min_rank": 1, "desc": "纯气道连环催动，初阶常用组合"},
+    {"name": "月影杀", "schools": ["月道", "鬼道"], "min_rank": 2, "desc": "月下鬼影，夜间威力倍增"},
+    {"name": "毒瘴蚀骨", "schools": ["毒道"], "min_rank": 2, "desc": "叠加毒素，沼泽地形加成"}
+  ],
+  "preset_killer_moves": [
+    {
+      "move_id": "kill_001",
+      "name": "万蚁噬身",
+      "source_chapter": "《蛊真人》第一卷，南疆虫道经典杀招",
+      "required_gu": ["gu_003", "gu_009", "gu_010"],
+      "instant_yuan_cost": 32,
+      "hold_yuan_cost": 8,
+      "cooldown": 120,
+      "effect": "蚁力蛊、探蚁蛊、聚蚁蛊三蛊齐动，召唤蚁群持续围攻目标，造成持续物理伤害",
+      "backlash": "持续吸引野外蚁群主动袭击蛊师自身",
+      "range": "近距离"
+    },
+    {
+      "move_id": "kill_002",
+      "name": "血泪杀",
+      "source_chapter": "原著第369节，血道杀招",
+      "required_gu": ["gu_xuemou", "gu_shenxue"],
+      "instant_yuan_cost": 45,
+      "hold_yuan_cost": 12,
+      "cooldown": 180,
+      "effect": "血眸蛊与渗血蛊联动，消耗自身精血凝聚血光远程攻击，威力绝伦",
+      "backlash": "持续损耗气血，长时间催动造成肉身永久损伤",
+      "range": "中距离"
+    },
+    {
+      "move_id": "kill_003",
+      "name": "水云盾",
+      "source_chapter": "北原水道蛊师常用防御杀招",
+      "required_gu": ["gu_006", "gu_008"],
+      "instant_yuan_cost": 28,
+      "hold_yuan_cost": 6,
+      "cooldown": 90,
+      "effect": "溪流蛊与水罩蛊联动，流动水云护盾分散攻击伤害，潮湿环境防御增幅",
+      "backlash": "干旱沙漠场景真元消耗翻倍",
+      "range": "自身环绕"
+    },
+    {
+      "move_id": "kill_004",
+      "name": "流沙天幕",
+      "source_chapter": "西漠土道防御困敌杀招",
+      "required_gu": ["gu_007", "gu_chensha"],
+      "instant_yuan_cost": 36,
+      "hold_yuan_cost": 9,
+      "cooldown": 150,
+      "effect": "流沙蛊与沉沙蛊联动，展开大范围沙土屏障束缚敌方行动",
+      "backlash": "水域环境杀招威力大幅衰减",
+      "range": "中距离"
+    }
+  ]
+}

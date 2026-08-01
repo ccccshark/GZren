@@ -7,6 +7,7 @@ import 'package:gzren/data_model/player_model.dart';
 import 'package:gzren/data_model/gu_model.dart';
 import 'world_timer.dart';
 import 'player_core.dart' show levelRank;
+import 'environment_system.dart' as env;
 
 final _rng = Random();
 
@@ -61,7 +62,16 @@ class NPCAI {
     final room = rooms[npc.homeRid];
     if (room == null) return;
     if (player.location == npc.homeRid && npc.isHostile) {
-      if (allowAmbush && _rng.nextDouble() < 0.30 + npc.hatePlayer * 0.1) {
+      // V1.5 加固【绿洲安全区】：safe_zone 房间（如戈壁绿洲）为禁战之地，
+      //   敌对 NPC 不会在此主动伏击玩家，体现"绿洲为安全区域"的设定。
+      if (room.secret == 'safe_zone') {
+        npc.lastAction = 'calm';
+        return;
+      }
+      // V1.6 加固【环境机制】：夜晚凶性野怪活跃度上升，伏击概率额外 +0.20。
+      // 体现"夜深兽凶"的生态（仅作用于 isHostile 野怪/游荡敌对蛊师）。
+      final nightBoost = env.EnvironmentSystem.isNight(player) ? 0.20 : 0.0;
+      if (allowAmbush && _rng.nextDouble() < 0.30 + npc.hatePlayer * 0.1 + nightBoost) {
         _ambush(npc, player, log, worldTimer);
         return;
       }

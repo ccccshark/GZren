@@ -1,0 +1,185 @@
+{
+  "regions": [
+    "西漠"
+  ],
+  "start_rid": "ximo_entry",
+  "rooms": [
+    {
+      "rid": "ximo_entry",
+      "name": "西漠戈壁入口",
+      "description": "穿过西漠边境通道的禁制，眼前豁然开朗——漫天黄沙铺展至天际，热浪扑面如炙。西漠戈壁入口是南疆通往西漠的咽喉，隘口立着一块风蚀的石碑，上刻『西漠』二字，字迹已被黄沙磨平大半。远处驼铃声隐约传来，一支沙民商队正驻扎在隘口阴凉处歇脚。西漠专属环境：风沙道、土道蛊虫在此威能加成；沙暴、流沙随时可能致命。北行可抵戈壁绿洲，西行深入黄沙荒原。",
+      "exits": {
+        "east": "border_west_pass",
+        "west": "ximo_yellow_sand",
+        "north": "ximo_oasis"
+      },
+      "env_effect": {
+        "风沙道": 1.1,
+        "土道": 1.05,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "沙晶"
+      ],
+      "wild_gu": [
+        "g_sand_worm"
+      ],
+      "npc_list": [
+        "npc_ximo_guide"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "ximo_oasis",
+      "name": "戈壁绿洲",
+      "description": "黄沙环抱中，一汪碧绿灵泉汩汩涌出，椰枣成荫，沙漠草药与灵蜜草丛生。这是西漠罕有的绿洲，沙民商队与过路蛊师皆在此歇脚补给。绿洲灵气充沛，真元恢复加快，水道与气道蛊虫在此亦得滋养。此地远离沙暴与沙盗，是西漠唯一的安全歇脚之处，可安心休憩、恢复真元。",
+      "exits": {
+        "south": "ximo_entry"
+      },
+      "env_effect": {
+        "水道": 1.15,
+        "气道": 1.1
+      },
+      "refresh_resource": [
+        "灵蜜",
+        "露水",
+        "沙漠草药"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_ximo_caravan"
+      ],
+      "secret": "safe_zone"
+    },
+    {
+      "rid": "ximo_yellow_sand",
+      "name": "黄沙荒原",
+      "description": "踏入黄沙荒原，脚下黄沙松软没踝，烈日将地表烤得发白，蜃气在地平线上扭曲出诡异光影。风沙道气息浓郁，风沙道蛊虫在此威能暴涨。沙丘起伏间偶有沙虫破沙而出嘶鸣，沙蝎藏于沙下伺机而动，游荡沙盗蛊师亦常出没劫掠独行客。沙暴来袭时，荒原化为修罗场，无风沙道蛊护体者寸步难行。戈壁原石与干枯蛊材散落沙间，等待有缘人拾取。",
+      "exits": {
+        "east": "ximo_entry",
+        "west": "ximo_stone_ruins"
+      },
+      "env_effect": {
+        "风沙道": 1.2,
+        "土道": 1.1,
+        "气道": 0.95
+      },
+      "refresh_resource": [
+        "沙晶",
+        "戈壁原石",
+        "干枯蛊材",
+        "黄沙精",
+        "岩尘"
+      ],
+      "wild_gu": [
+        "g_sand_worm",
+        "g_dust_devil",
+        "gu_shaxie",
+        "gu_chensha"
+      ],
+      "npc_list": [
+        "npc_ximo_sand_scorpion",
+        "npc_ximo_bandit"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "ximo_stone_ruins",
+      "name": "石林废墟",
+      "description": "石林废墟是一片风蚀而成的奇诡石林，巨石如剑指苍穹，石间散落着上古蛊师遗迹的断壁残垣。土道与鬼道蛊气在此凝而不散，石壁上刻着风沙磨洗的蛊文，依稀可辨『流沙古穴』字样。废墟深处偶有盐晶蛊与沙虫出没，亦有流浪蛊师在此切磋论道、寻觅古蛊残迹。传闻废墟西侧的流沙沟壑通往一处秘境，然流沙无情，无流沙蛊者入沟壑必受沙陷之苦。",
+      "exits": {
+        "east": "ximo_yellow_sand",
+        "west": "ximo_quicksand_gully"
+      },
+      "env_effect": {
+        "土道": 1.15,
+        "鬼道": 1.1,
+        "风沙道": 1.05
+      },
+      "refresh_resource": [
+        "沙晶",
+        "风沙琥珀",
+        "戈壁原石",
+        "岩尘"
+      ],
+      "wild_gu": [
+        "g_sand_worm",
+        "g_salt_crystal",
+        "gu_shaxie"
+      ],
+      "npc_list": [
+        "npc_ximo_wandering_guishi"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "ximo_quicksand_gully",
+      "name": "流沙沟壑",
+      "description": "流沙沟壑是一片看似平整实则暗藏杀机的沙谷，地表黄沙下是流动的沙河，一步踏错便陷入沙中难以自拔。地道蛊气浓郁欲滴，沟壑中央有一处塌陷的洞穴入口，洞口流沙漩涡般旋转，似通往地底秘境——流沙古穴。无流沙蛊者踏入此地，将持续受到流沙吞噬之害，体魄与寿元俱损；唯有持流沙蛊者方能驾驭流沙，安然开启古穴入口。沙蝎常藏于流沙之下伏击猎物。",
+      "exits": {
+        "east": "ximo_stone_ruins",
+        "down": "ximo_quicksand_cave"
+      },
+      "env_effect": {
+        "地道": 1.2,
+        "风沙道": 1.1,
+        "土道": 1.1
+      },
+      "refresh_resource": [
+        "沙晶",
+        "沙虫甲",
+        "戈壁原石",
+        "黄沙精"
+      ],
+      "wild_gu": [
+        "g_sand_worm",
+        "gu_007",
+        "gu_chensha"
+      ],
+      "npc_list": [
+        "npc_ximo_sand_scorpion"
+      ],
+      "secret": "quicksand_zone"
+    },
+    {
+      "rid": "ximo_quicksand_cave",
+      "name": "流沙古穴",
+      "description": "流沙古穴是西漠最神秘的秘境之一，穴内流沙如河缓缓流淌，钟乳沙柱倒悬，风沙道与地道蛊气浓郁至极。穴壁上凝结着千年沙髓与沙魂砂，亦散落着失传的流沙蛊蛊方残卷。穴底深处，一尊由流沙凝聚而成的沙巨蛊盘踞其上，每一步都令沙河震颤——此兽仅于沙暴天气、夜幕降临方会苏醒现身，寻常时只如一座沙丘沉睡。胜之，可得沙巨人蛊与千年沙髓。",
+      "exits": {
+        "up": "ximo_quicksand_gully"
+      },
+      "env_effect": {
+        "地道": 1.3,
+        "风沙道": 1.15,
+        "鬼道": 1.1
+      },
+      "refresh_resource": [
+        "千年沙髓",
+        "沙魂砂",
+        "风沙琥珀",
+        "流沙蛊蛊方"
+      ],
+      "wild_gu": [
+        "g_sand_worm",
+        "g_dust_devil",
+        "gu_007"
+      ],
+      "npc_list": [
+        "npc_ximo_sand_giant_boss"
+      ],
+      "secret": "need_gu_g_liusha",
+      "boss_info": {
+        "npc_id": "npc_ximo_sand_giant_boss",
+        "boss_name": "沙巨蛊",
+        "respawn_game_time": 300,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": [
+          "沙暴"
+        ]
+      }
+    }
+  ]
+}

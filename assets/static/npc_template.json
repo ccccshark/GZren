@@ -1,44 +1,1399 @@
 {
   "npcs": [
     {
-      "nid": "npc_trader_lao", "name": "老槐翁", "align": "中立", "level": "三转中阶",
-      "life_left": 120, "trueyuan": 200, "trueyuan_max": 200, "physique": 80, "soul_power": 60,
-      "slot_max": 5, "gu_in_slot": ["g005", "g007", "g014"],
-      "dao_mark": {"气道": 30, "毒道": 5},
-      "inventory": ["露水x10", "青茅草根x5", "酒液x3", "月光石x2", "铁矿石x5"],
-      "is_hostile": false, "is_merchant": true, "is_beast": false,
-      "dialogue": ["蛊师一路小心，青茅山近来不太平。", "老朽这儿有些蛊材，物美价廉。", "毒蛇蛊方? 老朽可不出售蛊方，只卖材料。"],
-      "trade_goods": {"露水": 1, "青茅草根": 2, "酒液": 5, "月光石": 8, "铁矿石": 3, "蛇蜕": 6, "毒囊": 10, "竹节": 2, "原石": 15, "青茅草": 4, "银针花": 12, "解毒散": 30}
+      "nid": "npc_trader_lao",
+      "name": "老槐翁",
+      "align": "中立",
+      "level": "三转中阶",
+      "life_left": 120,
+      "trueyuan": 200,
+      "trueyuan_max": 200,
+      "physique": 80,
+      "soul_power": 60,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g005",
+        "g007",
+        "g014"
+      ],
+      "dao_mark": {
+        "气道": 30,
+        "毒道": 5
+      },
+      "inventory": [
+        "露水x10",
+        "青茅草根x5",
+        "酒液x3",
+        "月光石x2",
+        "铁矿石x5"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "",
+      "dialogue": [
+        "蛊师一路小心，青茅山近来不太平。",
+        "老朽这儿有些蛊材，物美价廉。",
+        "毒蛇蛊方? 老朽可不出售蛊方，只卖材料。"
+      ],
+      "trade_goods": {
+        "露水": 1,
+        "青茅草根": 2,
+        "酒液": 5,
+        "月光石": 8,
+        "铁矿石": 3,
+        "蛇蜕": 6,
+        "毒囊": 10,
+        "竹节": 2,
+        "原石": 15,
+        "青茅草": 4,
+        "银针花": 12,
+        "解毒散": 30
+      }
     },
     {
-      "nid": "npc_beast_bamboo", "name": "竹林巨猿", "align": "中立", "level": "二转初阶",
-      "life_left": 60, "trueyuan": 80, "trueyuan_max": 80, "physique": 70, "soul_power": 20,
-      "slot_max": 4, "gu_in_slot": ["g018", "g008"],
-      "dao_mark": {"气道": 15},
-      "inventory": ["竹节x3", "兽血x2"],
-      "is_hostile": true, "is_merchant": false, "is_beast": true,
-      "dialogue": ["巨猿捶胸咆哮，目露凶光!"],
+      "nid": "npc_beast_bamboo",
+      "name": "竹林巨猿",
+      "align": "中立",
+      "level": "二转初阶",
+      "life_left": 60,
+      "trueyuan": 80,
+      "trueyuan_max": 80,
+      "physique": 70,
+      "soul_power": 20,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g018",
+        "g008"
+      ],
+      "dao_mark": {
+        "气道": 15
+      },
+      "inventory": [
+        "竹节x3",
+        "兽血x2"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "巨猿捶胸咆哮，目露凶光!"
+      ],
       "trade_goods": {}
     },
     {
-      "nid": "npc_beast_python", "name": "溶洞蟒王", "align": "中立", "level": "三转中阶",
-      "life_left": 200, "trueyuan": 150, "trueyuan_max": 150, "physique": 110, "soul_power": 40,
-      "slot_max": 5, "gu_in_slot": ["g012", "g006", "g013"],
-      "dao_mark": {"毒道": 35, "地道": 10},
-      "inventory": ["蛇蜕x3", "毒囊x3", "兽血x2", "原石x1"],
-      "is_hostile": true, "is_merchant": false, "is_beast": true,
-      "dialogue": ["蟒王吐信嘶嘶，毒雾弥漫!"],
+      "nid": "npc_beast_python",
+      "name": "溶洞蟒王",
+      "align": "中立",
+      "level": "三转中阶",
+      "life_left": 200,
+      "trueyuan": 150,
+      "trueyuan_max": 150,
+      "physique": 110,
+      "soul_power": 40,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g012",
+        "g006",
+        "g013"
+      ],
+      "dao_mark": {
+        "毒道": 35,
+        "地道": 10
+      },
+      "inventory": [
+        "蛇蜕x3",
+        "毒囊x3",
+        "兽血x2",
+        "原石x1"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "蟒王吐信嘶嘶，毒雾弥漫!"
+      ],
       "trade_goods": {}
     },
     {
-      "nid": "npc_beast_swamp", "name": "沼泽毒鳄", "align": "中立", "level": "二转中阶",
-      "life_left": 90, "trueyuan": 90, "trueyuan_max": 90, "physique": 85, "soul_power": 25,
-      "slot_max": 4, "gu_in_slot": ["g006", "g009"],
-      "dao_mark": {"毒道": 20},
-      "inventory": ["毒囊x2", "蛇蜕x1", "兽血x1"],
-      "is_hostile": true, "is_merchant": false, "is_beast": true,
-      "dialogue": ["毒鳄张开血盆大口，腥臭扑鼻!"],
+      "nid": "npc_beast_swamp",
+      "name": "沼泽毒鳄",
+      "align": "中立",
+      "level": "二转中阶",
+      "life_left": 90,
+      "trueyuan": 90,
+      "trueyuan_max": 90,
+      "physique": 85,
+      "soul_power": 25,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g006",
+        "g009"
+      ],
+      "dao_mark": {
+        "毒道": 20
+      },
+      "inventory": [
+        "毒囊x2",
+        "蛇蜕x1",
+        "兽血x1"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "毒鳄张开血盆大口，腥臭扑鼻!"
+      ],
       "trade_goods": {}
+    },
+    {
+      "nid": "npc_qingmao_guard",
+      "name": "青茅山宗族·巡逻弟子",
+      "align": "正派",
+      "level": "二转中阶",
+      "life_left": 80,
+      "trueyuan": 100,
+      "trueyuan_max": 100,
+      "physique": 70,
+      "soul_power": 30,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g002",
+        "g005",
+        "g014"
+      ],
+      "dao_mark": {
+        "气道": 20
+      },
+      "inventory": [
+        "青茅草根x3",
+        "露水x5"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "qingmao",
+      "dialogue": [
+        "宗族弟子向你看了一眼。",
+        "青茅山近来不太平，外来者请莫生事。"
+      ]
+    },
+    {
+      "nid": "npc_qingmao_elder",
+      "name": "青茅山宗族·长老",
+      "align": "正派",
+      "level": "四转中阶",
+      "life_left": 200,
+      "trueyuan": 300,
+      "trueyuan_max": 300,
+      "physique": 100,
+      "soul_power": 80,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g010",
+        "g005",
+        "g014",
+        "g019",
+        "g007"
+      ],
+      "dao_mark": {
+        "气道": 50,
+        "月道": 15
+      },
+      "inventory": [
+        "青茅真液x2",
+        "月光石x3",
+        "玉髓x2"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "qingmao",
+      "dialogue": [
+        "老夫观你骨骼清奇，可愿为宗族效力？",
+        "南疆三足鼎立，我青茅山宗族屹立不倒。",
+        "若你能为宗族立功，自有好处。"
+      ]
+    },
+    {
+      "nid": "npc_qingmao_patriarch",
+      "name": "青茅山宗族·族长",
+      "align": "正派",
+      "level": "五转初阶",
+      "life_left": 300,
+      "trueyuan": 500,
+      "trueyuan_max": 500,
+      "physique": 150,
+      "soul_power": 120,
+      "slot_max": 7,
+      "gu_in_slot": [
+        "g011",
+        "g005",
+        "g016",
+        "g014",
+        "g019",
+        "g007"
+      ],
+      "dao_mark": {
+        "气道": 80,
+        "月道": 40,
+        "寿道": 10
+      },
+      "inventory": [
+        "青茅真液x5",
+        "寿桃x1",
+        "星砂x3"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "qingmao",
+      "dialogue": [
+        "族长目光如电，扫过你全身。",
+        "南疆大劫将至，你准备好了吗？",
+        "为宗族效力者，族中不吝赏赐。"
+      ]
+    },
+    {
+      "nid": "npc_qingmao_apothecary",
+      "name": "青茅山药师",
+      "align": "正派",
+      "level": "三转初阶",
+      "life_left": 150,
+      "trueyuan": 200,
+      "trueyuan_max": 200,
+      "physique": 80,
+      "soul_power": 60,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g021",
+        "g022",
+        "g014",
+        "g007"
+      ],
+      "dao_mark": {
+        "毒道": 25,
+        "气道": 20
+      },
+      "inventory": [
+        "青茅草x10",
+        "银针花x5",
+        "解毒散x3",
+        "青茅真液x1"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "qingmao",
+      "dialogue": [
+        "老朽精通药理，解毒草药应有尽有。",
+        "毒道蛊虫虽强，却最伤自身。",
+        "你要买药？看看货吧。"
+      ],
+      "trade_goods": {
+        "青茅草": 4,
+        "银针花": 12,
+        "解毒散": 30,
+        "青茅真液": 35,
+        "蛇蜕": 6,
+        "毒囊": 10,
+        "杨梅酒": 8,
+        "黄金蜜酒": 10,
+        "苦贝酒": 8,
+        "白粮液": 9
+      }
+    },
+    {
+      "nid": "npc_heiya_patrol",
+      "name": "黑崖寨·斥候",
+      "align": "邪道",
+      "level": "二转中阶",
+      "life_left": 70,
+      "trueyuan": 90,
+      "trueyuan_max": 90,
+      "physique": 65,
+      "soul_power": 25,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g006",
+        "g013",
+        "g009"
+      ],
+      "dao_mark": {
+        "毒道": 18,
+        "地道": 10
+      },
+      "inventory": [
+        "毒囊x2",
+        "蛇蜕x1"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "aggressive",
+      "faction": "heiya",
+      "dialogue": [
+        "黑崖寨斥候冷笑：又来一个送死的？",
+        "识相的把物资留下，饶你不死！"
+      ]
+    },
+    {
+      "nid": "npc_heiya_gatekeeper",
+      "name": "黑崖寨·守门人",
+      "align": "邪道",
+      "level": "三转初阶",
+      "life_left": 130,
+      "trueyuan": 180,
+      "trueyuan_max": 180,
+      "physique": 100,
+      "soul_power": 40,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g008",
+        "g006",
+        "g019",
+        "g014"
+      ],
+      "dao_mark": {
+        "地道": 30,
+        "毒道": 15
+      },
+      "inventory": [
+        "铁矿石x5",
+        "毒囊x3"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "defend",
+      "faction": "heiya",
+      "dialogue": [
+        "守门人横刀而立：擅闯黑崖寨者，杀无赦！",
+        "想进去？先过我这关！"
+      ]
+    },
+    {
+      "nid": "npc_heiya_chieftain",
+      "name": "黑崖寨·寨主",
+      "align": "邪道",
+      "level": "五转中阶",
+      "life_left": 280,
+      "trueyuan": 450,
+      "trueyuan_max": 450,
+      "physique": 140,
+      "soul_power": 100,
+      "slot_max": 7,
+      "gu_in_slot": [
+        "g012",
+        "g008",
+        "g016",
+        "g019",
+        "g006",
+        "g014"
+      ],
+      "dao_mark": {
+        "毒道": 60,
+        "地道": 40,
+        "寿道": 15
+      },
+      "inventory": [
+        "黑莲花瓣x2",
+        "原石x30",
+        "毒囊x10"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "heiya",
+      "dialogue": [
+        "寨主端坐在虎皮椅上：南疆弱肉强食，你若有胆量，尽管来。",
+        "黑崖寨不靠什么正道规矩，只凭实力说话。",
+        "想要我寨中的宝物？先拿命来换！"
+      ]
+    },
+    {
+      "nid": "npc_heiya_smith",
+      "name": "黑崖寨·蛊兵锻造师",
+      "align": "邪道",
+      "level": "三转中阶",
+      "life_left": 150,
+      "trueyuan": 200,
+      "trueyuan_max": 200,
+      "physique": 90,
+      "soul_power": 50,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g008",
+        "g005",
+        "g020"
+      ],
+      "dao_mark": {
+        "地道": 35,
+        "力道": 20
+      },
+      "inventory": [
+        "铁矿石x10",
+        "玉髓x3",
+        "锈蚀蛊料x5"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "heiya",
+      "dialogue": [
+        "锻造师头也不抬：买材料还是卖材料？",
+        "黑崖寨的蛊兵锻造术，南疆第一。",
+        "别废话，看货。"
+      ],
+      "trade_goods": {
+        "铁矿石": 3,
+        "玉髓": 20,
+        "锈蚀蛊料": 6,
+        "沼铁原矿": 4,
+        "原石": 15
+      }
+    },
+    {
+      "nid": "npc_sanxiu_leader",
+      "name": "南疆散修·盟主",
+      "align": "中立",
+      "level": "四转中阶",
+      "life_left": 220,
+      "trueyuan": 350,
+      "trueyuan_max": 350,
+      "physique": 120,
+      "soul_power": 90,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g011",
+        "g014",
+        "g019",
+        "g007",
+        "g032"
+      ],
+      "dao_mark": {
+        "月道": 30,
+        "气道": 35,
+        "运道": 15
+      },
+      "inventory": [
+        "原石x20",
+        "月光石x5",
+        "星砂x2"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "sanxiu",
+      "dialogue": [
+        "散修盟主微微一笑：南疆散修不问出身，只看本事。",
+        "三大势力犬牙交错，散修求的是左右逢源。",
+        "有什么事，尽管开口。"
+      ]
+    },
+    {
+      "nid": "npc_sanxiu_merchant",
+      "name": "南疆散修·行商",
+      "align": "中立",
+      "level": "二转中阶",
+      "life_left": 100,
+      "trueyuan": 120,
+      "trueyuan_max": 120,
+      "physique": 70,
+      "soul_power": 30,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g013",
+        "g019",
+        "g007"
+      ],
+      "dao_mark": {
+        "气道": 15,
+        "运道": 10
+      },
+      "inventory": [
+        "原石x15",
+        "露水x10",
+        "酒液x5",
+        "青茅草根x5"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "sanxiu",
+      "dialogue": [
+        "行商笑呵呵：南疆什么都有卖，只要你有原石。",
+        "走过路过不要错过，新鲜蛊材！",
+        "老哥我走遍南疆，什么稀罕货都见过。"
+      ],
+      "trade_goods": {
+        "原石": 15,
+        "露水": 1,
+        "酒液": 5,
+        "青茅草根": 2,
+        "竹节": 2,
+        "蛇蜕": 6,
+        "毒囊": 10,
+        "铁矿石": 3,
+        "野果": 1,
+        "兽肉干": 2,
+        "杨梅酒": 8,
+        "黄金蜜酒": 10,
+        "苦贝酒": 8,
+        "白粮液": 9,
+        "蚁巢土": 2
+      }
+    },
+    {
+      "nid": "npc_sanxiu_trader",
+      "name": "南疆散修·游商",
+      "align": "中立",
+      "level": "三转初阶",
+      "life_left": 130,
+      "trueyuan": 160,
+      "trueyuan_max": 160,
+      "physique": 75,
+      "soul_power": 40,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g007",
+        "g013",
+        "g014",
+        "g032"
+      ],
+      "dao_mark": {
+        "气道": 20,
+        "运道": 20
+      },
+      "inventory": [
+        "原石x25",
+        "月光石x3",
+        "玉髓x2",
+        "兽血x3"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "sanxiu",
+      "dialogue": [
+        "游商压低声音：有些东西正道不让卖，但我这儿有。",
+        "想要好东西？得看你能出什么价。",
+        "以物易物也行，我不挑。"
+      ],
+      "trade_goods": {
+        "月光石": 8,
+        "玉髓": 20,
+        "兽血": 7,
+        "星砂": 25,
+        "原石": 15,
+        "野果": 1,
+        "兽肉干": 2,
+        "瘴米": 3,
+        "蛇羹": 5
+      }
+    },
+    {
+      "nid": "npc_caravan_guard",
+      "name": "青茅山商队·护卫",
+      "align": "正派",
+      "level": "二转中阶",
+      "life_left": 90,
+      "trueyuan": 110,
+      "trueyuan_max": 110,
+      "physique": 75,
+      "soul_power": 25,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g004",
+        "g008",
+        "g014"
+      ],
+      "dao_mark": {
+        "气道": 18
+      },
+      "inventory": [
+        "原石x5",
+        "铁矿石x3"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "defend",
+      "faction": "qingmao",
+      "dialogue": [
+        "商队护卫警惕地看着你：商队通行，请勿靠近。",
+        "护送商队是我们的职责，不会让你捣乱的。"
+      ]
+    },
+    {
+      "nid": "npc_beast_swamp_king",
+      "name": "沼泽蛊王",
+      "align": "中立",
+      "level": "四转中阶",
+      "life_left": 250,
+      "trueyuan": 200,
+      "trueyuan_max": 200,
+      "physique": 130,
+      "soul_power": 50,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g012",
+        "g006",
+        "g009",
+        "g013"
+      ],
+      "dao_mark": {
+        "毒道": 50,
+        "地道": 20
+      },
+      "inventory": [
+        "毒囊x5",
+        "蛇蜕x3",
+        "兽血x3",
+        "原石x3"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "沼泽蛊王发出震耳的嘶吼，毒雾弥漫！"
+      ]
+    },
+    {
+      "nid": "npc_beast_ancient_gu",
+      "name": "青茅古蛊",
+      "align": "中立",
+      "level": "五转中阶",
+      "life_left": 400,
+      "trueyuan": 300,
+      "trueyuan_max": 300,
+      "physique": 180,
+      "soul_power": 80,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g011",
+        "g013",
+        "g006"
+      ],
+      "dao_mark": {
+        "鬼道": 60,
+        "地道": 30
+      },
+      "inventory": [
+        "星砂x5",
+        "玉髓x3",
+        "锈蚀蛊料x4",
+        "原石x8"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "smart",
+      "faction": "",
+      "dialogue": [
+        "青茅古蛊于暗处睁眼，磷火森森，杀机毕露！"
+      ]
+    },
+    {
+      "nid": "npc_beast_stone_giant",
+      "name": "石巨人蛊",
+      "align": "中立",
+      "level": "四转巅峰",
+      "life_left": 350,
+      "trueyuan": 180,
+      "trueyuan_max": 180,
+      "physique": 220,
+      "soul_power": 60,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g013",
+        "g009"
+      ],
+      "dao_mark": {
+        "力道": 55,
+        "地道": 40
+      },
+      "inventory": [
+        "兽骨x5",
+        "玉髓x4",
+        "石壳菌x6",
+        "原石x6"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "defend",
+      "faction": "",
+      "dialogue": [
+        "石巨人蛊缓缓转身，巨拳砸地，碎石激射！"
+      ]
+    },
+    {
+      "nid": "npc_blackmarket_broker",
+      "name": "黑市掮客·蒙面客",
+      "align": "中立",
+      "level": "四转中阶",
+      "life_left": 180,
+      "trueyuan": 300,
+      "trueyuan_max": 300,
+      "physique": 130,
+      "soul_power": 70,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g037",
+        "g030",
+        "g014"
+      ],
+      "dao_mark": {
+        "鬼道": 45,
+        "毒道": 30
+      },
+      "inventory": [
+        "黑莲花瓣x3",
+        "千年毒囊x2",
+        "血煞晶x2",
+        "幽冥鬼砂x1",
+        "原石x20"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "sanxiu",
+      "dialogue": [
+        "嘘，黑市规矩，童叟无欺，不问来路。",
+        "蛊潮将临，货品刚到一批，挑挑？",
+        "高阶蛊方？嘿嘿，那得看你出得起什么价。"
+      ],
+      "trade_goods": {
+        "黑莲花瓣": 25,
+        "千年毒囊": 30,
+        "血煞晶": 28,
+        "幽冥鬼砂": 35,
+        "月华露": 20,
+        "炎晶": 22,
+        "古蛊师遗骨": 50,
+        "原石": 15
+      }
+    },
+    {
+      "nid": "npc_beast_venom_lord",
+      "name": "万毒蟒君",
+      "align": "中立",
+      "level": "五转初阶",
+      "life_left": 350,
+      "trueyuan": 280,
+      "trueyuan_max": 280,
+      "physique": 220,
+      "soul_power": 90,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g054",
+        "g012",
+        "g053"
+      ],
+      "dao_mark": {
+        "毒道": 80,
+        "地道": 30
+      },
+      "inventory": [
+        "千年毒囊x4",
+        "蛇蜕x5",
+        "黑莲花瓣x3",
+        "原石x8"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "smart",
+      "faction": "",
+      "dialogue": [
+        "万毒蟒君盘踞毒沼，毒雾翻涌如墨，吐信嘶嘶！"
+      ]
+    },
+    {
+      "nid": "npc_beast_ghost_lord",
+      "name": "幽冥鬼主",
+      "align": "中立",
+      "level": "六转初阶",
+      "life_left": 420,
+      "trueyuan": 350,
+      "trueyuan_max": 350,
+      "physique": 180,
+      "soul_power": 150,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g037",
+        "g036",
+        "g038"
+      ],
+      "dao_mark": {
+        "鬼道": 100,
+        "地道": 40
+      },
+      "inventory": [
+        "幽冥鬼砂x4",
+        "磷火晶x3",
+        "星砂x3",
+        "原石x12"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "smart",
+      "faction": "",
+      "dialogue": [
+        "幽冥鬼主虚影飘忽，鬼啸震魂，磷火如星河倾泻！"
+      ]
+    },
+    {
+      "nid": "npc_beast_fire_lord",
+      "name": "炎窟火主",
+      "align": "中立",
+      "level": "五转中阶",
+      "life_left": 300,
+      "trueyuan": 250,
+      "trueyuan_max": 250,
+      "physique": 240,
+      "soul_power": 80,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g055",
+        "g026",
+        "g025"
+      ],
+      "dao_mark": {
+        "火道": 70,
+        "地道": 50
+      },
+      "inventory": [
+        "炎晶x4",
+        "地脉火石x3",
+        "玉髓x3",
+        "原石x6"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "炎窟火主自岩浆中升起，烈焰裹身，咆哮震天！"
+      ]
+    },
+    {
+      "nid": "npc_bloodsect_disciple",
+      "name": "血煞宗·血修弟子",
+      "align": "魔道",
+      "level": "三转中阶",
+      "life_left": 150,
+      "trueyuan": 160,
+      "trueyuan_max": 160,
+      "physique": 100,
+      "soul_power": 50,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g029",
+        "g030"
+      ],
+      "dao_mark": {
+        "鬼道": 35,
+        "毒道": 20
+      },
+      "inventory": [
+        "兽血x4",
+        "血煞晶x1",
+        "原石x3"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "aggressive",
+      "faction": "heiya",
+      "dialogue": [
+        "血祭将临，尔等正道蝼蚁，正合炼为血食！",
+        "血煞宗威名，岂是你这等散修可抗？"
+      ]
+    },
+    {
+      "nid": "npc_bloodsect_elder",
+      "name": "血煞宗·血煞长老",
+      "align": "魔道",
+      "level": "四转中阶",
+      "life_left": 260,
+      "trueyuan": 240,
+      "trueyuan_max": 240,
+      "physique": 150,
+      "soul_power": 80,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g030",
+        "g031",
+        "g029"
+      ],
+      "dao_mark": {
+        "鬼道": 55,
+        "毒道": 35
+      },
+      "inventory": [
+        "兽血x5",
+        "血煞晶x3",
+        "黑莲花瓣x2",
+        "原石x8"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "heiya",
+      "dialogue": [
+        "老夫修血煞大道百年，岂会败于你手？",
+        "血祭需鲜血，你的，正好！"
+      ]
+    },
+    {
+      "nid": "npc_bloodsect_patriarch",
+      "name": "血煞宗主",
+      "align": "魔道",
+      "level": "六转中阶",
+      "life_left": 480,
+      "trueyuan": 400,
+      "trueyuan_max": 400,
+      "physique": 220,
+      "soul_power": 160,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g031",
+        "g030",
+        "g037"
+      ],
+      "dao_mark": {
+        "鬼道": 110,
+        "毒道": 60
+      },
+      "inventory": [
+        "冥血蛊蛊方x1",
+        "血煞晶x6",
+        "黑莲花瓣x5",
+        "星砂x4",
+        "原石x30"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "heiya",
+      "dialogue": [
+        "本座以血煞之道横行南疆百年，今日便以尔之血祭炼冥血蛊！",
+        "区区散修，也敢觊觎本座镇宗蛊方？纳命来！"
+      ]
+    },
+    {
+      "nid": "npc_ancient_master_soul",
+      "name": "古蛊师残魂",
+      "align": "中立",
+      "level": "六转初阶",
+      "life_left": 380,
+      "trueyuan": 320,
+      "trueyuan_max": 320,
+      "physique": 160,
+      "soul_power": 200,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g036",
+        "g037",
+        "g038"
+      ],
+      "dao_mark": {
+        "鬼道": 90,
+        "气道": 60,
+        "地道": 50
+      },
+      "inventory": [
+        "古蛊师遗骨x5",
+        "星砂x4",
+        "玉髓x4",
+        "风行蛊蛊方x1",
+        "原石x15"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "smart",
+      "faction": "",
+      "dialogue": [
+        "残魂飘忽，老夫守此遗迹千年，今日便考校考校你这后辈！",
+        "西漠之道？呵，先过老夫这一关再说。"
+      ]
+    },
+    {
+      "nid": "npc_xisha_hermit",
+      "name": "西漠隐士·沙行客",
+      "align": "中立",
+      "level": "五转中阶",
+      "life_left": 280,
+      "trueyuan": 260,
+      "trueyuan_max": 260,
+      "physique": 140,
+      "soul_power": 100,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g013",
+        "g055"
+      ],
+      "dao_mark": {
+        "地道": 60,
+        "气道": 40
+      },
+      "inventory": [
+        "原石x10"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "",
+      "dialogue": [
+        "年轻人，你也想通往西漠？此路被古禁制封锁，非同小可。",
+        "碑文所载不假——风行蛊御风沙，沙遁蛊穿沙海，二蛊合一可破禁制。",
+        "据老夫所知，风行蛊蛊方藏于万毒沼泽深处的万毒蟒君身上；沙遁蛊蛊方则在幽冥深渊的古蛊师残魂手中。",
+        "集齐二蛊方并炼出双蛊，西漠通道方可开启。但南疆危机四伏，量力而行啊。"
+      ]
+    },
+    {
+      "nid": "npc_qm2_peak_merchant",
+      "name": "青茅山主峰·望峰商贾",
+      "align": "中立",
+      "level": "三转初阶",
+      "life_left": 150,
+      "trueyuan": 200,
+      "trueyuan_max": 200,
+      "physique": 80,
+      "soul_power": 50,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g005",
+        "g014",
+        "g007"
+      ],
+      "dao_mark": {
+        "气道": 25,
+        "运道": 10
+      },
+      "inventory": [
+        "青茅草根x10",
+        "露水x10",
+        "月光石x5",
+        "铁矿石x8",
+        "玉髓x3",
+        "解毒散x3",
+        "银针花x5",
+        "原石x20"
+      ],
+      "is_hostile": false,
+      "is_merchant": true,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "qingmao",
+      "dialogue": [
+        "望峰亭风大，商贾裹紧长衫：客官要些什么？青茅山的货，童叟无欺。",
+        "主峰月华浓郁，月光石成色最佳，别处可比不得。",
+        "听说北麓寒雾洞窟出了个寒雾蛇王，夜里有浓雾才现身，可得当心。",
+        "东麓密林深处藏着毒瘴秘境，没有探隐蛊可别乱闯。",
+        "这三卷古蛊师遗方——土遁、探隐、阴视，可是开启青茅山三大秘境的钥匙，价格不菲，物有所值。"
+      ],
+      "trade_goods": {
+        "青茅草根": 2,
+        "露水": 1,
+        "月光石": 8,
+        "铁矿石": 3,
+        "玉髓": 20,
+        "解毒散": 30,
+        "银针花": 12,
+        "青茅草": 4,
+        "竹节": 2,
+        "蛇蜕": 6,
+        "毒囊": 10,
+        "寒雾晶": 16,
+        "石壳菌": 5,
+        "兽血": 7,
+        "阴魂砂": 18,
+        "地脉晶": 16,
+        "土遁蛊蛊方": 60,
+        "探隐蛊蛊方": 60,
+        "阴视蛊蛊方": 60
+      }
+    },
+    {
+      "nid": "npc_qm2_wandering_guishi",
+      "name": "青茅山游荡蛊师·云游子",
+      "align": "中立",
+      "level": "三转中阶",
+      "life_left": 160,
+      "trueyuan": 220,
+      "trueyuan_max": 220,
+      "physique": 90,
+      "soul_power": 70,
+      "slot_max": 5,
+      "gu_in_slot": [
+        "g010",
+        "g003",
+        "g014",
+        "g013"
+      ],
+      "dao_mark": {
+        "气道": 30,
+        "地道": 15,
+        "月道": 10
+      },
+      "inventory": [
+        "原石x15",
+        "青茅草根x5",
+        "月光石x2"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "sanxiu",
+      "dialogue": [
+        "云游子负手望向主峰：青茅山底蕴深厚，藏了不少古蛊师的秘境。",
+        "主峰地底有一处地下蛊窟，需土遁蛊方能开启入口，里头藏着地道蛊方。",
+        "东麓密林的毒瘴秘境，得有探隐蛊才进得去；北麓的古坟秘境，则需阴视蛊。",
+        "这三把钥匙蛊的蛊方，据说就藏在各自的秘境深处，真是因果循环。"
+      ]
+    },
+    {
+      "nid": "npc_qm2_herb_gatherer",
+      "name": "南坡采药人·茅婶",
+      "align": "中立",
+      "level": "一转中阶",
+      "life_left": 60,
+      "trueyuan": 50,
+      "trueyuan_max": 50,
+      "physique": 40,
+      "soul_power": 15,
+      "slot_max": 3,
+      "gu_in_slot": [
+        "g002",
+        "g014"
+      ],
+      "dao_mark": {
+        "气道": 8
+      },
+      "inventory": [
+        "青茅草根x5",
+        "露水x5",
+        "野草露水x3"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "",
+      "dialogue": [
+        "茅婶一边采药一边念叨：南坡的青茅草根最是养气，露水也清甜。",
+        "后生，初来青茅山？先去主峰找望峰商贾买些基础蛊材，再慢慢历练。",
+        "东边溪流水源地露水多，去那儿采集准没错。",
+        "夜里可别往北麓山谷去，阴森森的，闹鬼呢。"
+      ]
+    },
+    {
+      "nid": "npc_qm2_grave_keeper",
+      "name": "北麓守墓人·老哑叔",
+      "align": "中立",
+      "level": "二转中阶",
+      "life_left": 100,
+      "trueyuan": 120,
+      "trueyuan_max": 120,
+      "physique": 70,
+      "soul_power": 40,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g036",
+        "g038",
+        "g014"
+      ],
+      "dao_mark": {
+        "鬼道": 25,
+        "气道": 10
+      },
+      "inventory": [
+        "阴魂砂x2",
+        "蛇蜕x3",
+        "原石x5"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "",
+      "dialogue": [
+        "老哑叔沙哑开口：这山谷的坟茔，葬着上古鬼道蛊师，阴气重得很。",
+        "古坟秘境入口就在谷中央，没有阴视蛊照不见禁制，进不去的。",
+        "夜里寒雾洞窟的蛇王会现身，雾大时尤其凶险，小心行事。",
+        "阴魂砂是古坟凝结的阴气砂粒，炼鬼道蛊虫少不了。"
+      ]
+    },
+    {
+      "nid": "npc_qm2_forest_hunter",
+      "name": "东麓密林猎人·阿木",
+      "align": "中立",
+      "level": "二转中阶",
+      "life_left": 110,
+      "trueyuan": 130,
+      "trueyuan_max": 130,
+      "physique": 85,
+      "soul_power": 30,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g006",
+        "g009",
+        "g014"
+      ],
+      "dao_mark": {
+        "毒道": 20,
+        "气道": 12
+      },
+      "inventory": [
+        "蛇蜕x4",
+        "毒囊x3",
+        "兽血x2",
+        "原石x5"
+      ],
+      "is_hostile": false,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "calm",
+      "faction": "sanxiu",
+      "dialogue": [
+        "阿木擦拭着猎刀：密林里毒蛇蛊、竹叶青蛊多得很，浓雾天尤其难捕。",
+        "密林深处有片毒瘴禁区，没有探隐蛊别靠近，瘴气能要人命。",
+        "夜里密林的凶蛊会变得躁动，捕捉要小心反噬。",
+        "溪流水源地的露水最纯，炼蛊成色好，记得多采些。"
+      ]
+    },
+    {
+      "nid": "npc_qm2_snakeking",
+      "name": "寒雾蛇王",
+      "align": "中立",
+      "level": "四转中阶",
+      "life_left": 280,
+      "trueyuan": 320,
+      "trueyuan_max": 320,
+      "physique": 140,
+      "soul_power": 80,
+      "slot_max": 6,
+      "gu_in_slot": [
+        "g012",
+        "g006",
+        "g009",
+        "g013",
+        "g014"
+      ],
+      "dao_mark": {
+        "毒道": 55,
+        "水道": 30,
+        "地道": 20
+      },
+      "inventory": [
+        "寒雾晶x3",
+        "蛇蜕x5",
+        "毒囊x5",
+        "兽血x3",
+        "原石x15"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "smart",
+      "faction": "",
+      "dialogue": [
+        "寒雾蛇王自浓雾中探出巨首，竖瞳泛着幽冷寒光，嘶——",
+        "蛇王周身寒雾缭绕，毒信吞吐，雾气为之凝结！"
+      ]
+    },
+    {
+      "nid": "npc_qm2_beast_wolf",
+      "name": "密林狼蛊",
+      "align": "中立",
+      "level": "二转中阶",
+      "life_left": 95,
+      "trueyuan": 100,
+      "trueyuan_max": 100,
+      "physique": 80,
+      "soul_power": 30,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g034",
+        "g006",
+        "g014"
+      ],
+      "dao_mark": {
+        "兽道": 22,
+        "毒道": 10
+      },
+      "inventory": [
+        "兽血x2",
+        "蛇蜕x1"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": true,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "密林狼蛊绿目森森，低吼着逼近！"
+      ]
+    },
+    {
+      "nid": "npc_qm2_beast_ghost",
+      "name": "山谷游魂",
+      "align": "中立",
+      "level": "二转中阶",
+      "life_left": 70,
+      "trueyuan": 130,
+      "trueyuan_max": 130,
+      "physique": 50,
+      "soul_power": 55,
+      "slot_max": 4,
+      "gu_in_slot": [
+        "g036",
+        "g038"
+      ],
+      "dao_mark": {
+        "鬼道": 28
+      },
+      "inventory": [
+        "阴魂砂x1",
+        "蛇蜕x1"
+      ],
+      "is_hostile": true,
+      "is_merchant": false,
+      "is_beast": false,
+      "ai_type": "aggressive",
+      "faction": "",
+      "dialogue": [
+        "游魂发出凄厉哀嚎，阴气森森向你扑来！"
+      ]
     }
   ],
   "spawn_rules": {

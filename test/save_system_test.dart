@@ -151,13 +151,7 @@ void main() {
 
     test('丢失部分蛊虫', () {
       final p = _mkPlayer();
-      // 注入若干蛊虫实例
-      for (var i = 0; i < 5; i++) {
-        p.guBag.add(p.guBag.isEmpty ? p.guBag.first : p.guBag.first);
-      }
-      // 重建为独立实例
-      p.guBag.clear();
-      // 直接占位字符串模拟，guBag 实际是 GuInstance 列表，这里仅测试惩罚函数不崩溃
+      // guBag 为空时也应正常处理（不崩溃）。原循环对空列表调用 .first 会抛异常，已修正。
       final log = <String>[];
       sv.applyDeathPenalty(p, log);
       expect(log.any((s) => s.contains('死亡惩罚') || s.contains('物资')), true);

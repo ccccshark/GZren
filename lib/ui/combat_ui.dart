@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../engine/command.dart';
 import '../data_model/gu_model.dart';
+import '../data_model/killer_move_model.dart' show KillerMoveStore;
 
 class CombatUIPage extends StatefulWidget {
   final GameContext ctx;
@@ -100,6 +101,8 @@ class _CombatUIPageState extends State<CombatUIPage> {
   }
 
   Widget _combatButtons() {
+    // V1.3 新增：已构筑杀招列表，战斗内一键整套释放（同流派协同加成）
+    final killerMoves = KillerMoveStore.list(ctx.player!);
     return Wrap(
       spacing: 6, runSpacing: 6, alignment: WrapAlignment.center,
       children: [
@@ -107,6 +110,12 @@ class _CombatUIPageState extends State<CombatUIPage> {
           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF7B241C)),
           onPressed: () => ctx.combatAction('attack', g.name),
           child: Text('催动·${g.name}'),
+        )),
+        // V1.3 新增【杀招一键释放】：点击释放整套组合
+        ...killerMoves.map((km) => ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE67E22)),
+          onPressed: () => ctx.combatAction('killmove', km.name),
+          child: Text('杀招·${km.name}'),
         )),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2C3E50)),

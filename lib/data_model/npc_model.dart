@@ -21,6 +21,12 @@ class NpcTemplate {
   final bool isBeast;
   final List<String> dialogue;
   final Map<String, int> tradeGoods;
+  // 第三阶段新增【10.三大势力NPC+AI行为】：AI类型与势力归属。
+  // ai_type: aggressive(凶猛主动)/defend(防御自保)/calm(中立平和)/smart(高阶智能)。
+  // faction: qingmao(青茅山宗族)/heiya(黑崖寨)/sanxiu(南疆散修联盟)/""(无势力)。
+  // 旧JSON缺失时默认 'calm' / ''，不报错。
+  final String aiType;
+  final String faction;
 
   NpcTemplate({
     required this.nid,
@@ -41,6 +47,8 @@ class NpcTemplate {
     this.isBeast = false,
     this.dialogue = const [],
     this.tradeGoods = const {},
+    this.aiType = 'calm',
+    this.faction = '',
   });
 
   factory NpcTemplate.fromJson(Map<String, dynamic> j) => NpcTemplate(
@@ -64,6 +72,8 @@ class NpcTemplate {
         dialogue: List<String>.from(j['dialogue'] ?? []),
         tradeGoods: Map<String, int>.from(
             (j['trade_goods'] ?? {}).map((k, v) => MapEntry(k, (v as num).toInt()))),
+        aiType: j['ai_type'] ?? 'calm',
+        faction: j['faction'] ?? '',
       );
 }
 
@@ -87,6 +97,9 @@ class Npc {
   bool isBeast;
   List<String> dialogue;
   Map<String, int> tradeGoods;
+  // 第三阶段新增【10】：运行时 AI 类型与势力（从模板拷贝，供上层战斗日志/支援判定读取）。
+  String aiType;
+  String faction;
   String? homeRid;
   // 运行时
   bool alive;
@@ -120,6 +133,8 @@ class Npc {
         isBeast = t.isBeast,
         dialogue = t.dialogue,
         tradeGoods = Map<String, int>.from(t.tradeGoods),
+        aiType = t.aiType,
+        faction = t.faction,
         alive = true,
         hatePlayer = 0,
         deathTime = null,

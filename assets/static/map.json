@@ -4,8 +4,8 @@
   "rooms": [
     {
       "rid": "qingmao_01", "name": "青茅山山脚",
-      "description": "青茅山郁郁葱葱，草木繁茂，随处可见野生蛊虫踪迹。一条石阶蜿蜒通向山腰，远处传来蛊虫嘶鸣。",
-      "exits": {"north": "qingmao_02", "east": "qingmao_village"},
+      "description": "青茅山郁郁葱葱，草木繁茂，随处可见野生蛊虫踪迹。一条石阶蜿蜒通向山腰，远处传来蛊虫嘶鸣。西侧一条野径通往青茅山南坡谷地，是新版青茅山域的入口。",
+      "exits": {"north": "qingmao_02", "east": "qingmao_village", "west": "qm2_south_slope"},
       "env_effect": {"毒道": 1.05, "气道": 1.0},
       "refresh_resource": ["野草露水", "青茅草根"],
       "wild_gu": ["g002", "g004", "g018"],

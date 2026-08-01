@@ -1,0 +1,162 @@
+{
+  "events": [
+    {
+      "eid": "evx01", "name": "劫难·沙暴来袭", "type": "disaster",
+      "weight": 12, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_yellow_sand", "ximo_stone_ruins"],
+      "desc": "毫无征兆间，天际黄线翻涌而至——沙暴！铺天盖地的黄沙瞬间将你吞没，你捂住口鼻伏地躲避，仍被沙石割得遍体鳞伤，真元大量耗损。",
+      "effect": {"physique": -20, "trueyuan": -15, "injure": "轻伤", "lose_random_material": 1, "luck": -1}
+    },
+    {
+      "eid": "evx02", "name": "劫难·流沙陷阱", "type": "disaster",
+      "weight": 14, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_quicksand_gully"],
+      "desc": "脚下沙地突然变软，你惊觉踩中了流沙陷阱！沙子迅速没过膝盖，你拼命挣扎却越陷越深，丢弃部分物资才勉强脱身，体魄大损。",
+      "effect": {"physique": -18, "lose_random_material": 2, "luck": -1}
+    },
+    {
+      "eid": "evx03", "name": "机缘·风沙道灌顶", "type": "fortune",
+      "weight": 6, "min_rank": 2, "max_rank": 9,
+      "trigger": "rest",
+      "scene_rids": ["ximo_stone_ruins", "ximo_yellow_sand"],
+      "desc": "沙暴呼啸之际，你盘膝于石林避风岩下，竟感悟到风沙道灵韵入体，真元与风沙道感悟同时暴涨！",
+      "effect": {"trueyuan": 40, "dao_mark": {"风沙道": 5}, "luck": 1}
+    },
+    {
+      "eid": "evx04", "name": "机缘·绿洲灵泉", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "rest",
+      "scene_rids": ["ximo_oasis"],
+      "desc": "你于绿洲灵泉边静坐，甘泉入喉，灵气充沛，体魄与真元大幅恢复，沙漠草药的清香令人心旷神怡。",
+      "effect": {"physique": 25, "trueyuan": 35, "luck": 1}
+    },
+    {
+      "eid": "evx05", "name": "劫难·沙盗劫掠", "type": "disaster",
+      "weight": 11, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_yellow_sand"],
+      "desc": "驼铃声中大漠扬起，一队蒙面沙盗从沙丘后杀出，弯刀映日，原石与蛊材是他们唯一的目标！你且战且退，仍被劫去部分物资。",
+      "effect": {"physique": -22, "injure": "轻伤", "lose_random_material": 2, "luck": -1}
+    },
+    {
+      "eid": "evx06", "name": "机缘·沙晶矿脉", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_entry", "ximo_yellow_sand", "ximo_stone_ruins"],
+      "desc": "你在一处风化岩壁下发现一条裸露的沙晶矿脉，晶石在烈日下折射出迷人光彩，连忙开采了几块。",
+      "effect": {"add_item": ["沙晶x5"], "dao_mark": {"地道": 2}, "luck": 1}
+    },
+    {
+      "eid": "evx07", "name": "机缘·远古蛊残迹", "type": "fortune",
+      "weight": 6, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_stone_ruins"],
+      "desc": "石林废墟深处，你拨开风沙，发现一处上古蛊师遗迹的残壁。壁上刻着风沙道蛊文，残壁下散落着风沙古蛊方残片与干枯蛊材，似在诉说千年前的大战。",
+      "effect": {"add_item": ["风沙古蛊方残片x1", "干枯蛊材x3"], "dao_mark": {"风沙道": 3, "鬼道": 2}, "luck": 1}
+    },
+    {
+      "eid": "evx08", "name": "抉择·濒死的沙民", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_yellow_sand", "ximo_stone_ruins"],
+      "desc": "一名沙民倒在沙丘旁，嘴唇干裂，水囊早已空竭，气息奄奄地向你伸出干枯的手。",
+      "effect": {},
+      "choices": [
+        {"text": "赠水并喂食灵蜜", "effect": {"add_item_cost": ["灵蜜x1"], "add_item": ["原石x20", "沙晶x5"], "dao_mark": {"运道": 2}, "luck": 3}, "weight": 1},
+        {"text": "留下原石便离去", "effect": {"add_item_cost": ["原石x5"], "luck": 1}, "weight": 1},
+        {"text": "搜刮他随身之物", "effect": {"add_item": ["沙盗铜钱x8", "沙晶x3"], "luck": -4}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evx09", "name": "劫难·烈日中暑", "type": "disaster",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_yellow_sand", "ximo_entry"],
+      "desc": "酷日如焚，沙海反射的强光灼得你双目刺痛，你中暑眩晕，真元逆流，险些栽倒于沙中。",
+      "effect": {"physique": -12, "trueyuan": -15, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "evx10", "name": "机缘·戈壁原石", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_yellow_sand", "ximo_quicksand_gully"],
+      "desc": "你在戈壁碎石间发现一块沉甸甸的戈壁原石，敲开一角，内里竟隐隐透出蛊气，似含未知蛊虫！",
+      "effect": {"add_item": ["戈壁原石x3"], "dao_mark": {"地道": 1}, "luck": 1}
+    },
+    {
+      "eid": "evx11", "name": "抉择·商队求助", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_yellow_sand", "ximo_entry"],
+      "desc": "一支沙民商队被沙盗围困，商队首领远远望见你，高声呼救，许以重酬。",
+      "effect": {},
+      "choices": [
+        {"text": "拔刀相助", "effect": {"physique": -15, "add_item": ["原石x30", "沙晶x5"], "dao_mark": {"运道": 3}, "luck": 3}, "weight": 1},
+        {"text": "虚张声势吓退沙盗", "effect": {"add_item": ["原石x15"], "luck": 1}, "weight": 1},
+        {"text": "袖手旁观", "effect": {"luck": -2}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evx12", "name": "劫难·沙虫伏击", "type": "disaster",
+      "weight": 9, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_yellow_sand", "ximo_quicksand_gully"],
+      "desc": "脚下沙地突然炸开，一条巨大的戈壁沙虫张着环状巨口破沙而出，毒液四溅！你仓促招架仍被擦伤。",
+      "effect": {"physique": -18, "poison": {"pid": "evx12_sandworm", "name": "沙虫之毒", "rank": "fierce", "power": 14, "tick_hours": 6}, "luck": -1}
+    },
+    {
+      "eid": "evx13", "name": "机缘·沙漠草药丛", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_oasis", "ximo_entry"],
+      "desc": "你在绿洲边缘发现一丛耐旱的沙漠草药，叶片肥厚多汁，蕴含微弱土道灵韵，连忙采下。",
+      "effect": {"add_item": ["沙漠草药x4", "干枯蛊材x2"], "luck": 1}
+    },
+    {
+      "eid": "evx14", "name": "机缘·风沙道残卷", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_stone_ruins"],
+      "desc": "石林废墟一处石缝中，你拾到一卷风化严重的兽皮残卷，上面记载着失传的风沙道蛊方残片与一段修炼心法。",
+      "effect": {"add_item": ["风沙古蛊方残片x1"], "dao_mark": {"风沙道": 4}, "luck": 2}
+    },
+    {
+      "eid": "evx15", "name": "机缘·流沙古穴遗方", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_quicksand_cave"],
+      "desc": "流沙古穴深处一方石台上摊着半卷蛊方残片，正是西漠古蛊师遗落的『流沙蛊蛊方』！砂粒间还凝着千年沙髓。",
+      "effect": {"add_item": ["流沙蛊蛊方x1", "千年沙髓x1"], "dao_mark": {"地道": 5, "风沙道": 2}, "luck": 2}
+    },
+    {
+      "eid": "evx16", "name": "劫难·沙巨蛊震怒", "type": "disaster",
+      "weight": 8, "min_rank": 4, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_quicksand_cave"],
+      "desc": "你在流沙古穴中惊动了沉睡的沙巨蛊，沙河震颤，流沙翻涌如怒涛，你被沙浪掀飞，重重摔在岩壁上！",
+      "effect": {"physique": -25, "trueyuan": -20, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "evx17", "name": "机缘·沙魂砂", "type": "fortune",
+      "weight": 6, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["ximo_quicksand_cave"],
+      "desc": "古穴一处暗角中，亡魂凝结的沙魂砂幽幽发光，你小心翼翼收起，砂粒中似有上古鬼道蛊师的残念低语。",
+      "effect": {"add_item": ["沙魂砂x2", "风沙琥珀x1"], "dao_mark": {"鬼道": 4}, "luck": 1}
+    },
+    {
+      "eid": "evx18", "name": "抉择·流沙沟壑古碑", "type": "fortune",
+      "weight": 6, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["ximo_quicksand_gully"],
+      "desc": "流沙沟壑边缘立着一块半埋的古碑，碑文依稀可辨：『流沙之下，古穴藏方；持流沙蛊者，方可安然入内。』碑底似压着什么物件。",
+      "effect": {},
+      "choices": [
+        {"text": "冒流沙之险取物", "effect": {"physique": -10, "add_item": ["戈壁原石x3", "干枯蛊材x2"], "dao_mark": {"地道": 2}, "luck": 1}, "weight": 1},
+        {"text": "记下碑文离去", "effect": {"dao_mark": {"运道": 2}, "luck": 1}, "weight": 1}
+      ]
+    }
+  ]
+}

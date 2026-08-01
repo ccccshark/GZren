@@ -1,0 +1,47 @@
+{
+  "npcs": [
+    {
+      "nid": "npc_zhongzhou_merchant", "name": "驿站商人·陶翁", "align": "中立", "level": "四转中阶",
+      "life_left": 210, "trueyuan": 250, "trueyuan_max": 250, "physique": 125, "soul_power": 68,
+      "slot_max": 6, "gu_in_slot": ["g005", "g003", "g055"],
+      "dao_mark": {"气道": 40, "光道": 22},
+      "inventory": ["中原麦穗x20", "灵墨x10", "浩然玉x5", "古竹简x4", "原石x30"],
+      "is_hostile": false, "is_merchant": true, "is_beast": false,
+      "ai_type": "calm", "faction": "zhongzhou_posthouse",
+      "dialogue": ["陶翁的驿站货真价实，灵墨、浩然玉、古竹简，皆为中原上品。", "百家藏书阁的守护傀儡只在雷暴夜现身，没月光蛊连暗阁都进不去。", "麦田那伙山匪近日猖獗，独行客可要当心。", "中州学派重气道与光道，与南疆毒道、东海水道大不相同。"],
+      "trade_goods": {"中原麦穗": 2, "灵墨": 7, "浩然玉": 24, "古竹简": 22, "原石": 15, "灵蜜": 12, "解毒散": 30, "玉髓": 20, "月光石": 8, "兽血": 7}
+    },
+    {
+      "nid": "npc_zhongzhou_scholar", "name": "游学儒生·裴渊", "align": "中立", "level": "三转中阶",
+      "life_left": 130, "trueyuan": 170, "trueyuan_max": 170, "physique": 85, "soul_power": 50,
+      "slot_max": 5, "gu_in_slot": ["g003", "g002", "g014"],
+      "dao_mark": {"气道": 28, "光道": 16, "月道": 10},
+      "inventory": ["灵墨x4", "浩然玉x2", "古竹简x2", "原石x12"],
+      "is_hostile": false, "is_merchant": false, "is_beast": false,
+      "ai_type": "calm", "faction": "zhongzhou_posthouse",
+      "dialogue": ["裴渊拱手：百家藏书阁藏有上古学派残卷，奈何守护傀儡难敌。", "中州气道蛊虫威能居五地之首，修气道者不可错过。", "切磋？正合我意，以道会友，点到为止。", "听说太古遗迹的入口线索，就散落在五地秘境之中。"]
+    },
+    {
+      "nid": "npc_zhongzhou_bandit", "name": "麦田山匪", "align": "邪道", "level": "三转初阶",
+      "life_left": 120, "trueyuan": 60, "trueyuan_max": 60, "physique": 90, "soul_power": 18,
+      "slot_max": 3, "gu_in_slot": ["g013", "g006"],
+      "dao_mark": {"力道": 22, "地道": 12, "毒道": 8},
+      "inventory": ["中原麦穗x3", "原石x5", "灵墨x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "aggressive", "faction": "",
+      "dialogue": ["山匪自麦田窜出，钢刀出鞘，狞笑道：留下原石，饶你不死！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_zhongzhou_book_guardian", "name": "守护傀儡", "align": "中立", "level": "五转中阶",
+      "life_left": 340, "trueyuan": 280, "trueyuan_max": 280, "physique": 200, "soul_power": 70,
+      "slot_max": 5, "gu_in_slot": ["g013", "g055", "g011", "g003"],
+      "dao_mark": {"气道": 60, "光道": 55, "力道": 40, "地道": 30},
+      "inventory": ["百家残卷x2", "浩然玉x4", "古竹简x5", "原石x50"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "smart", "faction": "",
+      "dialogue": ["守护傀儡周身光道蛊气凝为实质，双目亮起幽蓝光芒，挥拳击碎阁柱，震耳欲聋！"],
+      "trade_goods": {}
+    }
+  ]
+}

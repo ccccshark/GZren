@@ -1,0 +1,170 @@
+{
+  "events": [
+    {
+      "eid": "evb01", "name": "劫难·暴风雪围困", "type": "disaster",
+      "weight": 14, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_snow_forest", "beiyuan_frozen_tundra", "beiyuan_ice_canyon"],
+      "desc": "毫无征兆间，天际白毛风呼啸而至——暴风雪！能见度骤降为零，你捂住口鼻伏地躲避，仍被冻得浑身僵硬，真元大量耗损，险些迷失方向。",
+      "effect": {"physique": -22, "trueyuan": -20, "injure": "轻伤", "lose_random_material": 1, "luck": -1}
+    },
+    {
+      "eid": "evb02", "name": "劫难·冰裂缝隙", "type": "disaster",
+      "weight": 12, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_frozen_tundra"],
+      "desc": "脚下冻土突然崩裂，你惊觉踩中了一条被积雪掩盖的冰裂缝隙！你拼命攀住冰沿才勉强脱身，丢弃部分物资，体魄大损。",
+      "effect": {"physique": -20, "lose_random_material": 2, "luck": -1}
+    },
+    {
+      "eid": "evb03", "name": "机缘·冰道灌顶", "type": "fortune",
+      "weight": 6, "min_rank": 2, "max_rank": 9,
+      "trigger": "rest",
+      "scene_rids": ["beiyuan_ice_canyon", "beiyuan_snow_forest"],
+      "desc": "暴风雪呼啸之际，你盘膝于冰岩避风处，竟感悟到冰道灵韵入体，真元与冰道感悟同时暴涨！",
+      "effect": {"trueyuan": 45, "dao_mark": {"冰道": 5}, "luck": 1}
+    },
+    {
+      "eid": "evb04", "name": "机缘·部族篝火", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "rest",
+      "scene_rids": ["beiyuan_tribe"],
+      "desc": "你于部族聚居地的篝火边静坐，暖意驱散了严寒，灵气充沛，体魄与真元大幅恢复，雪原草药的清香令人心旷神怡。",
+      "effect": {"physique": 28, "trueyuan": 38, "luck": 1}
+    },
+    {
+      "eid": "evb05", "name": "劫难·雪匪劫掠", "type": "disaster",
+      "weight": 11, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_snow_forest", "beiyuan_frozen_tundra"],
+      "desc": "风雪中大漠扬起，一队裹着兽皮的雪匪从雪丘后杀出，弯刀映寒光，原石与蛊材是他们唯一的目标！你且战且退，仍被劫去部分物资。",
+      "effect": {"physique": -24, "injure": "轻伤", "lose_random_material": 2, "luck": -1}
+    },
+    {
+      "eid": "evb06", "name": "机缘·寒冰原石矿脉", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_entry", "beiyuan_snow_forest", "beiyuan_frozen_tundra"],
+      "desc": "你在一处风化冰壁下发现一条裸露的寒冰原石矿脉，晶石在寒日下折射出迷人光彩，连忙开采了几块。",
+      "effect": {"add_item": ["寒冰原石x5"], "dao_mark": {"冰道": 2}, "luck": 1}
+    },
+    {
+      "eid": "evb07", "name": "机缘·冰下蛊巢奇遇", "type": "fortune",
+      "weight": 6, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_frozen_tundra"],
+      "desc": "冻土荒原深处，你拨开积雪，发现一处上古蛊师遗迹的残壁。壁上刻着冰道蛊文，残壁下散落着御寒蛊方残片与冻藏蛊材，似在诉说千年前的冰原大战。",
+      "effect": {"add_item": ["御寒蛊方x1", "冻藏蛊材x3"], "dao_mark": {"冰道": 3, "鬼道": 2}, "luck": 1}
+    },
+    {
+      "eid": "evb08", "name": "抉择·濒死的雪民", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_snow_forest", "beiyuan_frozen_tundra"],
+      "desc": "一名雪民倒在雪丘旁，嘴唇青紫，皮裘早已冻硬，气息奄奄地向你伸出冻僵的手。",
+      "effect": {},
+      "choices": [
+        {"text": "赠药并喂食灵蜜", "effect": {"add_item_cost": ["灵蜜x1"], "add_item": ["原石x20", "寒冰原石x5"], "dao_mark": {"运道": 2}, "luck": 3}, "weight": 1},
+        {"text": "留下原石便离去", "effect": {"add_item_cost": ["原石x5"], "luck": 1}, "weight": 1},
+        {"text": "搜刮他随身之物", "effect": {"add_item": ["雪匪铜钱x8", "寒冰原石x3"], "luck": -4}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evb09", "name": "劫难·雪盲症", "type": "disaster",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_snow_forest", "beiyuan_entry"],
+      "desc": "雪原反射的强光灼得你双目刺痛，你患上雪盲症，视界一片白茫茫，真元逆流，险些栽倒于雪中。",
+      "effect": {"physique": -12, "trueyuan": -15, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "evb10", "name": "机缘·冰晶骨", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_frozen_tundra", "beiyuan_ice_canyon"],
+      "desc": "你在冻土碎石间发现一块沉甸甸的冰晶骨，敲开一角，内里竟隐隐透出冰道蛊气，似含未知蛊虫！",
+      "effect": {"add_item": ["冰晶骨x3"], "dao_mark": {"冰道": 1}, "luck": 1}
+    },
+    {
+      "eid": "evb11", "name": "抉择·部族冲突", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_frozen_tundra"],
+      "desc": "两支北原部族为猎场归属剑拔弩张，一位部族长老远远望见你，高声邀请你助阵，许以重酬。",
+      "effect": {},
+      "choices": [
+        {"text": "助强势部族一战", "effect": {"physique": -18, "add_item": ["原石x30", "寒冰原石x5"], "dao_mark": {"运道": 3}, "luck": 3}, "weight": 1},
+        {"text": "居中调停化解", "effect": {"add_item": ["原石x15"], "dao_mark": {"运道": 2}, "luck": 2}, "weight": 1},
+        {"text": "袖手旁观", "effect": {"luck": -2}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evb12", "name": "劫难·冰原兽王伏击", "type": "disaster",
+      "weight": 9, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_snow_forest", "beiyuan_ice_canyon"],
+      "desc": "脚下积雪突然炸开，一头巨大的冰原兽王张着獠牙破雪而出，寒气四溅！你仓促招架仍被擦伤。",
+      "effect": {"physique": -20, "poison": {"pid": "evb12_icebeast", "name": "寒毒", "rank": "fierce", "power": 16, "tick_hours": 6}, "luck": -1}
+    },
+    {
+      "eid": "evb13", "name": "机缘·雪原草药丛", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_tribe", "beiyuan_entry", "beiyuan_snow_forest"],
+      "desc": "你在雪原林地边缘发现一丛耐寒的雪原草药，叶片覆满冰晶，蕴含微弱冰道灵韵，连忙采下。",
+      "effect": {"add_item": ["雪原草药x4", "冻藏蛊材x2"], "luck": 1}
+    },
+    {
+      "eid": "evb14", "name": "机缘·冰道残卷", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_ice_canyon"],
+      "desc": "冰岩峡谷一处冰缝中，你拾到一卷风化严重的兽皮残卷，上面记载着失传的冰道蛊方残片与一段修炼心法。",
+      "effect": {"add_item": ["御寒蛊方x1"], "dao_mark": {"冰道": 4}, "luck": 2}
+    },
+    {
+      "eid": "evb15", "name": "机缘·永冻冰窟遗方", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_permafrost_cave"],
+      "desc": "永冻冰窟深处一方冰台上摊着半卷蛊方残片，正是北原古蛊师遗落的『冰遁蛊蛊方』！冰砂间还凝着永冻冰髓。",
+      "effect": {"add_item": ["冰遁蛊蛊方x1", "永冻冰髓x1"], "dao_mark": {"冰道": 5, "月道": 2}, "luck": 2}
+    },
+    {
+      "eid": "evb16", "name": "劫难·冰麟蛊王震怒", "type": "disaster",
+      "weight": 8, "min_rank": 4, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_permafrost_cave"],
+      "desc": "你在永冻冰窟中惊动了沉睡的冰麟蛊王，冰窟震颤，万年玄冰崩裂如雨，你被冰浪掀飞，重重摔在岩壁上！",
+      "effect": {"physique": -28, "trueyuan": -22, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "evb17", "name": "机缘·冰魂砂", "type": "fortune",
+      "weight": 6, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_permafrost_cave"],
+      "desc": "冰窟一处暗角中，亡魂凝结的冰魂砂幽幽发光，你小心翼翼收起，砂粒中似有上古鬼道蛊师的残念低语。",
+      "effect": {"add_item": ["冰魂砂x2", "寒雾晶x1"], "dao_mark": {"鬼道": 4}, "luck": 1}
+    },
+    {
+      "eid": "evb18", "name": "抉择·冰岩峡谷古碑", "type": "fortune",
+      "weight": 6, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["beiyuan_ice_canyon"],
+      "desc": "冰岩峡谷边缘立着一块半埋的古碑，碑文依稀可辨：『冰窟之下，冰麟盘踞；持冰遁蛊者，方可安然入内。』碑底似压着什么物件。",
+      "effect": {},
+      "choices": [
+        {"text": "冒严寒取物", "effect": {"physique": -10, "add_item": ["冰晶骨x3", "冻藏蛊材x2"], "dao_mark": {"冰道": 2}, "luck": 1}, "weight": 1},
+        {"text": "记下碑文离去", "effect": {"dao_mark": {"运道": 2}, "luck": 1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evb19", "name": "机缘·雪原寻宝", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["beiyuan_snow_forest"],
+      "desc": "你在雪原林地一株覆雪古松下，掘出一个冻硬的兽皮包裹，内里竟是一批原石与寒冰原石，似是某位过路蛊师遇难前埋藏。",
+      "effect": {"add_item": ["原石x15", "寒冰原石x5", "雪匪铜钱x5"], "luck": 2}
+    }
+  ]
+}

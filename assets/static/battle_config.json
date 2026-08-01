@@ -1,0 +1,67 @@
+{
+  "env_effects": {
+    "毒道": {"attack_poison_bonus": 0.20, "detox_penalty": 0.10},
+    "气道": {"heal_zhen_bonus": 0.15, "cost_zhen_reduction": 0.05},
+    "月道": {"night_power_bonus": 0.30, "day_power_penalty": 0.20},
+    "地道": {"flee_bonus": 0.20, "defense_bonus": 0.10},
+    "力道": {"attack_bonus": 0.15, "defense_bonus": 0.05},
+    "血道": {"lifesteal": 0.10, "attack_bonus": 0.05},
+    "兽道": {"speed_bonus": 0.15, "counter_chance": 0.10},
+    "鬼道": {"soul_attack_bonus": 0.20, "fear_chance": 0.05},
+    "食道": {"recover_bonus": 0.15, "cost_zhen_reduction": 0.10},
+    "运道": {"luck_bonus": 0.10, "crit_chance": 0.05},
+    "火道": {"attack_bonus": 0.20, "cost_zhen_increase": 0.10},
+    "水道": {"heal_bonus": 0.20, "defense_bonus": 0.10}
+  },
+  "poison_stacking": {
+    "max_stacks": 5,
+    "stack_multiplier": 0.5,
+    "note": "同类毒素叠加至5层，每层效果递减50%"
+  },
+  "injury_stacking": {
+    "dark_injury_max": 3,
+    "dark_injury_life_cost_mul": 1.2,
+    "note": "暗伤最多叠加3层，每层寿元流逝加速20%"
+  },
+  "npc_ai_tactics": {
+    "aggressive": {
+      "description": "优先攻击，低血量也不逃跑",
+      "attack_priority": 0.8,
+      "defend_threshold": 0.15,
+      "flee_threshold": 0.0
+    },
+    "defend": {
+      "description": "优先防御和疗伤，血量过半才反击",
+      "attack_priority": 0.3,
+      "defend_threshold": 0.6,
+      "flee_threshold": 0.15,
+      "heal_priority": 0.8
+    },
+    "calm": {
+      "description": "攻守均衡，血量低于30%有概率逃跑",
+      "attack_priority": 0.5,
+      "defend_threshold": 0.4,
+      "flee_threshold": 0.30
+    },
+    "smart": {
+      "description": "高阶NPC智能战术：优先释放防御蛊，低血量触发疗伤，极低血量逃跑",
+      "attack_priority": 0.6,
+      "defend_threshold": 0.5,
+      "flee_threshold": 0.20,
+      "heal_priority": 0.7,
+      "use_detox_if_poisoned": true,
+      "swap_gu_if_low_durability": true
+    }
+  },
+  "loot_rules": {
+    "material_loot_chance": 0.60,
+    "gu_loot_chance": 0.05,
+    "protect_bound_gu": true,
+    "note": "战利品仅掠夺非绑定材料，保护本命蛊不可被掠夺"
+  },
+  "faction_support": {
+    "same_faction_support_range": 1,
+    "support_chance": 0.40,
+    "note": "同势力NPC在相邻场景有40%概率支援战斗"
+  }
+}

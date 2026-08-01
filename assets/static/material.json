@@ -1,25 +1,514 @@
 {
   "materials": {
-    "露水": {"mid": "m001", "rarity": 1, "desc": "清晨草叶凝结的水珠，炼制低阶蛊虫的基础蛊材", "price": 1},
-    "青茅草根": {"mid": "m002", "rarity": 1, "desc": "青茅山特产草根，蕴含微弱气道灵韵", "price": 2},
-    "野草露水": {"mid": "m003", "rarity": 1, "desc": "野生草木上的露水，品质略次于净露水", "price": 1},
-    "月光石": {"mid": "m004", "rarity": 2, "desc": "月华凝结的晶石，炼制月道蛊虫必备", "price": 8},
-    "蛇蜕": {"mid": "m005", "rarity": 2, "desc": "毒蛇蜕下的皮，蕴含毒道痕迹", "price": 6},
-    "毒囊": {"mid": "m006", "rarity": 2, "desc": "毒虫体内的毒囊，炼制毒道蛊虫核心材料", "price": 10},
-    "铁矿石": {"mid": "m007", "rarity": 1, "desc": "常见铁矿，炼制防御类蛊虫辅料", "price": 3},
-    "兽血": {"mid": "m008", "rarity": 2, "desc": "凶兽鲜血，血道蛊材", "price": 7},
-    "竹节": {"mid": "m009", "rarity": 1, "desc": "青竹的节段，炼制竹类蛊虫材料", "price": 2},
-    "酒液": {"mid": "m010", "rarity": 1, "desc": "陈酿米酒，炼制酒虫蛊的必需品", "price": 5},
-    "玉髓": {"mid": "m011", "rarity": 3, "desc": "玉石精髓，炼制防御蛊的珍稀材料", "price": 20},
-    "星砂": {"mid": "m012", "rarity": 3, "desc": "陨星坠地留下的砂粒，星道蛊材", "price": 25},
-    "寿桃": {"mid": "m013", "rarity": 4, "desc": "传说延寿的灵桃，寿道奇珍", "price": 100},
-    "黑莲花瓣": {"mid": "m014", "rarity": 4, "desc": "黑莲一片花瓣，魔道至宝", "price": 80},
-    "原石": {"mid": "m015", "rarity": 2, "desc": "未雕琢的蛊材原石，可能含未知蛊虫", "price": 15},
-    "青茅草": {"mid": "m016", "rarity": 1, "desc": "青茅山常见的解毒草药，可解轻微毒素，压制烈性毒素", "price": 4, "effect": {"type": "detox", "power": 6}},
-    "银针花": {"mid": "m017", "rarity": 2, "desc": "银色针状花瓣，药力强于青茅草，对烈性毒素有压制之效", "price": 12, "effect": {"type": "detox", "power": 14}},
-    "解毒散": {"mid": "m018", "rarity": 3, "desc": "古方调配的解毒散，药力雄浑，对烈性毒素有奇效（凡药不可解奇毒/道毒）", "price": 30, "effect": {"type": "detox", "power": 25}}
+    "露水": {
+      "mid": "m001",
+      "rarity": 1,
+      "desc": "清晨草叶凝结的水珠，炼制低阶蛊虫的基础蛊材",
+      "price": 1
+    },
+    "青茅草根": {
+      "mid": "m002",
+      "rarity": 1,
+      "desc": "青茅山特产草根，蕴含微弱气道灵韵",
+      "price": 2
+    },
+    "野草露水": {
+      "mid": "m003",
+      "rarity": 1,
+      "desc": "野生草木上的露水，品质略次于净露水",
+      "price": 1
+    },
+    "月光石": {
+      "mid": "m004",
+      "rarity": 2,
+      "desc": "月华凝结的晶石，炼制月道蛊虫必备",
+      "price": 8
+    },
+    "蛇蜕": {
+      "mid": "m005",
+      "rarity": 2,
+      "desc": "毒蛇蜕下的皮，蕴含毒道痕迹",
+      "price": 6
+    },
+    "毒囊": {
+      "mid": "m006",
+      "rarity": 2,
+      "desc": "毒虫体内的毒囊，炼制毒道蛊虫核心材料",
+      "price": 10
+    },
+    "铁矿石": {
+      "mid": "m007",
+      "rarity": 1,
+      "desc": "常见铁矿，炼制防御类蛊虫辅料",
+      "price": 3
+    },
+    "兽血": {
+      "mid": "m008",
+      "rarity": 2,
+      "desc": "凶兽鲜血，血道蛊材",
+      "price": 7
+    },
+    "竹节": {
+      "mid": "m009",
+      "rarity": 1,
+      "desc": "青竹的节段，炼制竹类蛊虫材料",
+      "price": 2
+    },
+    "酒液": {
+      "mid": "m010",
+      "rarity": 1,
+      "desc": "陈酿米酒，炼制酒虫蛊的必需品",
+      "price": 5
+    },
+    "玉髓": {
+      "mid": "m011",
+      "rarity": 3,
+      "desc": "玉石精髓，炼制防御蛊的珍稀材料",
+      "price": 20
+    },
+    "星砂": {
+      "mid": "m012",
+      "rarity": 3,
+      "desc": "陨星坠地留下的砂粒，星道蛊材",
+      "price": 25
+    },
+    "寿桃": {
+      "mid": "m013",
+      "rarity": 4,
+      "desc": "传说延寿的灵桃，寿道奇珍",
+      "price": 100
+    },
+    "黑莲花瓣": {
+      "mid": "m014",
+      "rarity": 4,
+      "desc": "黑莲一片花瓣，魔道至宝",
+      "price": 80
+    },
+    "原石": {
+      "mid": "m015",
+      "rarity": 2,
+      "desc": "未雕琢的蛊材原石，可能含未知蛊虫",
+      "price": 15
+    },
+    "青茅草": {
+      "mid": "m016",
+      "rarity": 1,
+      "desc": "青茅山常见的解毒草药，可解轻微毒素，压制烈性毒素",
+      "price": 4,
+      "effect": {
+        "type": "detox",
+        "power": 6
+      }
+    },
+    "银针花": {
+      "mid": "m017",
+      "rarity": 2,
+      "desc": "银色针状花瓣，药力强于青茅草，对烈性毒素有压制之效",
+      "price": 12,
+      "effect": {
+        "type": "detox",
+        "power": 14
+      }
+    },
+    "解毒散": {
+      "mid": "m018",
+      "rarity": 3,
+      "desc": "古方调配的解毒散，药力雄浑，对烈性毒素有奇效（凡药不可解奇毒/道毒）",
+      "price": 30,
+      "effect": {
+        "type": "detox",
+        "power": 25
+      }
+    },
+    "瘴灵草": {
+      "mid": "m019",
+      "rarity": 2,
+      "desc": "瘴林深处生长的灵草，蕴含毒道灵韵，可入药可炼蛊",
+      "price": 8
+    },
+    "毒菇": {
+      "mid": "m020",
+      "rarity": 1,
+      "desc": "瘴林中常见的毒蘑菇，炼制毒道蛊虫的基础材料",
+      "price": 3
+    },
+    "石壳菌": {
+      "mid": "m021",
+      "rarity": 2,
+      "desc": "生长于岩缝中的坚硬菌菇，炼制力道蛊虫辅料",
+      "price": 5
+    },
+    "沼铁原矿": {
+      "mid": "m022",
+      "rarity": 2,
+      "desc": "南疆沼泽中开采的铁矿石，含杂质但储量丰富",
+      "price": 4
+    },
+    "青茅真液": {
+      "mid": "m023",
+      "rarity": 3,
+      "desc": "青茅山宗族秘制药液，大幅恢复真元",
+      "price": 35,
+      "effect": {
+        "type": "food",
+        "heal_phy": 0,
+        "heal_zhen": 25,
+        "satiety": 6,
+        "heal_injure_chance": 0.1,
+        "detox_power": 0
+      }
+    },
+    "锈蚀蛊料": {
+      "mid": "m024",
+      "rarity": 2,
+      "desc": "黑崖寨锻造坊的边角料，含残余蛊气",
+      "price": 6
+    },
+    "豹魄晶": {
+      "mid": "m025",
+      "rarity": 3,
+      "desc": "青纹豹妖丹化成的晶石，兽道珍材",
+      "price": 30
+    },
+    "尸气丹": {
+      "mid": "m026",
+      "rarity": 3,
+      "desc": "以尸气炼制的丹药，鬼道蛊材",
+      "price": 28
+    },
+    "蛊虫丝": {
+      "mid": "m027",
+      "rarity": 2,
+      "desc": "蛊虫吐出的丝线，炼制储物蛊核心材料",
+      "price": 8
+    },
+    "野果": {
+      "mid": "m028",
+      "rarity": 1,
+      "desc": "南疆山林常见的野果，可充饥",
+      "price": 1,
+      "effect": {
+        "type": "food",
+        "heal_phy": 5,
+        "heal_zhen": 0,
+        "satiety": 8,
+        "heal_injure_chance": 0,
+        "detox_power": 0
+      }
+    },
+    "兽肉干": {
+      "mid": "m029",
+      "rarity": 1,
+      "desc": "风干兽肉，猎人的干粮",
+      "price": 2,
+      "effect": {
+        "type": "food",
+        "heal_phy": 12,
+        "heal_zhen": 0,
+        "satiety": 14,
+        "heal_injure_chance": 0.1,
+        "detox_power": 0
+      }
+    },
+    "瘴米": {
+      "mid": "m030",
+      "rarity": 2,
+      "desc": "瘴林边缘种植的稻米，略带毒性但饱腹",
+      "price": 3,
+      "effect": {
+        "type": "food",
+        "heal_phy": 8,
+        "heal_zhen": 3,
+        "satiety": 16,
+        "heal_injure_chance": 0,
+        "detox_power": 0
+      }
+    },
+    "蛇羹": {
+      "mid": "m031",
+      "rarity": 2,
+      "desc": "以蛇肉炖煮的汤羹，温补气血",
+      "price": 5,
+      "effect": {
+        "type": "food",
+        "heal_phy": 20,
+        "heal_zhen": 8,
+        "satiety": 18,
+        "heal_injure_chance": 0.2,
+        "detox_power": 2
+      }
+    },
+    "毒菇汤": {
+      "mid": "m032",
+      "rarity": 2,
+      "desc": "瘴林毒菇熬制的汤，以毒攻毒可解轻微毒素",
+      "price": 4,
+      "effect": {
+        "type": "food",
+        "heal_phy": 6,
+        "heal_zhen": 5,
+        "satiety": 10,
+        "heal_injure_chance": 0,
+        "detox_power": 8
+      }
+    },
+    "灵蜜": {
+      "mid": "m033",
+      "rarity": 3,
+      "desc": "灵蜂酿造的蜂蜜，恢复真元",
+      "price": 12,
+      "effect": {
+        "type": "food",
+        "heal_phy": 10,
+        "heal_zhen": 20,
+        "satiety": 8,
+        "heal_injure_chance": 0.15,
+        "detox_power": 0
+      }
+    },
+    "蛊肉脯": {
+      "mid": "m034",
+      "rarity": 3,
+      "desc": "以蛊虫材料腌制的肉脯，大补但有小毒",
+      "price": 15,
+      "effect": {
+        "type": "food",
+        "heal_phy": 30,
+        "heal_zhen": 15,
+        "satiety": 20,
+        "heal_injure_chance": 0.25,
+        "detox_power": 3
+      }
+    },
+    "黑莲粥": {
+      "mid": "m035",
+      "rarity": 4,
+      "desc": "以黑莲花瓣熬制的粥，鬼道食补圣品",
+      "price": 40,
+      "effect": {
+        "type": "food",
+        "heal_phy": 25,
+        "heal_zhen": 30,
+        "satiety": 24,
+        "heal_injure_chance": 0.3,
+        "detox_power": 5
+      }
+    },
+    "妖丹": {
+      "mid": "m036",
+      "rarity": 4,
+      "desc": "高阶异兽体内的妖丹，兽道至宝",
+      "price": 60
+    },
+    "蛊魂晶": {
+      "mid": "m037",
+      "rarity": 4,
+      "desc": "蛊虫魂力凝结的晶石，鬼道珍材",
+      "price": 55
+    },
+    "天蚕丝": {
+      "mid": "m038",
+      "rarity": 3,
+      "desc": "天蚕吐出的丝，炼制高阶储物蛊必备",
+      "price": 25
+    },
+    "南疆陨铁": {
+      "mid": "m039",
+      "rarity": 3,
+      "desc": "南疆发现的陨铁，力道蛊材",
+      "price": 22
+    },
+    "瘴毒精华": {
+      "mid": "m040",
+      "rarity": 3,
+      "desc": "瘴林毒气凝结的精华，毒道高阶材料",
+      "price": 20
+    },
+    "千年毒囊": {
+      "mid": "m041",
+      "rarity": 4,
+      "desc": "历经千年的毒囊，毒道至宝，万毒蟒君身上产出",
+      "price": 50
+    },
+    "腐骨": {
+      "mid": "m042",
+      "rarity": 3,
+      "desc": "腐骨窟中的上古腐骨，毒道/鬼道珍材",
+      "price": 25
+    },
+    "幽冥鬼砂": {
+      "mid": "m043",
+      "rarity": 4,
+      "desc": "幽冥深渊产出的鬼砂，鬼道至宝",
+      "price": 55
+    },
+    "磷火晶": {
+      "mid": "m044",
+      "rarity": 3,
+      "desc": "磷火凝结的晶石，鬼道珍材",
+      "price": 28
+    },
+    "血煞晶": {
+      "mid": "m045",
+      "rarity": 4,
+      "desc": "血煞宗血池凝结的晶石，血道至宝",
+      "price": 60
+    },
+    "炎晶": {
+      "mid": "m046",
+      "rarity": 3,
+      "desc": "炎窟地脉产出的火道晶石，火道珍材",
+      "price": 30
+    },
+    "地脉火石": {
+      "mid": "m047",
+      "rarity": 3,
+      "desc": "地脉深处的火石，火道/地道材料",
+      "price": 22
+    },
+    "月华露": {
+      "mid": "m048",
+      "rarity": 3,
+      "desc": "月华幻境凝结的露水，月道珍材",
+      "price": 32
+    },
+    "古蛊师遗骨": {
+      "mid": "m049",
+      "rarity": 5,
+      "desc": "古蛊师遗迹中的遗骨，蕴含上古蛊道气息，集齐可触发西漠线索",
+      "price": 100
+    },
+    "兽骨": {
+      "mid": "m050",
+      "rarity": 2,
+      "desc": "凶兽骨骼，力道/地道辅料",
+      "price": 5
+    },
+    "风行蛊蛊方": {
+      "mid": "m051",
+      "rarity": 5,
+      "desc": "西漠通道关键蛊方·风行蛊，万毒蟒君掉落",
+      "price": 200
+    },
+    "沙遁蛊蛊方": {
+      "mid": "m052",
+      "rarity": 5,
+      "desc": "西漠通道关键蛊方·沙遁蛊，古蛊师残魂掉落",
+      "price": 200
+    },
+    "风行蛊蛊方残片": {
+      "mid": "m053",
+      "rarity": 4,
+      "desc": "风行蛊蛊方残片，黑市掮客好感度赠送",
+      "price": 80
+    },
+    "冥血蛊蛊方": {
+      "mid": "m054",
+      "rarity": 5,
+      "desc": "血煞宗镇宗蛊方·冥血蛊，血煞宗主掉落",
+      "price": 250
+    },
+    "阴魂砂": {
+      "mid": "m055",
+      "rarity": 3,
+      "desc": "古坟秘境凝结的阴气砂粒，炼制鬼道蛊虫的珍材",
+      "price": 18
+    },
+    "寒雾晶": {
+      "mid": "m056",
+      "rarity": 3,
+      "desc": "寒雾洞窟雾气凝结的晶石，蕴含水道与冰道灵韵",
+      "price": 16
+    },
+    "地脉晶": {
+      "mid": "m057",
+      "rarity": 3,
+      "desc": "地下蛊窟岩壁凝结的地脉结晶，炼制地道蛊虫珍材",
+      "price": 16
+    },
+    "土遁蛊蛊方": {
+      "mid": "m058",
+      "rarity": 3,
+      "desc": "青茅山古蛊师遗方·土遁蛊，地下蛊窟深处寻得",
+      "price": 60
+    },
+    "探隐蛊蛊方": {
+      "mid": "m059",
+      "rarity": 3,
+      "desc": "青茅山古蛊师遗方·探隐蛊，毒瘴秘境深处寻得",
+      "price": 60
+    },
+    "阴视蛊蛊方": {
+      "mid": "m060",
+      "rarity": 3,
+      "desc": "青茅山古蛊师遗方·阴视蛊，古坟秘境深处寻得",
+      "price": 60
+    },
+    "蚁巢土": {
+      "mid": "m061",
+      "rarity": 1,
+      "desc": "南疆蚁巢中挖掘的土壤，蕴含虫道气息，炼制蚁力蛊原料",
+      "price": 2,
+      "scene": [
+        "青茅山主峰",
+        "青茅山南坡谷地"
+      ]
+    },
+    "月兰花瓣": {
+      "mid": "m062",
+      "rarity": 2,
+      "desc": "月兰花盛开时飘落的花瓣，月光蛊饵料，蕴含月道灵韵",
+      "price": 5,
+      "scene": [
+        "隐秘洞天",
+        "月华寒潭·秘境"
+      ]
+    },
+    "杨梅酒": {
+      "mid": "m063",
+      "rarity": 2,
+      "desc": "以南疆杨梅酿制的果酒，四味酒虫合炼材料之一",
+      "price": 8,
+      "scene": [
+        "散修集市"
+      ]
+    },
+    "黄金蜜酒": {
+      "mid": "m064",
+      "rarity": 2,
+      "desc": "金黄蜜色美酒，四味酒虫合炼材料之一",
+      "price": 10,
+      "scene": [
+        "散修集市"
+      ]
+    },
+    "苦贝酒": {
+      "mid": "m065",
+      "rarity": 2,
+      "desc": "以苦贝草酿制的苦酒，四味酒虫合炼材料之一",
+      "price": 8,
+      "scene": [
+        "散修集市"
+      ]
+    },
+    "白粮液": {
+      "mid": "m066",
+      "rarity": 2,
+      "desc": "白粮酿造的清冽酒液，四味酒虫合炼材料之一",
+      "price": 9,
+      "scene": [
+        "散修集市"
+      ]
+    }
   },
   "ores": {
-    "原石": {"drop_gu_rank_max": 2, "drop_rate": 0.25}
+    "原石": {
+      "drop_gu_rank_max": 2,
+      "drop_rate": 0.25
+    },
+    "沼铁原矿": {
+      "drop_gu_rank_max": 2,
+      "drop_rate": 0.2
+    }
   }
 }

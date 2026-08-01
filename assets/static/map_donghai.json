@@ -1,0 +1,127 @@
+{
+  "regions": [
+    "东海"
+  ],
+  "start_rid": "donghai_entry",
+  "rooms": [
+    {
+      "rid": "donghai_entry",
+      "name": "东海·滨海礁岸",
+      "description": "穿过东海古道的禁制，咸湿海风扑面而来，眼前是一片碧波万顷的辽阔海域。礁岸嶙峋，浪花拍岸溅起白沫，海鸥盘旋其间。礁石缝隙间散落珊瑚碎片与海蛇蜕，水道蛊气在此温润流动。远处渔村的炊烟隐约可见，东侧码头桅杆林立，北行可抵碧波断崖。东海专属环境：水道蛊虫在此威能加成；海雾、暴雨、台风随时可能致命。",
+      "exits": {
+        "west": "border_east_pass",
+        "east": "donghai_fishing_village",
+        "north": "donghai_cliff"
+      },
+      "env_effect": {
+        "水道": 1.1,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "珊瑚碎片",
+        "海蛇蜕",
+        "珊瑚碎屑"
+      ],
+      "wild_gu": [
+        "g003",
+        "g006"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "donghai_fishing_village",
+      "name": "渔村码头",
+      "description": "一座依海而建的渔村码头，木栈桥伸入碧波，渔船随浪起伏。村中渔民往来修补渔网，晾晒的海产散发着咸腥气息。此地因村中老蛊师的长年祭祀而灵气温润，真元恢复加快，水道蛊虫亦得滋养。码头有渔村商人坐镇，远离海妖与台风袭扰，是东海唯一的安全歇脚之处，可安心休憩、恢复真元、交易补给。",
+      "exits": {
+        "west": "donghai_entry"
+      },
+      "env_effect": {
+        "水道": 1.1,
+        "气道": 1.1
+      },
+      "refresh_resource": [
+        "咸湿蛊材",
+        "海蛇蜕",
+        "珊瑚碎片"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_donghai_merchant",
+        "npc_donghai_wanderer"
+      ],
+      "secret": "safe_zone"
+    },
+    {
+      "rid": "donghai_cliff",
+      "name": "碧波断崖",
+      "description": "一道陡峭的临海断崖，崖下惊涛拍岸，卷起千堆雪。崖壁上凝结着海珍珠与珊瑚，水道蛊气浓郁欲滴。断崖之下隐现一处被暗流环绕的洞窟入口——海妖洞窟，传闻有海妖王盘踞其间，兴风作浪祸乱渔村。崖顶海风凛冽，台风来时寸步难行，无水遁蛊者无法潜入洞窟暗流。海蛇与水道野蛊常于崖畔礁石间出没。",
+      "exits": {
+        "south": "donghai_entry",
+        "down": "donghai_sea_demon_cave"
+      },
+      "env_effect": {
+        "水道": 1.2,
+        "风道": 1.1,
+        "气道": 0.95
+      },
+      "refresh_resource": [
+        "海珍珠",
+        "珊瑚碎片",
+        "海蛇蜕",
+        "海雾晶",
+        "珊瑚碎屑"
+      ],
+      "wild_gu": [
+        "g003",
+        "g006",
+        "gu_langxi",
+        "gu_yingshen"
+      ],
+      "npc_list": [
+        "npc_donghai_sea_snake"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "donghai_sea_demon_cave",
+      "name": "海妖洞窟",
+      "description": "海妖洞窟被暗流环绕，窟内钟乳倒悬，水道蛊气浓郁至极。窟壁上凝结着海珍珠与海妖骨，亦散落着失传的水遁蛊蛊方残卷。窟底深处，一尊由深海妖气凝聚而成的海妖王盘踞其上，周身水雾凝为实质，每一次咆哮都掀起狂浪——此兽仅于暴雨或台风天气方会苏醒现身，寻常时只于暗流深处沉睡。胜之，可得海妖骨与海珍珠。无水遁蛊者无法踏入此地，必被暗流拖拽卷入深海。",
+      "exits": {
+        "up": "donghai_cliff"
+      },
+      "env_effect": {
+        "水道": 1.4,
+        "兽道": 1.15,
+        "毒道": 1.05
+      },
+      "refresh_resource": [
+        "海珍珠",
+        "海妖骨",
+        "珊瑚碎片",
+        "水遁蛊蛊方",
+        "海雾晶"
+      ],
+      "wild_gu": [
+        "g006",
+        "g003",
+        "gu_langxi",
+        "gu_yingshen"
+      ],
+      "npc_list": [
+        "npc_donghai_sea_demon_boss"
+      ],
+      "secret": "need_gu_g_shuidun",
+      "boss_info": {
+        "npc_id": "npc_donghai_sea_demon_boss",
+        "boss_name": "海妖王",
+        "respawn_game_time": 300,
+        "limit_daytime": [],
+        "limit_weather": [
+          "暴雨",
+          "台风"
+        ]
+      }
+    }
+  ]
+}

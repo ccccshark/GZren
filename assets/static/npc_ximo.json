@@ -1,0 +1,134 @@
+{
+  "npcs": [
+    {
+      "nid": "npc_ximo_guide", "name": "沙民向导·阿曼", "align": "中立", "level": "三转中阶",
+      "life_left": 150, "trueyuan": 180, "trueyuan_max": 180, "physique": 90, "soul_power": 50,
+      "slot_max": 5, "gu_in_slot": ["g_sand_worm", "g_salt_crystal", "g_wind_walk"],
+      "dao_mark": {"地道": 35, "风沙道": 20},
+      "inventory": ["沙晶x8", "风沙琥珀x2", "原石x10"],
+      "is_hostile": false, "is_merchant": false, "is_beast": false,
+      "ai_type": "calm", "faction": "ximo_shamin",
+      "dialogue": ["外乡人，西漠可不是闹着玩的，没备好水囊和风沙蛊别往深处走。", "沙暴来时连沙盗都要找地方躲避，你若听到风声变尖，赶紧寻避风处。", "前面是流沙区，看着是平沙，踩下去就别想出来了——认着有盐晶骨的地段走准没错。", "要去盐湖？跟着商队的驼印走，别贪近路。"]
+    },
+    {
+      "nid": "npc_ximo_caravan", "name": "盐湖商队·哈桑", "align": "中立", "level": "四转中阶",
+      "life_left": 220, "trueyuan": 260, "trueyuan_max": 260, "physique": 120, "soul_power": 70,
+      "slot_max": 6, "gu_in_slot": ["g_sand_worm", "g_salt_crystal", "g_mirage", "g055"],
+      "dao_mark": {"地道": 40, "气道": 25},
+      "inventory": ["沙晶x15", "盐晶骨x10", "原石x30", "灵蜜x3"],
+      "is_hostile": false, "is_merchant": true, "is_beast": false,
+      "ai_type": "calm", "faction": "ximo_caravan",
+      "dialogue": ["哈桑的商队走南闯北，盐湖的晶盐、戈壁的沙晶，应有尽有。", "沙盗那群疯子最近又劫了几支队伍，独行客可要当心。", "海市蜃楼？那是旱蜃造的幻，进去能得蜃气珠，但也可能再也出不来。", "西行过石林废墟便是流沙沟壑，无流沙蛊者切勿涉足，沙陷之下九死一生。", "这卷流沙蛊蛊方是商队从流沙古穴中带出的孤本，价格不菲，但物有所值。"],
+      "trade_goods": {"沙晶": 6, "盐晶骨": 5, "风沙琥珀": 22, "旱蜃涎": 25, "原石": 15, "灵蜜": 12, "解毒散": 30, "沙虫甲": 28, "沙漠草药": 3, "干枯蛊材": 5, "戈壁原石": 4, "流沙蛊蛊方": 60, "寒夜冰晶": 20}
+    },
+    {
+      "nid": "npc_ximo_bandit_lord", "name": "沙盗首领·独眼贾拉", "align": "魔道", "level": "五转中阶",
+      "life_left": 320, "trueyuan": 300, "trueyuan_max": 300, "physique": 160, "soul_power": 90,
+      "slot_max": 6, "gu_in_slot": ["g_dust_devil", "g_desert_ghost", "g_sand_giant", "g055", "g054"],
+      "dao_mark": {"风沙道": 50, "鬼道": 30, "地道": 20},
+      "inventory": ["原石x50", "沙盗铜钱x20", "风沙琥珀x5", "千年沙髓x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "smart", "faction": "ximo_bandit",
+      "dialogue": ["独眼贾拉阴恻恻地笑：又一只肥羊自己送上门来！", "把蛊材和原石都留下，饶你不死！", "西漠是沙盗的西漠，外人别想活着出去！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_ghost_cultivator", "name": "沙窟鬼修·枯骨散人", "align": "魔道", "level": "四转中阶",
+      "life_left": 180, "trueyuan": 280, "trueyuan_max": 280, "physique": 95, "soul_power": 110,
+      "slot_max": 5, "gu_in_slot": ["g_desert_ghost", "g036", "g_desert_ghost"],
+      "dao_mark": {"鬼道": 55, "毒道": 20},
+      "inventory": ["沙魂砂x5", "沙盗铜钱x10", "原石x25"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "smart", "faction": "ximo_ghost",
+      "dialogue": ["枯骨散人阴测测地盯着你：活人的气息……真是久违了。", "这沙窟之下埋着千年前的沙场亡魂，正好喂养老夫的沙鬼蛊。", "留下来吧，成为这沙窟的一部分……"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_ancient_master", "name": "风沙古蛊师残魂", "align": "中立", "level": "六转中阶",
+      "life_left": 400, "trueyuan": 420, "trueyuan_max": 420, "physique": 200, "soul_power": 160,
+      "slot_max": 7, "gu_in_slot": ["g_sandstorm_lord", "g_mirage", "g_sand_giant", "g056", "g054", "g037"],
+      "dao_mark": {"风沙道": 80, "气道": 40, "土道": 35, "鬼道": 30},
+      "inventory": ["千年沙髓x2", "风沙古蛊方残片x3", "风沙琥珀x8", "原石x80"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "smart", "faction": "",
+      "dialogue": ["一缕残魂自风沙古墓中浮现：千年矣……竟有人寻到此处。", "风行、沙遁二蛊皆出我手，未料后世竟有人集齐破禁而来。", "既入西漠腹地，便接老夫一招沙暴之威！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_sand_worm", "name": "戈壁沙虫", "align": "中立", "level": "三转初阶",
+      "life_left": 130, "trueyuan": 60, "trueyuan_max": 60, "physique": 100, "soul_power": 15,
+      "slot_max": 3, "gu_in_slot": ["g_sand_worm", "g_sand_worm"],
+      "dao_mark": {"地道": 30},
+      "inventory": ["沙晶x3", "沙虫甲x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "aggressive", "faction": "",
+      "dialogue": ["沙虫自流沙中窜出，张着环状巨口嘶嘶作响！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_mirage_beast", "name": "旱蜃", "align": "中立", "level": "四转中阶",
+      "life_left": 200, "trueyuan": 320, "trueyuan_max": 320, "physique": 80, "soul_power": 120,
+      "slot_max": 4, "gu_in_slot": ["g_mirage", "g_mirage"],
+      "dao_mark": {"气道": 60},
+      "inventory": ["旱蜃涎x3", "蜃气珠x1", "蜃楼珠x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "smart", "faction": "",
+      "dialogue": ["旱蜃吐出迷蒙蜃气，周遭景象扭曲变幻！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_sand_golem", "name": "盐湖沙巨人", "align": "中立", "level": "五转初阶",
+      "life_left": 350, "trueyuan": 150, "trueyuan_max": 150, "physique": 220, "soul_power": 40,
+      "slot_max": 4, "gu_in_slot": ["g_sand_giant", "g_salt_crystal", "g055"],
+      "dao_mark": {"土道": 60, "力道": 30},
+      "inventory": ["盐晶骨x8", "沙晶x10", "千年沙髓x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "aggressive", "faction": "",
+      "dialogue": ["沙巨人自盐晶中拔地而起，每一步都令大地震颤！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_sand_scorpion", "name": "戈壁沙蝎", "align": "中立", "level": "二转中阶",
+      "life_left": 80, "trueyuan": 50, "trueyuan_max": 50, "physique": 75, "soul_power": 15,
+      "slot_max": 3, "gu_in_slot": ["g_sand_worm", "g006"],
+      "dao_mark": {"地道": 18, "毒道": 10},
+      "inventory": ["沙晶x2", "毒囊x1", "戈壁原石x1"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "aggressive", "faction": "",
+      "dialogue": ["沙蝎自流沙中暴起，毒尾高高竖起，嘶嘶作响！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_bandit", "name": "游荡沙盗蛊师", "align": "邪道", "level": "三转初阶",
+      "life_left": 110, "trueyuan": 130, "trueyuan_max": 130, "physique": 80, "soul_power": 35,
+      "slot_max": 4, "gu_in_slot": ["g_dust_devil", "g_sand_worm", "g013"],
+      "dao_mark": {"风沙道": 22, "地道": 15},
+      "inventory": ["原石x8", "沙晶x3", "干枯蛊材x2", "戈壁原石x2"],
+      "is_hostile": true, "is_merchant": false, "is_beast": false,
+      "ai_type": "aggressive", "faction": "ximo_bandit",
+      "dialogue": ["沙盗蛊师裹着头巾阴笑：留下蛊材和原石，饶你不死！", "西漠是沙盗的猎场，外乡人别想活着走出去！", "识相的把流沙蛊交出来，老子或许留你全尸！"],
+      "trade_goods": {}
+    },
+    {
+      "nid": "npc_ximo_wandering_guishi", "name": "流浪蛊师·沙行客", "align": "中立", "level": "三转中阶",
+      "life_left": 130, "trueyuan": 160, "trueyuan_max": 160, "physique": 85, "soul_power": 45,
+      "slot_max": 5, "gu_in_slot": ["g_dust_devil", "g_sand_worm", "g_salt_crystal", "g014"],
+      "dao_mark": {"风沙道": 25, "地道": 18, "气道": 10},
+      "inventory": ["沙晶x5", "风沙琥珀x1", "戈壁原石x3", "原石x10"],
+      "is_hostile": false, "is_merchant": false, "is_beast": false,
+      "ai_type": "calm", "faction": "ximo_sanxiu",
+      "dialogue": ["沙行客抹了把脸上的沙尘：石林废墟下面藏着古蛊师的痕迹，我在这儿寻了好几日。", "西漠的蛊虫多属风沙道、土道，与南疆的毒道、气道大不相同。", "想切磋？可以，点到为止，输了的请喝一囊沙民酿的椰枣酒。", "流沙古穴的沙巨蛊只在沙暴之夜现身，要去讨伐可得备齐解毒散与风沙道护体蛊。"]
+    },
+    {
+      "nid": "npc_ximo_sand_giant_boss", "name": "沙巨蛊", "align": "中立", "level": "五转中阶",
+      "life_left": 380, "trueyuan": 220, "trueyuan_max": 220, "physique": 240, "soul_power": 60,
+      "slot_max": 5, "gu_in_slot": ["g_sand_giant", "g_dust_devil", "g_sandstorm_lord", "g055"],
+      "dao_mark": {"地道": 65, "风沙道": 45, "力道": 30},
+      "inventory": ["千年沙髓x2", "沙魂砂x3", "风沙琥珀x5", "原石x40", "沙虫甲x3"],
+      "is_hostile": true, "is_merchant": false, "is_beast": true,
+      "ai_type": "smart", "faction": "",
+      "dialogue": ["沙巨蛊自流沙中拔地而起，聚沙成巨，每一步都令沙河震颤，咆哮如雷！"],
+      "trade_goods": {}
+    }
+  ]
+}

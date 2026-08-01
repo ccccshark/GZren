@@ -1,0 +1,10 @@
+{
+  "region": "中州",
+  "weather_refresh_minute": 120,
+  "weather_list": [
+    {"weather": "晴朗", "weight": 32, "buff": {}, "debuff": {}, "desc": "中原晴空万里，麦浪金黄"},
+    {"weather": "阴雨", "weight": 26, "buff": {"水道": 1.10, "气道": 1.05}, "debuff": {"捕捉成功率": 0.85}, "desc": "细雨绵绵，气道水道蛊虫威能略升"},
+    {"weather": "浓雾", "weight": 22, "buff": {"鬼道": 1.10}, "debuff": {"捕捉成功率": 0.80, "视界模糊": true}, "desc": "晨雾浓重，蛊虫藏匿，鬼道蛊虫威能提升"},
+    {"weather": "雷暴", "weight": 20, "buff": {"雷道": 1.30, "气道": 1.10}, "debuff": {"捕捉成功率": 0.70, "真元大量消耗": true, "视界模糊": true}, "desc": "雷暴交加，雷道蛊虫威能暴涨，野外野怪活跃度上升"}
+  ]
+}

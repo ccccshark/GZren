@@ -1,0 +1,168 @@
+{
+  "quests": [
+    {
+      "qid": "q_main_xisha_01",
+      "name": "西漠之钥·残破驿站的石碑",
+      "type": "main",
+      "chain": "xisha_main",
+      "chain_step": 1,
+      "min_rank": 3,
+      "auto_accept": true,
+      "desc": "你在西漠古道·残破驿站发现一块风化石碑，碑文提及通往西漠需寻『风行蛊』与『沙遁蛊』二蛊。驿站中有一位西漠隐士·沙行客，或许知晓更多内情。",
+      "objective": {"type": "talk_npc", "target": "npc_xisha_hermit"},
+      "reward": {"原石": 20, "flags": {"xisha_clue_known": 1}},
+      "next_qid": "q_main_xisha_02"
+    },
+    {
+      "qid": "q_main_xisha_02",
+      "name": "西漠之钥·寻访二蛊方",
+      "type": "main",
+      "chain": "xisha_main",
+      "chain_step": 2,
+      "min_rank": 4,
+      "desc": "沙行客告知：风行蛊蛊方藏于万毒沼泽深处的万毒蟒君身上；沙遁蛊蛊方则在幽冥深渊的古蛊师残魂手中。需击杀二位首领，夺取蛊方。",
+      "objective": {"type": "collect_item", "target": {"风行蛊蛊方": 1, "沙遁蛊蛊方": 1}},
+      "reward": {"原石": 50, "flags": {"xisha_recipes_obtained": 1}},
+      "next_qid": "q_main_xisha_03"
+    },
+    {
+      "qid": "q_main_xisha_03",
+      "name": "西漠之钥·炼制双蛊",
+      "type": "main",
+      "chain": "xisha_main",
+      "chain_step": 3,
+      "min_rank": 4,
+      "desc": "已取得二蛊方，需自行炼制出风行蛊与沙遁蛊。集齐双蛊后，西漠通道禁制方可破解。但炼蛊谈何容易，且南疆危机四伏，望量力而行。",
+      "objective": {"type": "own_gu_by_gid", "target": {"g_wind_walk": 1, "g_sand_dodge": 1}},
+      "reward": {"原石": 100, "flags": {"xisha_unlock_ready": 1}},
+      "next_qid": "",
+      "ending_note": "【任务完成】双蛊已备！待修为突破五转，可前往南疆西侧「黄沙古道」催动风行蛊与沙遁蛊，双蛊合一破除西漠通道禁制，踏入黄沙之地。"
+    },
+    {
+      "qid": "q_side_blackmarket_01",
+      "name": "黑市·掮客的委托",
+      "type": "side",
+      "min_rank": 3,
+      "desc": "黑市掮客·蒙面客托你前往万毒沼泽深处，采集3份千年毒囊。作为回报，他将开放一批高阶货品供你选购。",
+      "objective": {"type": "collect_item", "target": {"千年毒囊": 3}},
+      "reward": {"原石": 30, "flags": {"blackmarket_vip": 1}},
+      "next_qid": ""
+    },
+    {
+      "qid": "q_side_bloodsect_01",
+      "name": "正道委托·血煞宗之患",
+      "type": "side",
+      "min_rank": 4,
+      "desc": "南疆散修联盟悬赏血煞宗魔修。击杀血煞宗·血修弟子5名，可获散修联盟声望与赏金。",
+      "objective": {"type": "kill_npc_count", "target": {"npc_bloodsect_disciple": 5}},
+      "reward": {"原石": 40, "flags": {"sanxiu_reputation": 10}},
+      "next_qid": "q_side_bloodsect_02"
+    },
+    {
+      "qid": "q_side_bloodsect_02",
+      "name": "正道委托·血煞长老",
+      "type": "side",
+      "min_rank": 4,
+      "desc": "散修联盟进一步悬赏：击杀血煞宗·血煞长老1名。此人为魔道中坚，实力远胜普通弟子。",
+      "objective": {"type": "kill_npc_count", "target": {"npc_bloodsect_elder": 1}},
+      "reward": {"原石": 60, "flags": {"sanxiu_reputation": 15}},
+      "next_qid": "q_side_bloodsect_03"
+    },
+    {
+      "qid": "q_side_bloodsect_03",
+      "name": "正道委托·血煞宗主",
+      "type": "side",
+      "min_rank": 5,
+      "desc": "散修联盟终极悬赏：击杀血煞宗主！此人修为已达六转中阶，更持有镇宗蛊方——冥血蛊蛊方。胜之，南疆魔道势力必将元气大伤。",
+      "objective": {"type": "kill_npc_count", "target": {"npc_bloodsect_patriarch": 1}},
+      "reward": {"原石": 200, "flags": {"sanxiu_reputation": 50, "bloodsect_defeated": 1}},
+      "next_qid": ""
+    },
+    {
+      "qid": "q_loop_gather_01",
+      "name": "循环委托·采集黑莲花瓣",
+      "type": "loop",
+      "min_rank": 3,
+      "repeatable": true,
+      "cooldown_minute": 240,
+      "desc": "南疆散修联盟长期收购黑莲花瓣，每份5枚原石，可反复交付。",
+      "objective": {"type": "collect_item", "target": {"黑莲花瓣": 3}},
+      "reward": {"原石": 5},
+      "next_qid": ""
+    },
+    {
+      "qid": "q_loop_gather_02",
+      "name": "循环委托·采集幽冥鬼砂",
+      "type": "loop",
+      "min_rank": 4,
+      "repeatable": true,
+      "cooldown_minute": 360,
+      "desc": "黑市掮客长期收购幽冥鬼砂，用于炼制禁忌蛊方。每份8枚原石，可反复交付。",
+      "objective": {"type": "collect_item", "target": {"幽冥鬼砂": 2}},
+      "reward": {"原石": 8},
+      "next_qid": ""
+    },
+    {
+      "qid": "q_loop_kill_01",
+      "name": "循环委托·清剿竹林巨猿",
+      "type": "loop",
+      "min_rank": 2,
+      "repeatable": true,
+      "cooldown_minute": 180,
+      "desc": "青茅山宗族委托清剿竹林巨猿，维护山门安宁。每击杀3只，奖励原石15枚。",
+      "objective": {"type": "kill_npc_count", "target": {"npc_beast_bamboo": 3}},
+      "reward": {"原石": 15, "flags": {"qingmao_reputation": 2}},
+      "next_qid": ""
+    },
+    {
+      "qid": "q_side_qingmao_newbie",
+      "name": "青茅指引·初入青茅山",
+      "type": "side",
+      "chain": "qingmao_guide",
+      "chain_step": 1,
+      "min_rank": 1,
+      "auto_accept": true,
+      "desc": "初入青茅山域，南坡采药人·茅婶似是此地活字典。前去与她攀谈，或能知晓青茅山的门道。",
+      "objective": {"type": "talk_npc", "target": "npc_qm2_herb_gatherer"},
+      "reward": {"原石": 10, "flags": {"qingmao_guide": 1}},
+      "next_qid": "q_side_qingmao_01"
+    },
+    {
+      "qid": "q_side_qingmao_01",
+      "name": "青茅支线·云游子的秘境之说",
+      "type": "side",
+      "chain": "qingmao_guide",
+      "chain_step": 2,
+      "min_rank": 2,
+      "desc": "茅婶指点你前往青茅山主峰寻访游荡蛊师·云游子。此人云游四方，知晓青茅山三大秘境——地下蛊窟、毒瘴秘境、古坟秘境的入口玄机。",
+      "objective": {"type": "talk_npc", "target": "npc_qm2_wandering_guishi"},
+      "reward": {"原石": 20, "flags": {"qingmao_guide": 2}},
+      "next_qid": "q_side_qingmao_02"
+    },
+    {
+      "qid": "q_side_qingmao_02",
+      "name": "青茅支线·三把钥匙蛊",
+      "type": "side",
+      "chain": "qingmao_guide",
+      "chain_step": 3,
+      "min_rank": 2,
+      "desc": "云游子所言：青茅山三大秘境各需一把钥匙蛊方能开启——土遁蛊开地下蛊窟、探隐蛊破毒瘴秘境、阴视蛊照古坟秘境。蛊方可向主峰望峰商贾购置，材料散落青茅山各处，自行炼制双蛊。",
+      "objective": {"type": "own_gu_by_gid", "target": {"g_qm_tudun": 1, "g_qm_tanyin": 1, "g_qm_yinshi": 1}},
+      "reward": {"原石": 60, "flags": {"qingmao_guide": 3, "qingmao_reputation": 5}},
+      "next_qid": "q_side_qingmao_03"
+    },
+    {
+      "qid": "q_side_qingmao_03",
+      "name": "青茅支线·寒雾蛇王",
+      "type": "side",
+      "chain": "qingmao_guide",
+      "chain_step": 4,
+      "min_rank": 3,
+      "desc": "三大秘境既开，云游子托你讨伐盘踞寒雾洞窟的寒雾蛇王。此兽仅于夜晚且浓雾天气现身，实力堪比四转中阶蛊师，务必备齐解毒之药、做好万全准备再行挑战。",
+      "objective": {"type": "kill_npc_count", "target": {"npc_qm2_snakeking": 1}},
+      "reward": {"原石": 100, "flags": {"qingmao_reputation": 15, "qingmao_snakeking_slain": 1}},
+      "next_qid": "",
+      "ending_note": "【任务完成】寒雾蛇王伏诛！云游子闻讯赶来，赠你一块寒雾蛇王褪下的蛇王胆晶，青茅山域自此清宁许多。青茅山支线至此圆满。"
+    }
+  ]
+}

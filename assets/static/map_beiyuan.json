@@ -1,0 +1,193 @@
+{
+  "regions": [
+    "北原"
+  ],
+  "start_rid": "beiyuan_entry",
+  "rooms": [
+    {
+      "rid": "beiyuan_entry",
+      "name": "北原边境隘口",
+      "description": "穿过北原边境通道的禁制，朔风裹挟着碎雪扑面而来，眼前是一片苍茫辽阔的冰雪世界。隘口两侧冰岩如削，立着一块覆霜石碑，上刻『北原』二字，字迹已被风雪侵蚀斑驳。远处雪原林地边缘，几名裹着兽皮的北原部族斥候正警惕地注视着过路行人。北原专属环境：冰道、水道蛊虫在此威能加成；严寒、暴风雪随时可能致命。北行可深入雪原林地，东行抵部族聚居地。",
+      "exits": {
+        "south": "border_north_pass",
+        "north": "beiyuan_snow_forest",
+        "east": "beiyuan_tribe"
+      },
+      "env_effect": {
+        "冰道": 1.1,
+        "水道": 1.05,
+        "气道": 1.0
+      },
+      "refresh_resource": [
+        "寒冰原石"
+      ],
+      "wild_gu": [
+        "g_xuehu"
+      ],
+      "npc_list": [
+        "npc_beiyuan_guide"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "beiyuan_tribe",
+      "name": "部族聚居地",
+      "description": "冰原环绕中，一座由兽皮帐篷与冰岩屋舍组成的部族聚居地矗立其间，篝火昼夜不熄，驱散了周遭的严寒。部族族人往来其间，皮毛与蛊材交易繁忙。此地灵气因部族萨满的长年祭祀而温润，真元恢复加快，冰道与气道蛊虫在此亦得滋养。聚居地有部族勇士守护，远离暴风雪与雪匪袭扰，是北原唯一的安全歇脚之处，可安心休憩、恢复真元、交易补给。",
+      "exits": {
+        "west": "beiyuan_entry"
+      },
+      "env_effect": {
+        "冰道": 1.1,
+        "气道": 1.1
+      },
+      "refresh_resource": [
+        "雪原草药",
+        "兽血",
+        "冻藏蛊材"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_beiyuan_merchant",
+        "npc_beiyuan_tribe_guishi"
+      ],
+      "secret": "safe_zone"
+    },
+    {
+      "rid": "beiyuan_snow_forest",
+      "name": "雪原林地",
+      "description": "踏入雪原林地，苍松翠柏覆满厚雪，林间静谧得只闻积雪压折枯枝的脆响。冰道气息浓郁，冰道蛊虫在此威能暴涨。林深处偶有冰原野兽出没觅食，雪匪亦常藏匿于林间劫掠独行客。暴风雪来袭时，林地化为白茫茫的修罗场，无御寒蛊护体者真元将大量流失，寸步难行。寒冰原石与雪原草药散落雪下，等待有缘人拾取。无御寒类蛊者踏入此地，将持续受到严寒侵蚀。",
+      "exits": {
+        "south": "beiyuan_entry",
+        "north": "beiyuan_frozen_tundra"
+      },
+      "env_effect": {
+        "冰道": 1.2,
+        "水道": 1.1,
+        "气道": 0.95
+      },
+      "refresh_resource": [
+        "寒冰原石",
+        "雪原草药",
+        "冻藏蛊材",
+        "露水精华",
+        "雪原草"
+      ],
+      "wild_gu": [
+        "g_xuehu",
+        "g_bingxiong",
+        "gu_006",
+        "gu_008",
+        "gu_bearli"
+      ],
+      "npc_list": [
+        "npc_beiyuan_ice_beast",
+        "npc_beiyuan_snow_bandit"
+      ],
+      "secret": "cold_zone"
+    },
+    {
+      "rid": "beiyuan_frozen_tundra",
+      "name": "冻土荒原",
+      "description": "冻土荒原是一片被永冻层覆盖的苍茫荒原，地表冻土坚硬如铁，偶尔裂开露出深不见底的冰裂缝隙。冰道与土道蛊气在此凝而不散，远处冰岩峡谷的入口隐约可见。荒原上冰原野兽成群出没，雪匪团伙亦在此扎营劫掠，更有部族蛊师于荒原猎杀异兽修炼。暴风雪肆虐时，荒原化为死地，无御寒蛊者真元枯竭必死无疑。寒冰原石与冻藏蛊材深埋冻土之下，需以蛊力开掘。无御寒类蛊者踏入此地，将持续受到严寒侵蚀。",
+      "exits": {
+        "south": "beiyuan_snow_forest",
+        "west": "beiyuan_ice_canyon"
+      },
+      "env_effect": {
+        "冰道": 1.25,
+        "土道": 1.1,
+        "气道": 0.9
+      },
+      "refresh_resource": [
+        "寒冰原石",
+        "冻藏蛊材",
+        "冰晶骨",
+        "雪原草",
+        "露水精华"
+      ],
+      "wild_gu": [
+        "g_bingxiong",
+        "g_hanlin",
+        "gu_bearli",
+        "gu_bingpo"
+      ],
+      "npc_list": [
+        "npc_beiyuan_ice_beast",
+        "npc_beiyuan_snow_bandit",
+        "npc_beiyuan_tribe_warrior"
+      ],
+      "secret": "cold_zone"
+    },
+    {
+      "rid": "beiyuan_ice_canyon",
+      "name": "冰岩峡谷",
+      "description": "冰岩峡谷是一道深切入冻土的险峻峡谷，两侧冰壁高耸如削，谷底仅容数人并行，部分路段狭窄至仅容一人侧身通过。冰道蛊气浓郁欲滴，冰壁上凝结着千年冰晶与冰魂砂。峡谷深处有一处塌陷的冰窟入口，洞口寒气如雾翻涌，似通往地底秘境——永冻冰窟。峡谷地形险恶，部分狭窄路段一旦遭遇战斗便无路可逃，唯有死战方能脱身。无冰遁蛊者无法开启永冻冰窟入口。冰原野兽常于峡谷中伏击猎物，雪匪亦借此地形围猎。",
+      "exits": {
+        "east": "beiyuan_frozen_tundra",
+        "down": "beiyuan_permafrost_cave"
+      },
+      "env_effect": {
+        "冰道": 1.3,
+        "土道": 1.15,
+        "气道": 0.85
+      },
+      "refresh_resource": [
+        "寒冰原石",
+        "冰晶骨",
+        "冰魂砂",
+        "寒冰晶"
+      ],
+      "wild_gu": [
+        "g_bingxiong",
+        "g_hanlin",
+        "gu_bingpo",
+        "gu_008"
+      ],
+      "npc_list": [
+        "npc_beiyuan_ice_beast"
+      ],
+      "secret": "no_flee_zone"
+    },
+    {
+      "rid": "beiyuan_permafrost_cave",
+      "name": "永冻冰窟",
+      "description": "永冻冰窟是北原最神秘的秘境之一，窟内万年玄冰不化，冰柱倒悬如林，冰道与水道蛊气浓郁至极。窟壁上凝结着永冻冰髓与冰魂砂，亦散落着失传的冰遁蛊蛊方残卷。窟底深处，一尊由万年玄冰凝聚而成的冰麟蛊王盘踞其上，周身寒气凝为实质，每一步都令冰窟震颤——此兽仅于暴风雪天气、深夜时分方会苏醒现身，寻常时只如一座冰雕沉睡。胜之，可得冰麟蛊与永冻冰髓。无冰遁蛊者无法踏入此地，必被玄冰寒气冻毙于入口。",
+      "exits": {
+        "up": "beiyuan_ice_canyon"
+      },
+      "env_effect": {
+        "冰道": 1.4,
+        "水道": 1.2,
+        "月道": 1.1
+      },
+      "refresh_resource": [
+        "永冻冰髓",
+        "冰魂砂",
+        "寒雾晶",
+        "冰遁蛊蛊方",
+        "寒冰晶"
+      ],
+      "wild_gu": [
+        "g_bingpo",
+        "g_hanyue",
+        "gu_bingpo"
+      ],
+      "npc_list": [
+        "npc_beiyuan_binglin_boss"
+      ],
+      "secret": "need_gu_g_bingdun",
+      "boss_info": {
+        "npc_id": "npc_beiyuan_binglin_boss",
+        "boss_name": "冰麟蛊王",
+        "respawn_game_time": 360,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": [
+          "暴风雪"
+        ]
+      }
+    }
+  ]
+}

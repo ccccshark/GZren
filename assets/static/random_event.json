@@ -55,6 +55,465 @@
       "trigger": "move",
       "desc": "踏入一处古阵，无形诅咒缠身，寿元莫名流逝!",
       "effect": {"life_left": -2, "luck": -2}
+    },
+    {
+      "eid": "ev009", "name": "劫难·黑崖伏击", "type": "disaster",
+      "weight": 10, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一队黑崖寨斥候从暗处杀出，刀光剑影间你被困在埋伏圈中！",
+      "effect": {"physique": -15, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "ev010", "name": "机缘·宗族馈赠", "type": "fortune",
+      "weight": 5, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "青茅山宗族弟子路过，见你孤身行路，赠予一壶灵蜜和几句忠告。",
+      "effect": {"add_item": ["灵蜜x1", "青茅草根x3"], "luck": 1}
+    },
+    {
+      "eid": "ev011", "name": "抉择·路边遗物", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "你发现路边有一具刚死不久的蛊师尸体，身上似乎还有物资。",
+      "effect": {},
+      "choices": [
+        {"text": "搜刮尸体", "effect": {"add_item": ["原石x5", "毒囊x2"], "luck": -2}, "weight": 1},
+        {"text": "替他收敛遗骸", "effect": {"luck": 3, "dao_mark": {"运道": 1}}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev012", "name": "抉择·毒蛇拦路", "type": "disaster",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一条浑身碧绿的毒蛇蛊拦住去路，嘶嘶吐信，似乎在守护什么。",
+      "effect": {},
+      "choices": [
+        {"text": "绕路而行", "effect": {"physique": -3}, "weight": 1},
+        {"text": "击杀取材", "effect": {"physique": -8, "add_item": ["蛇蜕x1", "毒囊x1"]}, "weight": 1},
+        {"text": "尝试捕捉", "effect": {"add_item": ["毒蛇蛊x1"], "luck": -1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev013", "name": "劫难·瘴气爆发", "type": "disaster",
+      "weight": 11, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "瘴林深处突然爆发浓烈毒瘴，你猝不及防吸入大量毒气！",
+      "effect": {"physique": -12, "injure": "毒伤", "luck": -1}
+    },
+    {
+      "eid": "ev014", "name": "机缘·月夜修炼", "type": "fortune",
+      "weight": 6, "min_rank": 1, "max_rank": 6,
+      "trigger": "rest",
+      "desc": "月华如水倾泻而下，你趁月道灵韵修炼，真元暴涨。",
+      "effect": {"trueyuan": 35, "dao_mark": {"月道": 3}, "luck": 1}
+    },
+    {
+      "eid": "ev015", "name": "抉择·散修求助", "type": "fortune",
+      "weight": 7, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一名受伤的散修蛊师瘫坐路边，向你求救。",
+      "effect": {},
+      "choices": [
+        {"text": "施以援手", "effect": {"add_item": ["原石x10"], "dao_mark": {"运道": 2}, "luck": 2}, "weight": 1},
+        {"text": "视而不见", "effect": {}, "weight": 1},
+        {"text": "趁火打劫", "effect": {"add_item": ["原石x15", "毒囊x3"], "luck": -3}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev016", "name": "劫难·蛊虫暴走", "type": "disaster",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "rest",
+      "desc": "静坐时空窍中蛊虫突然暴走，真元逆流冲击经脉！",
+      "effect": {"trueyuan": -20, "soul_power": -8, "physique": -5}
+    },
+    {
+      "eid": "ev017", "name": "机缘·古蛊方残卷", "type": "fortune",
+      "weight": 4, "min_rank": 2, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "你在岩缝中发现一卷残破兽皮，上面隐约可见古蛊方的字迹。",
+      "effect": {"add_item": ["原石x3"], "dao_mark": {"气道": 5, "毒道": 3}, "luck": 2}
+    },
+    {
+      "eid": "ev018", "name": "抉择·黑市线索", "type": "fortune",
+      "weight": 5, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一个鬼鬼祟祟的蛊商靠近你，低声说知道一处黑市入口，但要收“引路费”。",
+      "effect": {},
+      "choices": [
+        {"text": "支付原石x5", "effect": {"add_item": ["原石x-5"], "luck": 1}, "weight": 1},
+        {"text": "拒绝并离开", "effect": {}, "weight": 1},
+        {"text": "威胁他免费带路", "effect": {"physique": -5, "luck": -2}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev019", "name": "劫难·沼泽陷阱", "type": "disaster",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "脚下突然塌陷，你陷入沼泽泥潭中，毒水没过膝盖！",
+      "effect": {"physique": -10, "injure": "轻伤", "lose_random_material": 1}
+    },
+    {
+      "eid": "ev020", "name": "机缘·异兽内丹", "type": "fortune",
+      "weight": 3, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "你在一处异兽巢穴中发现一枚温热的内丹，兽道灵韵浓郁。",
+      "effect": {"add_item": ["妖丹x1"], "dao_mark": {"兽道": 5}, "luck": 2}
+    },
+    {
+      "eid": "ev021", "name": "抉择·路遇蛊商", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 9,
+      "trigger": "move",
+      "desc": "路边一位蛊商正在摆摊，有些稀罕货色。",
+      "effect": {},
+      "choices": [
+        {"text": "购买解毒散", "effect": {"add_item": ["解毒散x1"], "add_item_cost": ["原石x15"]}, "weight": 1},
+        {"text": "购买月光石", "effect": {"add_item": ["月光石x1"], "add_item_cost": ["原石x8"]}, "weight": 1},
+        {"text": "只是看看", "effect": {}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev022", "name": "劫难·寿元诅咒", "type": "disaster",
+      "weight": 3, "min_rank": 4, "max_rank": 9,
+      "trigger": "move",
+      "desc": "你误入一处上古禁地残阵，无形诅咒缠身，寿元流逝！",
+      "effect": {"life_left": -3, "luck": -3}
+    },
+    {
+      "eid": "ev023", "name": "机缘·蛊潮洗礼", "type": "fortune",
+      "weight": 6, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "蛊潮领地中蛊气浓郁，你在一处蛊潮裂隙旁盘膝而坐，引蛊气入体，竟凝聚出几味珍稀蛊材。",
+      "effect": {"add_item": ["瘴毒精华x2", "毒囊x3"], "dao_mark": {"毒道": 3}, "luck": 1}
+    },
+    {
+      "eid": "ev024", "name": "劫难·蛊潮暴动", "type": "disaster",
+      "weight": 9, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "desc": "蛊潮领地的蛊群突然暴动，铺天盖地的毒虫向你涌来，你勉强逃出却身中剧毒！",
+      "effect": {"physique": -18, "poison": {"pid": "ev024_guchao", "name": "蛊潮之毒", "rank": "fierce", "power": 16, "tick_hours": 6}, "luck": -1}
+    },
+    {
+      "eid": "ev025", "name": "抉择·西漠碑文残片", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "西漠古道旁你拾到一块风化严重的石碑残片，碑文依稀提及『风行』『沙遁』二字，似与西漠通道有关。",
+      "effect": {},
+      "choices": [
+        {"text": "仔细拓印碑文", "effect": {"add_item": ["原石x2"], "dao_mark": {"气道": 2, "地道": 2}, "luck": 1}, "weight": 1},
+        {"text": "石碑似有古怪，远离为上", "effect": {"physique": -2}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev026", "name": "劫难·血煞宗追杀", "type": "disaster",
+      "weight": 8, "min_rank": 4, "max_rank": 9,
+      "trigger": "move",
+      "desc": "两名血煞宗分舵弟子盯上了你，他们催动血道蛊虫，赤红血雾弥漫，刀光夹杂血煞之气袭来！",
+      "effect": {"physique": -22, "injure": "轻伤", "lose_random_material": 1, "luck": -1}
+    },
+    {
+      "eid": "ev027", "name": "机缘·幽冥鬼火", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "幽冥深渊边缘，一簇幽蓝鬼火在岩缝中明灭，你以真元裹之，竟凝结成磷火晶与幽冥鬼砂。",
+      "effect": {"add_item": ["磷火晶x1", "幽冥鬼砂x1"], "dao_mark": {"鬼道": 3}, "luck": 1}
+    },
+    {
+      "eid": "ev028", "name": "抉择·古蛊师遗骨", "type": "fortune",
+      "weight": 4, "min_rank": 4, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "古蛊师遗迹深处，你发现一具盘坐的枯骨，骨架上残留着上古蛊道气息，周身散落着些许遗物。",
+      "effect": {},
+      "choices": [
+        {"text": "收取遗骨与遗物", "effect": {"add_item": ["古蛊师遗骨x1", "原石x8"], "dao_mark": {"鬼道": 2, "毒道": 2}, "luck": -1}, "weight": 1},
+        {"text": "叩拜后取走散落物资", "effect": {"add_item": ["原石x5", "蛊魂晶x1"], "dao_mark": {"运道": 2}, "luck": 2}, "weight": 1},
+        {"text": "不予惊扰，悄然离去", "effect": {"luck": 1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev029", "name": "劫难·万毒蟒君踪迹", "type": "disaster",
+      "weight": 5, "min_rank": 5, "max_rank": 9,
+      "trigger": "move",
+      "desc": "万毒沼泽深处传来嘶嘶低鸣，一条巨蟒的影子在毒雾中若隐若现——那是传说中的万毒蟒君！你惊出一身冷汗，仓皇撤离时仍被毒气波及。",
+      "effect": {"physique": -25, "poison": {"pid": "ev029_mang", "name": "蟒君毒雾", "rank": "odd", "power": 22, "tick_hours": 8}, "luck": -2}
+    },
+    {
+      "eid": "ev030", "name": "机缘·月华幻境入口", "type": "fortune",
+      "weight": 4, "min_rank": 3, "max_rank": 9,
+      "trigger": "rest",
+      "desc": "静坐之际，周遭景象忽变，你竟误入临时秘境·月华幻境！月华如水倾泻，真元与魂力同时得到洗礼。",
+      "effect": {"trueyuan": 40, "soul_power": 8, "dao_mark": {"月道": 4}, "luck": 2}
+    },
+    {
+      "eid": "ev031", "name": "抉择·黑市密信", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一只信蛊落在你肩头，足上绑着一封黑市密信，邀你前往南疆黑市洽谈一笔『特殊生意』。",
+      "effect": {},
+      "choices": [
+        {"text": "依信前往黑市", "effect": {"add_item": ["原石x5"], "dao_mark": {"运道": 1}, "luck": 1}, "weight": 1},
+        {"text": "烧毁密信，不蹚浑水", "effect": {"luck": 1}, "weight": 1},
+        {"text": "将密信卖给路过的散修", "effect": {"add_item": ["原石x10"], "luck": -2}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev032", "name": "劫难·毒瘴秘境迷失", "type": "disaster",
+      "weight": 8, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "desc": "毒瘴秘境·腐骨窟中瘴气翻涌，你迷失了方向，在腐臭的白骨堆中转了许久才脱身，体魄大损。",
+      "effect": {"physique": -15, "injure": "毒伤", "lose_random_material": 1, "luck": -1}
+    },
+    {
+      "eid": "ev033", "name": "机缘·血煞晶矿脉", "type": "fortune",
+      "weight": 4, "min_rank": 4, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "魔道据点·血煞宗分舵附近的一处废弃血池中，你发现一脉尚未枯竭的血煞晶矿，连忙采集了几块。",
+      "effect": {"add_item": ["血煞晶x2"], "dao_mark": {"血道": 3}, "luck": 1}
+    },
+    {
+      "eid": "ev034", "name": "抉择·受伤的蛊师", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "desc": "南疆密林中，一名身受重伤的蛊师靠在树边，胸口插着一根血煞宗的暗钉，气息奄奄地向你求救。",
+      "effect": {},
+      "choices": [
+        {"text": "拔钉救治，赠以灵蜜", "effect": {"add_item_cost": ["灵蜜x1"], "add_item": ["原石x15", "毒囊x2"], "dao_mark": {"运道": 2}, "luck": 3}, "weight": 1},
+        {"text": "留下原石便离去", "effect": {"add_item_cost": ["原石x5"], "luck": 1}, "weight": 1},
+        {"text": "趁伤夺其蛊材", "effect": {"add_item": ["千年毒囊x1", "原石x20"], "luck": -4}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev035", "name": "劫难·蛊虫变异失控", "type": "disaster",
+      "weight": 6, "min_rank": 3, "max_rank": 9,
+      "trigger": "rest",
+      "desc": "静养时空窍内一只易变异蛊突然躁动，变异之气逆冲经脉，你强压反噬却已伤及魂力与真元。",
+      "effect": {"trueyuan": -25, "soul_power": -10, "physique": -8, "luck": -1}
+    },
+    {
+      "eid": "ev036", "name": "机缘·古方残卷·风行", "type": "fortune",
+      "weight": 3, "min_rank": 4, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "万毒沼泽深处的一处枯井中，你捞到一卷残破兽皮，上面隐约可见『风行蛊』蛊方的半段记载！",
+      "effect": {"add_item": ["风行蛊蛊方残片x1"], "dao_mark": {"气道": 4}, "luck": 2}
+    },
+    {
+      "eid": "ev037", "name": "抉择·魔道弟子招揽", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一名血煞宗分舵的执事拦住你，称宗主赏识你的资质，邀你入宗，许以血道高阶蛊方与血煞晶为礼。",
+      "effect": {},
+      "choices": [
+        {"text": "婉拒，取走见面礼", "effect": {"add_item": ["血煞晶x2", "原石x10"], "luck": -1}, "weight": 1},
+        {"text": "虚与委蛇，套取情报", "effect": {"add_item": ["原石x5"], "dao_mark": {"血道": 2}, "luck": 1}, "weight": 1},
+        {"text": "严词拒绝并表明立场", "effect": {"physique": -10, "luck": 2, "dao_mark": {"运道": 1}}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev038", "name": "劫难·鬼道禁制", "type": "disaster",
+      "weight": 6, "min_rank": 4, "max_rank": 9,
+      "trigger": "move",
+      "desc": "幽冥深渊入口处一道上古鬼道禁制突然激发，幽蓝鬼火灼烧你的神魂，你硬扛着禁制之力才勉强脱身。",
+      "effect": {"soul_power": -15, "trueyuan": -15, "physique": -8, "luck": -1}
+    },
+    {
+      "eid": "ev039", "name": "机缘·月华幻境灌顶", "type": "fortune",
+      "weight": 4, "min_rank": 3, "max_rank": 6,
+      "trigger": "rest",
+      "desc": "月华幻境之中，一缕精纯至极的月道灵韵没入空窍，你的真元与月道感悟同时暴涨！",
+      "effect": {"trueyuan": 50, "dao_mark": {"月道": 5}, "luck": 2}
+    },
+    {
+      "eid": "ev040", "name": "抉择·沼泽古蛊", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "万毒沼泽中，你发现一只通体碧绿的古老蛊虫正在吞食毒瘴，它似乎对你并无敌意，正用触角试探你。",
+      "effect": {},
+      "choices": [
+        {"text": "尝试捕捉", "effect": {"add_item": ["毒囊x3"], "add_gu_rank_max": 3, "luck": -1}, "weight": 1},
+        {"text": "投喂毒材引其亲近", "effect": {"add_item_cost": ["毒囊x2"], "add_gu_rank_max": 4, "dao_mark": {"毒道": 2}, "luck": 1}, "weight": 1},
+        {"text": "静静观察后离开", "effect": {"dao_mark": {"毒道": 3}, "luck": 1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev041", "name": "劫难·血煞血祭", "type": "disaster",
+      "weight": 4, "min_rank": 5, "max_rank": 9,
+      "trigger": "move",
+      "desc": "你撞破了一处血煞宗的血祭阵法，阵中血光大盛，血煞宗主投影降临！你被血煞之力波及，寿元与体魄同时受损。",
+      "effect": {"physique": -28, "life_left": -1, "injure": "轻伤", "luck": -2}
+    },
+    {
+      "eid": "ev042", "name": "机缘·西漠遗物·沙遁残片", "type": "fortune",
+      "weight": 3, "min_rank": 4, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "幽冥深渊的一处塌方中，你挖出一个古蛊师的储物蛊残骸，内里竟藏着半段『沙遁蛊』蛊方的残片！",
+      "effect": {"add_item": ["原石x5", "古蛊师遗骨x1"], "dao_mark": {"地道": 4, "鬼道": 2}, "luck": 2}
+    },
+    {
+      "eid": "ev043", "name": "机缘·南坡青茅", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 5,
+      "trigger": "gather",
+      "scene_rids": ["qm2_south_slope"],
+      "desc": "南坡谷地的青茅草根格外肥美，你循着草香挖出一大簇，根须间还凝着清甜露水。",
+      "effect": {"add_item": ["青茅草根x4", "露水x3"], "luck": 1}
+    },
+    {
+      "eid": "ev044", "name": "劫难·南坡野猪", "type": "disaster",
+      "weight": 7, "min_rank": 1, "max_rank": 5,
+      "trigger": "move",
+      "scene_rids": ["qm2_south_slope"],
+      "desc": "草丛中突然拱出一头野猪蛊，獠牙挑向你腰间的蛊囊，混战中你丢失了些蛊材！",
+      "effect": {"lose_random_material": 1, "physique": -6}
+    },
+    {
+      "eid": "ev045", "name": "机缘·主峰月华", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 6,
+      "trigger": "rest",
+      "scene_rids": ["qm2_main_peak"],
+      "desc": "主峰之巅月华如瀑，你于望峰亭下吐纳，一缕精纯月气没入空窍，月道感悟顿生。",
+      "effect": {"trueyuan": 40, "dao_mark": {"月道": 4}, "luck": 1}
+    },
+    {
+      "eid": "ev046", "name": "机缘·主峰古碑", "type": "fortune",
+      "weight": 5, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["qm2_main_peak"],
+      "desc": "你拂去峰顶一方古碑的苔藓，碑上八卦方位隐现，碑底刻着一行小字：『土遁穿地，蛊窟方开』。",
+      "effect": {"dao_mark": {"地道": 3, "运道": 1}, "luck": 2}
+    },
+    {
+      "eid": "ev047", "name": "抉择·主峰地裂", "type": "fortune",
+      "weight": 6, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["qm2_main_peak"],
+      "desc": "峰顶石盘中央的裂口隐隐透出地底蛊气，似有古蛊师遗藏。你俯身探查，却觉禁制反噬。",
+      "effect": {},
+      "choices": [
+        {"text": "强行探查裂口", "effect": {"physique": -10, "trueyuan": -15, "add_item": ["地脉晶x1"], "dao_mark": {"地道": 2}}, "weight": 1},
+        {"text": "记下方位离去", "effect": {"dao_mark": {"运道": 2}, "luck": 1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev048", "name": "劫难·北麓阴风", "type": "disaster",
+      "weight": 8, "min_rank": 1, "max_rank": 6,
+      "trigger": "move",
+      "scene_rids": ["qm2_north_valley"],
+      "desc": "北麓山谷阴风乍起，乱葬岗间磷火明灭，一缕阴气钻入空窍，你只觉遍体生寒、神识受损。",
+      "effect": {"soul_power": -6, "trueyuan": -8, "luck": -1}
+    },
+    {
+      "eid": "ev049", "name": "机缘·北坟残砂", "type": "fortune",
+      "weight": 6, "min_rank": 2, "max_rank": 8,
+      "trigger": "gather",
+      "scene_rids": ["qm2_north_valley"],
+      "desc": "你在乱葬岗的坟茔间拾得一捧阴魂砂，砂粒幽冷，凝着上古鬼道蛊师的残念。",
+      "effect": {"add_item": ["阴魂砂x2", "蛇蜕x1"], "dao_mark": {"鬼道": 3}}
+    },
+    {
+      "eid": "ev050", "name": "劫难·寒雾迷失", "type": "disaster",
+      "weight": 9, "min_rank": 1, "max_rank": 7,
+      "trigger": "move",
+      "scene_rids": ["qm2_cold_mist_cave"],
+      "desc": "寒雾洞窟的浓雾骤然加稠，你在钟乳石林中迷失方向，寒气渗入骨血，体魄与寿元俱损。",
+      "effect": {"physique": -10, "life_left": -1, "injure": "轻伤"}
+    },
+    {
+      "eid": "ev051", "name": "机缘·寒雾结晶", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 8,
+      "trigger": "gather",
+      "scene_rids": ["qm2_cold_mist_cave"],
+      "desc": "洞壁上一簇寒雾晶熠熠生辉，你小心翼翼凿下，晶石中蕴含的水道灵韵沁人心脾。",
+      "effect": {"add_item": ["寒雾晶x2", "露水x2"], "dao_mark": {"水道": 3}}
+    },
+    {
+      "eid": "ev052", "name": "抉择·洞窟蛇蜕", "type": "fortune",
+      "weight": 6, "min_rank": 1, "max_rank": 7,
+      "trigger": "gather",
+      "scene_rids": ["qm2_cold_mist_cave"],
+      "desc": "雾中你踩到一截巨大的蛇蜕，寒雾蛇王的蜕皮！四周隐隐有嘶嘶回响，似有巨物在雾中游走。",
+      "effect": {},
+      "choices": [
+        {"text": "快速剥取蛇蜕", "effect": {"add_item": ["蛇蜕x3", "毒囊x2"], "physique": -5}, "weight": 1},
+        {"text": "屏息悄然退走", "effect": {"luck": 1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "ev053", "name": "劫难·密林毒蛇", "type": "disaster",
+      "weight": 9, "min_rank": 1, "max_rank": 6,
+      "trigger": "move",
+      "scene_rids": ["qm2_east_forest"],
+      "desc": "东麓密林叶间一条竹叶青蛊突袭而下，毒牙划破你手臂，毒素入血！",
+      "effect": {"physique": -8, "injure": "毒伤", "luck": -1}
+    },
+    {
+      "eid": "ev054", "name": "机缘·密林奇草", "type": "fortune",
+      "weight": 7, "min_rank": 1, "max_rank": 7,
+      "trigger": "gather",
+      "scene_rids": ["qm2_east_forest"],
+      "desc": "密林深处一株银针花在雾中泛着幽光，你将其连根采下，药力远胜寻常。",
+      "effect": {"add_item": ["银针花x2", "青茅草x3"], "luck": 1}
+    },
+    {
+      "eid": "ev055", "name": "机缘·溪畔灵泉", "type": "fortune",
+      "weight": 8, "min_rank": 1, "max_rank": 6,
+      "trigger": "rest",
+      "scene_rids": ["qm2_stream"],
+      "desc": "你捧起溪流水源地的清泉饮下，甘甜泉水含天地灵韵，真元与体魄同时恢复。",
+      "effect": {"trueyuan": 25, "physique": 8}
+    },
+    {
+      "eid": "ev056", "name": "机缘·溪畔灵狐", "type": "fortune",
+      "weight": 6, "min_rank": 1, "max_rank": 5,
+      "trigger": "gather",
+      "scene_rids": ["qm2_stream"],
+      "desc": "一只灵狐蛊在溪边饮水，见你不惊不惧，临走前抖落一袖露水，似有灵性。",
+      "effect": {"add_item": ["露水x5"], "dao_mark": {"运道": 2}, "luck": 1}
+    },
+    {
+      "eid": "ev057", "name": "机缘·地下蛊窟遗方", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["qm2_secret_underground"],
+      "desc": "地下蛊窟深处一方石台上摊着半卷蛊方残片，正是青茅山古蛊师遗落的『土遁蛊蛊方』！",
+      "effect": {"add_item": ["土遁蛊蛊方x1", "地脉晶x2"], "dao_mark": {"地道": 5}, "luck": 2}
+    },
+    {
+      "eid": "ev058", "name": "劫难·地下遁地蛊王", "type": "disaster",
+      "weight": 7, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["qm2_secret_underground"],
+      "desc": "地道深处一只沉睡的遁地蛊王被你的脚步惊醒，土石翻涌间它遁地袭来，你仓促应战受了内伤！",
+      "effect": {"physique": -18, "trueyuan": -20, "injure": "轻伤"}
+    },
+    {
+      "eid": "ev059", "name": "机缘·毒瘴秘境黑莲", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["qm2_secret_miasma"],
+      "desc": "毒瘴秘境的腐土中一株黑莲花悄然绽放，你以布巾掩鼻靠近，小心采下一瓣，毒道感悟涌动。",
+      "effect": {"add_item": ["黑莲花瓣x1", "毒囊x3"], "dao_mark": {"毒道": 5}, "luck": 1}
+    },
+    {
+      "eid": "ev060", "name": "机缘·毒瘴秘境遗方", "type": "fortune",
+      "weight": 4, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["qm2_secret_miasma"],
+      "desc": "秘境深处一具古蛊师枯骨怀中抱着半卷蛊方，正是失传的『探隐蛊蛊方』！",
+      "effect": {"add_item": ["探隐蛊蛊方x1", "腐骨x1"], "dao_mark": {"毒道": 3, "气道": 2}, "luck": 2}
+    },
+    {
+      "eid": "ev061", "name": "劫难·古坟残魂", "type": "disaster",
+      "weight": 8, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["qm2_secret_tomb"],
+      "desc": "古坟秘境深处一道残魂猛然扑来，鬼啸震魂，你的魂力被重创，眼前阵阵发黑！",
+      "effect": {"soul_power": -15, "trueyuan": -15, "life_left": -1}
+    },
+    {
+      "eid": "ev062", "name": "机缘·古坟秘境遗方", "type": "fortune",
+      "weight": 4, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["qm2_secret_tomb"],
+      "desc": "坟茔主室石棺之上刻着上古鬼道蛊文，你依文摸索，竟寻得『阴视蛊蛊方』残卷！",
+      "effect": {"add_item": ["阴视蛊蛊方x1", "阴魂砂x3"], "dao_mark": {"鬼道": 6}, "luck": 2}
     }
   ],
   "trigger_chance": {

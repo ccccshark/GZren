@@ -1,0 +1,51 @@
+{
+  "region": "中州",
+  "gu_list": [
+    {
+      "gid": "gu_daoguang",
+      "name": "刀光蛊",
+      "rank": 3,
+      "school": "金道",
+      "cost_zhen": 14,
+      "cost_life": 0,
+      "durability_max": 70,
+      "feed_material": [
+        "精铁碎屑"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "刀光蛊，凝聚刀气远程攻击。原著中州散修常用金道攻击蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "中州",
+        "山地"
+      ],
+      "combat": {
+        "type": "attack",
+        "power": 28
+      }
+    },
+    {
+      "gid": "gu_shuchong",
+      "name": "书虫",
+      "rank": 1,
+      "school": "辅道",
+      "cost_zhen": 3,
+      "cost_life": 0,
+      "durability_max": 100,
+      "feed_material": [
+        "墨汁原液"
+      ],
+      "side_effect": "无明显副作用",
+      "desc": "书虫，解读传承文字、破译古籍。中州篇章，辅道 Utility 蛊",
+      "evolve_gid": "",
+      "habitat": [
+        "中州",
+        "书阁"
+      ],
+      "combat": {
+        "type": "utility",
+        "power": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "regions": [
+    "中州"
+  ],
+  "start_rid": "zhongzhou_entry",
+  "rooms": [
+    {
+      "rid": "zhongzhou_entry",
+      "name": "中州·官道渡口",
+      "description": "穿过中州古道禁制，眼前是一条宽阔平整的青石官道，道旁麦田金黄，远山含黛。中州乃中原腹地，文风鼎盛，学派林立，官道上商旅行人络绎不绝。道旁碑亭立着残破石碑，依稀可辨古学派铭文，气道蛊气在此温润流动。北行可达古驿站歇脚，东行则入中原麦田，更深处有百家藏书阁秘境的传说。中州专属环境：气道蛊虫威能加成；阴雨、浓雾、雷暴随时影响行程。",
+      "exits": {
+        "south": "border_center_pass",
+        "north": "zhongzhou_posthouse",
+        "east": "zhongzhou_plains"
+      },
+      "env_effect": {
+        "气道": 1.1,
+        "光道": 1.05
+      },
+      "refresh_resource": [
+        "中原麦穗",
+        "灵墨",
+        "精铁碎屑"
+      ],
+      "wild_gu": [
+        "g002",
+        "g003",
+        "gu_daoguang"
+      ],
+      "npc_list": [],
+      "secret": ""
+    },
+    {
+      "rid": "zhongzhou_posthouse",
+      "name": "古驿站",
+      "description": "一座传承百年的古驿站，青砖黛瓦，院中老槐遮天。驿站为往来蛊师提供食宿，灵气温润，真元恢复加快，气道蛊虫亦得滋养。驿站有商人坐镇，远离山匪与雷暴袭扰，是中州唯一的安全歇脚之处，可安心休憩、恢复真元、交易补给。游学儒生常于此切磋论道。",
+      "exits": {
+        "south": "zhongzhou_entry"
+      },
+      "env_effect": {
+        "气道": 1.12,
+        "光道": 1.08
+      },
+      "refresh_resource": [
+        "中原麦穗",
+        "灵墨",
+        "浩然玉"
+      ],
+      "wild_gu": [],
+      "npc_list": [
+        "npc_zhongzhou_merchant",
+        "npc_zhongzhou_scholar"
+      ],
+      "secret": "safe_zone"
+    },
+    {
+      "rid": "zhongzhou_plains",
+      "name": "中原麦田",
+      "description": "一望无际的中原麦田，麦浪翻金，风过沙沙作响。田埂间散落灵墨与中原麦穗，气道蛊气温润。麦田深处偶有山匪出没劫掠行商，亦有流浪蛊虫栖息。北面麦田尽头，一座被古藤与阵法掩映的藏书阁隐约可见——百家藏书阁，传闻藏有上古学派残卷与守护傀儡，须持月光蛊照亮暗阁方可踏入。雷暴来时麦田无遮无拦，颇为凶险。",
+      "exits": {
+        "west": "zhongzhou_entry",
+        "north": "zhongzhou_book_cave"
+      },
+      "env_effect": {
+        "气道": 1.12,
+        "光道": 1.05,
+        "地道": 0.95
+      },
+      "refresh_resource": [
+        "中原麦穗",
+        "灵墨",
+        "浩然玉",
+        "精铁碎屑",
+        "墨汁原液"
+      ],
+      "wild_gu": [
+        "g002",
+        "g003",
+        "g013",
+        "gu_daoguang"
+      ],
+      "npc_list": [
+        "npc_zhongzhou_bandit"
+      ],
+      "secret": ""
+    },
+    {
+      "rid": "zhongzhou_book_cave",
+      "name": "百家藏书阁",
+      "description": "百家藏书阁被上古阵法掩映，阁内幽暗深邃，千卷古简堆叠如山，气道与光道蛊气浓郁至极。阁壁上嵌着浩然玉与古竹简，亦散落着失传的百家残卷。阁底深处，一尊由上古学派以阵法驱动的守护傀儡镇守其位，周身光道蛊气凝为实质，每一次挥击都撼动阁基——此傀儡仅于雷暴天气、夜晚时分方会苏醒现身，寻常时只如石像静立。胜之，可得百家残卷与浩然玉。无月光蛊者无法照亮暗阁，必于幽暗中迷失方向、被阵法困毙。",
+      "exits": {
+        "south": "zhongzhou_plains"
+      },
+      "env_effect": {
+        "气道": 1.35,
+        "光道": 1.25,
+        "鬼道": 1.1
+      },
+      "refresh_resource": [
+        "古竹简",
+        "百家残卷",
+        "浩然玉",
+        "灵墨",
+        "墨汁原液"
+      ],
+      "wild_gu": [
+        "g003",
+        "g011",
+        "gu_shuchong"
+      ],
+      "npc_list": [
+        "npc_zhongzhou_book_guardian"
+      ],
+      "secret": "need_gu_g003",
+      "boss_info": {
+        "npc_id": "npc_zhongzhou_book_guardian",
+        "boss_name": "守护傀儡",
+        "respawn_game_time": 300,
+        "limit_daytime": [
+          "夜晚",
+          "凌晨"
+        ],
+        "limit_weather": [
+          "雷暴"
+        ]
+      }
+    }
+  ]
+}

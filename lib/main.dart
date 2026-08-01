@@ -1,7 +1,11 @@
 // main.dart
 // 蛊真人单机文字MUD（安卓端）APP 入口。纯离线，无任何联网功能。
+// V2.0 内存优化：Debug 模式关闭多余检测+图片缓存限制+错误兜底 zone。
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'engine/command.dart';
+import 'engine/save_system.dart' as sv;
 import 'ui/main_game_page.dart';
 import 'ui/save_menu.dart';
 import 'ui/help_page.dart';
@@ -10,7 +14,25 @@ import 'ui/save_code_dialog.dart';
 import 'ui/panels.dart'; // 第一阶段新增：新手引导面板
 
 void main() {
-  runApp(const GuZhenRenApp());
+  // V2.0 内存优化【关闭 Debug 多余检测】：release 模式下禁用调试断言与 painting 检测。
+  if (kReleaseMode) {
+    debugPrint = (_, {int? wrapWidth}) {}; // 静默 debugPrint，减少字符串拼接开销
+    debugDefaultTargetPlatformOverride = null;
+  }
+  // V2.0 内存优化【图片缓存限制】：纯文字游戏无大图，限制 Flutter 图片缓存为最小值。
+  // 即使运行时仅用 Material Icons 字体图标，也防止意外图片解码缓存膨胀。
+  PaintingBinding.instance.imageCache.maximumSize = 20; // 最多缓存 20 张
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 2 * 1024 * 1024; // 2MB 上限
+
+  // V2.0 内存优化【错误兜底 zone】：捕获未处理异常，防止崩溃且不产生调试堆栈日志。
+  runZonedGuarded(() {
+    runApp(const GuZhenRenApp());
+  }, (error, stack) {
+    // release 模式下静默处理，debug 模式下输出到控制台
+    if (kDebugMode) {
+      debugPrint('未捕获异常: $error\n$stack');
+    }
+  });
 }
 
 class GuZhenRenApp extends StatelessWidget {
@@ -82,9 +104,50 @@ class _BootPageState extends State<BootPage> {
   }
 }
 
-class MainMenuPage extends StatelessWidget {
+class MainMenuPage extends StatefulWidget {
   final GameContext ctx;
   const MainMenuPage({super.key, required this.ctx});
+  @override
+  State<MainMenuPage> createState() => _MainMenuPageState();
+}
+
+class _MainMenuPageState extends State<MainMenuPage> {
+  GameContext get ctx => widget.ctx;
+  bool? _hasAutoSave;
+
+  @override
+  void initState() {
+    super.initState();
+    sv.SafeSaveManager.instance.hasAutoSave().then((v) {
+      if (mounted) setState(() => _hasAutoSave = v);
+    });
+  }
+
+  Future<void> _continueGame(BuildContext context) async {
+    final (p, npcStates) = await sv.SafeSaveManager.instance.loadAuto();
+    if (!mounted) return;
+    if (p == null) {
+      showDialog(
+        context: context,
+        builder: (c) => AlertDialog(
+          backgroundColor: const Color(0xFF14101A),
+          title: const Text('继续游戏失败', style: TextStyle(color: Colors.white)),
+          content: const Text('自动存档损坏且无备份，请从"读取存档"选择手动存档槽。',
+              style: TextStyle(color: Colors.white70)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(c),
+              child: const Text('确定'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+    await ctx.installLoadedSave(p, npcStates);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) =>
+        MainGamePage(ctx: ctx)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +187,10 @@ class MainMenuPage extends StatelessWidget {
                   const Text('单机文字MUD · 纯离线',
                       style: TextStyle(color: Color(0xFF8C7DA0), fontSize: 13, letterSpacing: 2)),
                   const SizedBox(height: 44),
+                  // V1.9 新增【继续游戏】：有自动存档时显示于顶部（高亮推荐按钮）
+                  if (_hasAutoSave == true)
+                    _menuBtn(context, '继续游戏', Icons.play_arrow, () => _continueGame(context),
+                        highlight: true),
                   _menuBtn(context, '新建角色', Icons.person_add, () => _newGame(context)),
                   _menuBtn(context, '读取存档', Icons.save, () => Navigator.push(context,
                       MaterialPageRoute(builder: (_) => SaveMenuPage(ctx: ctx, mode: SaveMenuMode.load)))),
@@ -154,11 +221,11 @@ class MainMenuPage extends StatelessWidget {
     );
   }
 
-  Widget _menuBtn(BuildContext context, String label, IconData icon, VoidCallback onTap) {
+  Widget _menuBtn(BuildContext context, String label, IconData icon, VoidCallback onTap, {bool highlight = false}) {
     // UI美化：圆角16、底色#261C30、淡紫细描边，按压柔光晕动效（封装于 _GlowMenuButton，仅样式）
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
-      child: _GlowMenuButton(label: label, icon: icon, onTap: onTap),
+      child: _GlowMenuButton(label: label, icon: icon, onTap: onTap, highlight: highlight),
     );
   }
 
@@ -233,11 +300,13 @@ class _ScrollPatternPainter extends CustomPainter {
 
 /// 主菜单按钮：圆角16、底色#261C30、淡紫细描边，按压时柔光晕动效。
 /// 仅样式封装，点击透传原 onTap 回调，不改动任何业务逻辑。
+/// V1.9 新增 highlight 参数：为 true 时外发光+绿描边（推荐"继续游戏"使用）。
 class _GlowMenuButton extends StatefulWidget {
   final String label;
   final IconData icon;
   final VoidCallback onTap;
-  const _GlowMenuButton({required this.label, required this.icon, required this.onTap});
+  final bool highlight;
+  const _GlowMenuButton({required this.label, required this.icon, required this.onTap, this.highlight = false});
   @override
   State<_GlowMenuButton> createState() => _GlowMenuButtonState();
 }
@@ -247,6 +316,10 @@ class _GlowMenuButtonState extends State<_GlowMenuButton> {
 
   @override
   Widget build(BuildContext context) {
+    final borderColor = widget.highlight ? const Color(0xFF27AE60) : const Color(0xFF9D5CD0);
+    final iconColor = widget.highlight ? const Color(0xFF27AE60) : const Color(0xFF9D5CD0);
+    final textColor = widget.highlight ? const Color(0xFFE8F8EE) : const Color(0xFFDCDCDC);
+    final bgColor = widget.highlight ? const Color(0xFF183A24) : const Color(0xFF261C30);
     return GestureDetector(
       onTapDown: (_) => setState(() => _pressed = true),
       onTap: () {
@@ -260,20 +333,22 @@ class _GlowMenuButtonState extends State<_GlowMenuButton> {
         width: double.infinity,
         height: 56,
         decoration: BoxDecoration(
-          color: const Color(0xFF261C30),
+          color: bgColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFF9D5CD0).withOpacity(0.45), width: 1),
+          border: Border.all(color: borderColor.withOpacity(widget.highlight ? 0.75 : 0.45), width: 1),
           boxShadow: _pressed
-              ? [BoxShadow(color: const Color(0xFF9D5CD0).withOpacity(0.55), blurRadius: 20, spreadRadius: 1)]
-              : [BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 6, offset: const Offset(0, 2))],
+              ? [BoxShadow(color: borderColor.withOpacity(0.55), blurRadius: 20, spreadRadius: 1)]
+              : (widget.highlight
+                  ? [BoxShadow(color: borderColor.withOpacity(0.35), blurRadius: 12, spreadRadius: 0.5)]
+                  : [BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 6, offset: const Offset(0, 2))]),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(widget.icon, color: const Color(0xFF9D5CD0), size: 20),
+            Icon(widget.icon, color: iconColor, size: 20),
             const SizedBox(width: 12),
             Text(widget.label,
-                style: const TextStyle(fontSize: 17, color: Color(0xFFDCDCDC), letterSpacing: 2)),
+                style: TextStyle(fontSize: 17, color: textColor, letterSpacing: 2, fontWeight: widget.highlight ? FontWeight.w600 : FontWeight.normal)),
           ],
         ),
       ),

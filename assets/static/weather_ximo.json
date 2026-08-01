@@ -1,0 +1,10 @@
+{
+  "region": "西漠",
+  "weather_refresh_minute": 120,
+  "weather_list": [
+    {"weather": "晴朗", "weight": 30, "buff": {}, "debuff": {}, "desc": "烈日当空，黄沙万里"},
+    {"weather": "烈日", "weight": 25, "buff": {"火道": 1.10}, "debuff": {"真元缓慢消耗": true}, "desc": "酷日炙烤，沙海如炉"},
+    {"weather": "沙暴", "weight": 25, "buff": {"风沙道": 1.30, "土道": 1.10}, "debuff": {"捕捉成功率": 0.70, "视界模糊": true}, "desc": "漫天黄沙遮天蔽日，风沙道蛊虫威能暴涨"},
+    {"weather": "寒夜", "weight": 20, "buff": {"月道": 1.10, "鬼道": 1.05}, "debuff": {"体魄缓慢消耗": true}, "desc": "入夜寒气刺骨，沙海如冰"}
+  ]
+}

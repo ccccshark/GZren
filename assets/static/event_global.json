@@ -1,0 +1,39 @@
+{
+  "events": [
+    {
+      "eid": "evg01", "name": "奇遇·传承蛊巢", "type": "fortune",
+      "weight": 2, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "你在荒野中偶见一处被岁月掩埋的古蛊师传承蛊巢——巢壁虫茧森森，中央石台上静静躺着一枚封存的蛊卵与半卷残方，蛊气虽已稀薄，却仍透着上古蛊师的传承意志。此乃原著所载『传承蛊巢』之奇遇，机缘难得！",
+      "effect": {"add_item": ["原石x30", "玉髓x2"], "dao_mark": {"运道": 4}, "luck": 3}
+    },
+    {
+      "eid": "evg02", "name": "伏笔·太古残简", "type": "fortune",
+      "weight": 3, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "你于一处荒僻角落拾得半截太古残简，简上符文古奥，依稀可辨『太古遗迹』『五地秘境』『入口之钥』字样——这似是通往太古遗迹入口的线索！五地秘境各藏其一部，集齐方可窥见入口所在。心念一动，气运悄然流转。",
+      "effect": {"dao_mark": {"运道": 3}, "luck": 2}
+    },
+    {
+      "eid": "evg03", "name": "劫难·正道蛊师追捕", "type": "disaster",
+      "weight": 4, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一队正道蛊师忽地拦住去路，为首者厉声道：『邪修贼子，作恶多端，今日便是你的死期！』你力战退敌，仍被重创，丢弃部分物资方才脱身。作恶愈多，正道追捕愈紧，此乃蛊师江湖的铁律。",
+      "effect": {"physique": -24, "trueyuan": -18, "injure": "轻伤", "lose_random_material": 2, "luck": -2}
+    },
+    {
+      "eid": "evg04", "name": "奇遇·古蛊师残魂", "type": "fortune",
+      "weight": 3, "min_rank": 4, "max_rank": 9,
+      "trigger": "rest",
+      "desc": "静坐入定时，一缕古蛊师残魂自虚空中浮现，颔首赞你心性坚韧，以神念传你一道道痕，又留下一枚原石方才消散。此乃原著所载『残魂传道』之奇遇。",
+      "effect": {"add_item": ["原石x20"], "dao_mark": {"运道": 3, "气道": 2}, "luck": 2}
+    },
+    {
+      "eid": "evg05", "name": "劫难·天象异变", "type": "disaster",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "move",
+      "desc": "天象骤变，日月无光，天地间蛊气紊乱狂暴，你被迫伏地固守真元，待异变平息时已是真元枯竭、体魄受损。此乃天地大劫之兆，传闻太古遗迹将现时必有天象异变。",
+      "effect": {"physique": -20, "trueyuan": -24, "luck": -1}
+    }
+  ]
+}

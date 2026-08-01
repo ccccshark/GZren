@@ -274,7 +274,11 @@ Future<void> showTradeDialog(BuildContext context, GameContext ctx) async {
     ctx.out('这里没有商人可交易。', MsgType.danger);
     return;
   }
-  final tiles = merchants.map((n) => _tile(n.name, subtitle: '货物 ${n.tradeGoods.length} 种', icon: Icons.store, iconColor: const Color(0xFFE67E22))).toList();
+  // BUG修复【老槐翁原石循环刷取】：货物数过滤黑名单（原石为货币不计入商品）
+  final tiles = merchants.map((n) {
+    final goodsCount = n.tradeGoods.entries.where((e) => !ctx.isTradeBlacklisted(e.key)).length;
+    return _tile(n.name, subtitle: '货物 $goodsCount 种', icon: Icons.store, iconColor: const Color(0xFFE67E22));
+  }).toList();
   final idx = await _showPickList(context: context, title: '选择商人交易', tiles: tiles);
   if (idx == null) return;
   final npc = merchants[idx];
@@ -327,22 +331,28 @@ Widget _actionTile(BuildContext dialogCtx, _TradeOp op, String label, IconData i
 }
 
 /// 购买：列出商人货物，点击 buy。
+/// BUG修复【老槐翁原石循环刷取】：过滤黑名单商品（原石为货币，不出现在购买列表）
 Future<void> showBuyDialog(BuildContext context, GameContext ctx, Npc npc) async {
   final have = gu.countMaterial(ctx.player!, '原石');
-  if (npc.tradeGoods.isEmpty) {
+  // 过滤黑名单：货币类物品（原石）不出售
+  final goods = npc.tradeGoods.entries
+      .where((e) => !ctx.isTradeBlacklisted(e.key))
+      .toList();
+  if (goods.isEmpty) {
     ctx.out('${npc.name} 没有货物出售。', MsgType.danger);
     return;
   }
-  final tiles = npc.tradeGoods.entries.map((e) => _tile(e.key,
+  final tiles = goods.map((e) => _tile(e.key,
       subtitle: '价格 ${e.value}原石 · 你持有 $have 原石',
       icon: Icons.shopping_cart, iconColor: const Color(0xFF27AE60))).toList();
   final idx = await _showPickList(context: context, title: '购买（原石=$have）', tiles: tiles);
   if (idx == null) return;
-  final item = npc.tradeGoods.entries.elementAt(idx).key;
+  final item = goods[idx].key;
   ctx.doTradeAction('buy $item 1');
 }
 
 /// 出售：列出背包可出售材料，点击 sell。
+/// BUG修复【老槐翁原石循环刷取】：过滤黑名单物品（原石为货币，不可出售换原石，杜绝闭环兑换）
 Future<void> showSellDialog(BuildContext context, GameContext ctx) async {
   final p = ctx.player!;
   // 去重统计背包材料
@@ -351,20 +361,24 @@ Future<void> showSellDialog(BuildContext context, GameContext ctx) async {
     final (n, c) = MatParser.parse(it);
     seen[n] = (seen[n] ?? 0) + c;
   }
-  if (seen.isEmpty) {
+  // 过滤黑名单：货币类物品（原石）不可出售
+  final sellable = seen.entries
+      .where((e) => !ctx.isTradeBlacklisted(e.key))
+      .toList();
+  if (sellable.isEmpty) {
     ctx.out('背包空空如也，无可出售。', MsgType.danger);
     return;
   }
   final matInfo = (ctx.materials['materials'] ?? {}) as Map;
-  final tiles = seen.entries.map((e) {
+  final tiles = sellable.map((e) {
     final priceInfo = ((matInfo[e.key] ?? {}) as Map)['price'] ?? 1;
     final price = (((priceInfo as num) * 0.6).toInt()) * e.value;
     return _tile(e.key, subtitle: '持有 ${e.value} · 可售得约 $price 原石', icon: Icons.sell, iconColor: const Color(0xFFE67E22));
   }).toList();
   final idx = await _showPickList(context: context, title: '出售物资', tiles: tiles);
   if (idx == null) return;
-  final item = seen.entries.elementAt(idx).key;
-  ctx.doTradeAction('sell $item ${seen[item]}');
+  final item = sellable[idx].key;
+  ctx.doTradeAction('sell $item ${sellable[idx].value}');
 }
 
 /// 攻击：列出场景可攻击NPC，点击 attack。

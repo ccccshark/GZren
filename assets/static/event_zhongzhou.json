@@ -1,0 +1,73 @@
+{
+  "events": [
+    {
+      "eid": "evz01", "name": "劫难·官道遇匪", "type": "disaster",
+      "weight": 12, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["zhongzhou_entry", "zhongzhou_plains"],
+      "desc": "官道旁窜出两名山匪，钢刀出鞘，狞笑逼近。你且战且退，仍被擦伤，丢弃部分物资才脱身。",
+      "effect": {"physique": -20, "injure": "轻伤", "lose_random_material": 2, "luck": -1}
+    },
+    {
+      "eid": "evz02", "name": "机缘·麦田灵穗", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["zhongzhou_plains", "zhongzhou_entry"],
+      "desc": "你在麦田深处发现一片灵气充沛的灵麦，穗粒饱满泛光，连忙采下几束，还顺带挖到一块灵墨。",
+      "effect": {"add_item": ["中原麦穗x5", "灵墨x2"], "dao_mark": {"气道": 2}, "luck": 1}
+    },
+    {
+      "eid": "evz03", "name": "机缘·藏书阁残卷", "type": "fortune",
+      "weight": 5, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["zhongzhou_book_cave"],
+      "desc": "百家藏书阁深处一只石匣中，静静躺着半卷百家残卷，卷上符文流转，蕴含上古学派气道至理。匣边还散落着浩然玉。",
+      "effect": {"add_item": ["百家残卷x1", "浩然玉x2"], "dao_mark": {"气道": 5, "光道": 2}, "luck": 2}
+    },
+    {
+      "eid": "evz04", "name": "劫难·暴雨泥泞", "type": "disaster",
+      "weight": 11, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["zhongzhou_entry", "zhongzhou_plains"],
+      "desc": "中州突降暴雨，官道化为泥泞，举步维艰。你深一脚浅一脚地跋涉，真元大量耗损，险些跌入路边深沟。",
+      "effect": {"physique": -18, "trueyuan": -16, "injure": "轻伤", "luck": -1}
+    },
+    {
+      "eid": "evz05", "name": "劫难·浓雾迷途", "type": "disaster",
+      "weight": 10, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["zhongzhou_entry", "zhongzhou_plains"],
+      "desc": "晨雾浓重如纱，官道隐没其间，你迷失了方向，在麦田间兜兜转转，真元耗损，险些闯入山匪的埋伏。",
+      "effect": {"physique": -14, "trueyuan": -12, "luck": -1}
+    },
+    {
+      "eid": "evz06", "name": "机缘·驿站休憩", "type": "fortune",
+      "weight": 9, "min_rank": 1, "max_rank": 9,
+      "trigger": "rest",
+      "scene_rids": ["zhongzhou_posthouse"],
+      "desc": "你于古驿站静坐休憩，老槐灵气温润，体魄与真元大幅恢复，一卷古竹简的墨香令人心旷神怡。",
+      "effect": {"physique": 26, "trueyuan": 36, "luck": 1}
+    },
+    {
+      "eid": "evz07", "name": "抉择·落魄书生", "type": "fortune",
+      "weight": 7, "min_rank": 2, "max_rank": 9,
+      "trigger": "move",
+      "scene_rids": ["zhongzhou_entry", "zhongzhou_plains"],
+      "desc": "官道边蜷缩着一名衣衫褴褛的落魄书生，气息奄奄，怀中紧抱一卷残简，眼中透着求救之色。",
+      "effect": {},
+      "choices": [
+        {"text": "赠食并送其离去", "effect": {"add_item_cost": ["中原麦穗x3"], "add_item": ["原石x15", "浩然玉x1"], "dao_mark": {"运道": 2}, "luck": 3}, "weight": 1},
+        {"text": "夺其残简离去", "effect": {"add_item": ["古竹简x2"], "luck": -3}, "weight": 1},
+        {"text": "不闻不问", "effect": {"luck": -1}, "weight": 1}
+      ]
+    },
+    {
+      "eid": "evz08", "name": "伏笔·太古残碑", "type": "fortune",
+      "weight": 3, "min_rank": 3, "max_rank": 9,
+      "trigger": "gather",
+      "scene_rids": ["zhongzhou_book_cave", "zhongzhou_plains"],
+      "desc": "你在藏书阁一隅发现半截残碑，碑文古奥难辨，依稀可见『太古』『遗迹』『五地秘境』字样——这似乎是通往太古遗迹入口的线索之一！心念一动，气运悄然流转。",
+      "effect": {"dao_mark": {"运道": 3, "气道": 2}, "luck": 2}
+    }
+  ]
+}
