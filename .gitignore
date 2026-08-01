@@ -10,7 +10,20 @@
 pubspec.lock
 
 # ===== Android =====
-# flutter create 生成的 android/ 工程文件需要提交，但以下构建产物排除
+# 按 v1.0.4 打包逻辑：android 工程脚手架由 CI 的 `flutter create` 自动生成，
+# 仓库只保留手写的 AndroidManifest.xml，其余配置文件不入库，避免与 CI Flutter 版本不兼容。
+android/.gitignore
+android/build.gradle.kts
+android/settings.gradle.kts
+android/gradle.properties
+android/gradle/
+android/app/build.gradle.kts
+android/app/proguard-rules.pro
+android/app/src/debug/
+android/app/src/profile/
+android/app/src/main/kotlin/
+android/app/src/main/res/
+# flutter create 生成的其他文件
 android/.gradle/
 android/captures/
 android/gradlew
