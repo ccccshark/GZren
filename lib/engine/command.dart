@@ -501,7 +501,13 @@ class GameContext extends ChangeNotifier {
   }
 
   // ---------- 场景/NPC ----------
-  Room curRoom() => rooms[player!.location]!;
+  /// 防御式获取当前房间：若玩家所在地域资源尚未懒加载或未知房间，
+  /// 回退至 startRid（青茅山），避免 ! 空断言崩溃。
+  /// 修复：读档入南疆外其他地域时 rooms 尚未加载导致的 Crash。
+  Room curRoom() {
+    final rid = player?.location ?? startRid;
+    return rooms[rid] ?? rooms[startRid] ?? rooms.values.first;
+  }
   List<Npc> npcsInCurRoom() => npcsInRoom(npcs, player!.location);
 
   // ---------- 新游戏 ----------
@@ -769,7 +775,14 @@ class GameContext extends ChangeNotifier {
     // V1.6 新增【场景专属事件过滤】：事件含 scene_rids 字段时，仅当前房间 rid 命中方可触发；
     // 缺失 scene_rids 的事件保持全局通用（旧 JSON 兼容）。
     final pool = events
-        .where((e) => e['trigger'] == trigger && (e['min_rank'] as int) <= rank && (e['max_rank'] as int) >= rank)
+        .where((e) {
+          if (e['trigger'] != trigger) return false;
+          // 防御：缺失 min_rank/max_rank 或类型非 num 时，按 0/999 默认值兼容；
+          // 避免 JSON 中为 double（如 1.0）或缺失导致 as int 抛 CastError。
+          final minR = (e['min_rank'] as num?)?.toInt() ?? 0;
+          final maxR = (e['max_rank'] as num?)?.toInt() ?? 999;
+          return minR <= rank && maxR >= rank;
+        })
         .where((e) {
           final sr = e['scene_rids'];
           if (sr is! List || sr.isEmpty) return true;
@@ -845,11 +858,30 @@ class GameContext extends ChangeNotifier {
         }
       }
     }
-    if (eff['trueyuan'] != null) p.recoverTrueyuan(eff['trueyuan'] as int);
-    if (eff['physique'] != null) p.physique = (p.physique + (eff['physique'] as num)).clamp(1, 9999).toInt();
-    if (eff['soul_power'] != null) p.soulPower = (p.soulPower + (eff['soul_power'] as num)).clamp(1, 9999).toInt();
-    if (eff['life_left'] != null) p.lifeLeft = dmax(0, p.lifeLeft + (eff['life_left'] as num).toDouble());
-    if (eff['luck'] != null) p.luck = imax(0, p.luck + (eff['luck'] as int));
+    // 防御：JSON 数值可能为 int 或 double，统一用 num?.toInt()/toDouble() 兼容，
+    // 避免 as int 抛 CastError 导致事件结算崩溃。
+    if (eff['trueyuan'] != null) {
+      final v = (eff['trueyuan'] as num?)?.toInt() ?? 0;
+      p.recoverTrueyuan(v);
+    }
+    if (eff['physique'] != null) {
+      final v = (eff['physique'] as num?)?.toInt() ?? 0;
+      p.physique = (p.physique + v).clamp(1, 9999).toInt();
+    }
+    if (eff['soul_power'] != null) {
+      final v = (eff['soul_power'] as num?)?.toInt() ?? 0;
+      p.soulPower = (p.soulPower + v).clamp(1, 9999).toInt();
+    }
+    if (eff['life_left'] != null) {
+      final v = (eff['life_left'] as num?)?.toDouble() ?? 0;
+      p.lifeLeft = dmax(0, p.lifeLeft + v);
+    }
+    if (eff['luck'] != null) {
+      // 防御：JSON 中 luck 可能为 double（如 5.0），用 num?.toInt() 兼容；
+      // 避免 as int 抛 CastError 导致随机事件结算崩溃。
+      final delta = (eff['luck'] as num?)?.toInt() ?? 0;
+      p.luck = imax(0, p.luck + delta);
+    }
     if (eff['injure'] != null) {
       final inj = eff['injure'] as String;
       p.addInjure(inj);
@@ -1809,7 +1841,8 @@ class GameContext extends ChangeNotifier {
     if (tribulation) {
       out('【渡劫失败·陨落】天劫之威非你所能抗……', MsgType.danger);
     } else {
-      out('【你被 ${npc!.name} 击败！】', MsgType.danger);
+      // 防御：正常战斗战败时 npc 必不为空，极端异常下用"野怪"兜底避免 npe
+      out('【你被 ${npc?.name ?? "野怪"} 击败！】', MsgType.danger);
     }
     final tlog = <String>[];
     sv.applyDeathPenalty(p, tlog);
