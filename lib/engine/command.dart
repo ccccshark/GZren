@@ -278,33 +278,66 @@ class GameContext extends ChangeNotifier {
   /// 五域扩展(map_nanjiang/ximo/beiyuan/donghai/zhongzhou+配套gu/material/npc/event/weather)
   /// 在玩家首次进入对应地域时由 ensureRegionLoaded() 懒加载。
   Future<void> loadStatic() async {
-    final guJson = jsonDecode(await rootBundle.loadString('assets/static/gu_list.json')) as Map<String, dynamic>;
-    final guArr = guJson['gu_list'] as List;
-    guList = {for (var g in guArr) (g as Map<String, dynamic>)['gid'] as String: GuTemplate.fromJson(g)};
-    combatEngine = CombatEngine(guList);
+    // V3.0 修复：所有 JSON 解析包裹 try-catch，防止单个文件损坏导致整个启动崩溃。
+    try {
+      final guJson = jsonDecode(await rootBundle.loadString('assets/static/gu_list.json')) as Map<String, dynamic>;
+      final guArr = guJson['gu_list'] as List;
+      guList = {for (var g in guArr) (g as Map<String, dynamic>)['gid'] as String: GuTemplate.fromJson(g)};
+      combatEngine = CombatEngine(guList);
+    } catch (e) {
+      debugPrint('loadStatic: gu_list.json 解析失败: $e');
+      rethrow; // 蛊虫列表是核心数据，无默认值，继续向上抛让 SplashPage 显示错误
+    }
 
-    final rJson = jsonDecode(await rootBundle.loadString('assets/static/recipe.json')) as Map<String, dynamic>;
-    recipes = (rJson['recipes'] as List).map((e) => Recipe.fromJson(e as Map<String, dynamic>)).toList();
-    evolveRecipes = (rJson['evolve_recipes'] as List? ?? [])
-        .map((e) => EvolveRecipe.fromJson(e as Map<String, dynamic>))
-        .toList();
+    try {
+      final rJson = jsonDecode(await rootBundle.loadString('assets/static/recipe.json')) as Map<String, dynamic>;
+      recipes = (rJson['recipes'] as List).map((e) => Recipe.fromJson(e as Map<String, dynamic>)).toList();
+      evolveRecipes = (rJson['evolve_recipes'] as List? ?? [])
+          .map((e) => EvolveRecipe.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      debugPrint('loadStatic: recipe.json 解析失败: $e');
+      recipes = [];
+      evolveRecipes = [];
+    }
 
-    final mJson = jsonDecode(await rootBundle.loadString('assets/static/map.json')) as Map<String, dynamic>;
-    final roomList = (mJson['rooms'] as List)
-        .map((r) => Room.fromJson(r as Map<String, dynamic>))
-        .toList();
-    rooms = {for (final r in roomList) r.rid: r};
-    startRid = mJson['start_rid'] ?? 'qingmao_01';
+    try {
+      final mJson = jsonDecode(await rootBundle.loadString('assets/static/map.json')) as Map<String, dynamic>;
+      final roomList = (mJson['rooms'] as List)
+          .map((r) => Room.fromJson(r as Map<String, dynamic>))
+          .toList();
+      rooms = {for (final r in roomList) r.rid: r};
+      startRid = mJson['start_rid'] ?? 'qingmao_01';
+    } catch (e) {
+      debugPrint('loadStatic: map.json 解析失败: $e');
+      rethrow; // 地图是核心数据，无默认值
+    }
 
-    final nJson = jsonDecode(await rootBundle.loadString('assets/static/npc_template.json')) as Map<String, dynamic>;
-    npcTemplates = (nJson['npcs'] as List).map((e) => NpcTemplate.fromJson(e as Map<String, dynamic>)).toList();
+    try {
+      final nJson = jsonDecode(await rootBundle.loadString('assets/static/npc_template.json')) as Map<String, dynamic>;
+      npcTemplates = (nJson['npcs'] as List).map((e) => NpcTemplate.fromJson(e as Map<String, dynamic>)).toList();
+    } catch (e) {
+      debugPrint('loadStatic: npc_template.json 解析失败: $e');
+      npcTemplates = [];
+    }
 
-    materials = jsonDecode(await rootBundle.loadString('assets/static/material.json')) as Map<String, dynamic>;
+    try {
+      materials = jsonDecode(await rootBundle.loadString('assets/static/material.json')) as Map<String, dynamic>;
+    } catch (e) {
+      debugPrint('loadStatic: material.json 解析失败: $e');
+      materials = {};
+    }
 
-    final eJson = jsonDecode(await rootBundle.loadString('assets/static/random_event.json')) as Map<String, dynamic>;
-    events = (eJson['events'] as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-    eventTriggerChance = Map<String, double>.from(
-        (eJson['trigger_chance'] ?? {}).map((k, v) => MapEntry(k, (v as num).toDouble())));
+    try {
+      final eJson = jsonDecode(await rootBundle.loadString('assets/static/random_event.json')) as Map<String, dynamic>;
+      events = (eJson['events'] as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+      eventTriggerChance = Map<String, double>.from(
+          (eJson['trigger_chance'] ?? {}).map((k, v) => MapEntry(k, (v as num).toDouble())));
+    } catch (e) {
+      debugPrint('loadStatic: random_event.json 解析失败: $e');
+      events = [];
+      eventTriggerChance = {};
+    }
 
     // V1.9 新增【全局奇遇系统】：event_global 为全局通用，启动时加载（权重极低，体量小）。
     try {

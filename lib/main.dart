@@ -1,9 +1,10 @@
 // main.dart
 // 蛊真人单机文字MUD（安卓端）APP 入口。纯离线，无任何联网功能。
-// V2.0 内存优化：Debug 模式关闭多余检测+图片缓存限制+错误兜底 zone。
+// V3.0 启动修复：WidgetsFlutterBinding 置顶 + Splash 闪屏 + 全局异常捕获。
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 import 'engine/command.dart';
 import 'engine/save_system.dart' as sv;
 import 'ui/main_game_page.dart';
@@ -11,9 +12,13 @@ import 'ui/save_menu.dart';
 import 'ui/help_page.dart';
 import 'ui/disclaimer_dialog.dart';
 import 'ui/save_code_dialog.dart';
-import 'ui/panels.dart'; // 第一阶段新增：新手引导面板
+import 'ui/panels.dart';
+import 'ui/splash_page.dart';
 
 void main() {
+  // 【修复】WidgetsFlutterBinding 必须最先初始化，否则 PaintingBinding 等无法访问。
+  WidgetsFlutterBinding.ensureInitialized();
+
   // V2.0 内存优化【关闭 Debug 多余检测】：release 模式下禁用调试断言与 painting 检测。
   if (kReleaseMode) {
     debugPrint = (_, {int? wrapWidth}) {}; // 静默 debugPrint，减少字符串拼接开销
@@ -25,13 +30,14 @@ void main() {
   PaintingBinding.instance.imageCache.maximumSizeBytes = 2 * 1024 * 1024; // 2MB 上限
 
   // V2.0 内存优化【错误兜底 zone】：捕获未处理异常，防止崩溃且不产生调试堆栈日志。
+  // V3.0 增强：兜底 ErrorWidget 显示友好提示，防止永久白屏。
   runZonedGuarded(() {
     runApp(const GuZhenRenApp());
   }, (error, stack) {
-    // release 模式下静默处理，debug 模式下输出到控制台
     if (kDebugMode) {
       debugPrint('未捕获异常: $error\n$stack');
     }
+    // 异常已在 zone 中捕获，Flutter 框架会显示 ErrorWidget，不会永久卡死。
   });
 }
 
@@ -55,54 +61,13 @@ class GuZhenRenApp extends StatelessWidget {
         ),
         fontFamily: 'monospace',
       ),
-      home: const BootPage(),
+      // V3.0 替换 BootPage 为 SplashPage：闪屏加载，异步初始化，完成后跳转主菜单。
+      home: SplashPage(onInitialized: (ctx) => MainMenuPage(ctx: ctx)),
     );
   }
 }
 
-class BootPage extends StatefulWidget {
-  const BootPage({super.key});
-  @override
-  State<BootPage> createState() => _BootPageState();
-}
-
-class _BootPageState extends State<BootPage> {
-  final GameContext ctx = GameContext();
-  bool _loading = true;
-  bool _disclaimerAccepted = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _init();
-  }
-
-  Future<void> _init() async {
-    await ctx.loadStatic();
-    if (!mounted) return;
-    // 启动后最先弹出免责声明弹窗；用户必须同意才进入主菜单，拒绝则退出 App。
-    final accepted = await showStartupDisclaimer(context);
-    if (!mounted) return;
-    setState(() {
-      _disclaimerAccepted = accepted;
-      _loading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator(color: Color(0xFF9D5CD0))),
-      );
-    }
-    // 用户拒绝时显示空 Scaffold（SystemNavigator.pop 已触发退出 App）
-    if (!_disclaimerAccepted) {
-      return const Scaffold(body: SizedBox.shrink());
-    }
-    return MainMenuPage(ctx: ctx);
-  }
-}
+// ===================== 主菜单页面 =====================
 
 class MainMenuPage extends StatefulWidget {
   final GameContext ctx;
