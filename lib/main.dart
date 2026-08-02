@@ -1,10 +1,11 @@
 // main.dart
 // 蛊真人单机文字MUD（安卓端）APP 入口。纯离线，无任何联网功能。
-// V3.0 启动修复：WidgetsFlutterBinding 置顶 + Splash 闪屏 + 全局异常捕获。
+// V3.1 启动修复：WidgetsFlutterBinding 置顶 + 三层异常捕获 + 写本地错误日志。
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gzren/utils/safe_json_loader.dart' show writeErrorLog;
 import 'engine/command.dart';
 import 'engine/save_system.dart' as sv;
 import 'ui/main_game_page.dart';
@@ -25,19 +26,38 @@ void main() {
     debugDefaultTargetPlatformOverride = null;
   }
   // V2.0 内存优化【图片缓存限制】：纯文字游戏无大图，限制 Flutter 图片缓存为最小值。
-  // 即使运行时仅用 Material Icons 字体图标，也防止意外图片解码缓存膨胀。
-  PaintingBinding.instance.imageCache.maximumSize = 20; // 最多缓存 20 张
-  PaintingBinding.instance.imageCache.maximumSizeBytes = 2 * 1024 * 1024; // 2MB 上限
+  PaintingBinding.instance.imageCache.maximumSize = 20;
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 2 * 1024 * 1024;
 
-  // V2.0 内存优化【错误兜底 zone】：捕获未处理异常，防止崩溃且不产生调试堆栈日志。
-  // V3.0 增强：兜底 ErrorWidget 显示友好提示，防止永久白屏。
+  // 【修复】FlutterError.onError：捕获 Flutter 框架层渲染/布局/管线异常，防止永久白屏。
+  FlutterError.onError = (FlutterErrorDetails details) {
+    final msg = details.exceptionAsString();
+    final stack = details.stack?.toString() ?? '';
+    debugPrint('FlutterError.onError: $msg\n$stack');
+    // 非 debug 模式写入本地日志
+    if (kReleaseMode) {
+      writeErrorLog('FlutterError', msg, stack: stack);
+    }
+  };
+
+  // 【修复】PlatformDispatcher.onError：捕获 Dart 层未处理的异步异常。
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    debugPrint('PlatformDispatcher.onError: $error\n$stack');
+    if (kReleaseMode) {
+      writeErrorLog('DartError', error.toString(), stack: stack.toString());
+    }
+    return true; // 已处理，不终止进程
+  };
+
+  // 【修复】runZonedGuarded：捕获 runApp 同步初始化异常 + zone 内未捕获异常。
   runZonedGuarded(() {
     runApp(const GuZhenRenApp());
-  }, (error, stack) {
-    if (kDebugMode) {
-      debugPrint('未捕获异常: $error\n$stack');
+  }, (Object error, StackTrace stack) {
+    final msg = 'runZonedGuarded: $error';
+    debugPrint('$msg\n$stack');
+    if (kReleaseMode) {
+      writeErrorLog('ZoneError', error.toString(), stack: stack.toString());
     }
-    // 异常已在 zone 中捕获，Flutter 框架会显示 ErrorWidget，不会永久卡死。
   });
 }
 
@@ -51,7 +71,6 @@ class GuZhenRenApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        // UI美化·统一色彩规范：背景#0A0A0D，主色#593475，高亮紫#9D5CD0
         scaffoldBackgroundColor: const Color(0xFF0A0A0D),
         primaryColor: const Color(0xFF593475),
         colorScheme: const ColorScheme.dark(
@@ -61,7 +80,7 @@ class GuZhenRenApp extends StatelessWidget {
         ),
         fontFamily: 'monospace',
       ),
-      // V3.0 替换 BootPage 为 SplashPage：闪屏加载，异步初始化，完成后跳转主菜单。
+      // V3.1 闪屏首页：先渲染 UI，addPostFrameCallback 后异步分批加载数据。
       home: SplashPage(onInitialized: (ctx) => MainMenuPage(ctx: ctx)),
     );
   }
@@ -124,7 +143,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
       ),
       body: Stack(
         children: [
-          // UI美化：低透明度古卷暗纹背景
           Positioned.fill(child: CustomPaint(painter: _ScrollPatternPainter())),
           Center(
             child: SingleChildScrollView(
@@ -132,7 +150,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // UI美化：古风标题 + 柔和外发光
                   const Text(
                     '蛊 真 人',
                     textAlign: TextAlign.center,
@@ -152,7 +169,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
                   const Text('单机文字MUD · 纯离线',
                       style: TextStyle(color: Color(0xFF8C7DA0), fontSize: 13, letterSpacing: 2)),
                   const SizedBox(height: 44),
-                  // V1.9 新增【继续游戏】：有自动存档时显示于顶部（高亮推荐按钮）
                   if (_hasAutoSave == true)
                     _menuBtn(context, '继续游戏', Icons.play_arrow, () => _continueGame(context),
                         highlight: true),
@@ -160,13 +176,11 @@ class _MainMenuPageState extends State<MainMenuPage> {
                   _menuBtn(context, '读取存档', Icons.save, () => Navigator.push(context,
                       MaterialPageRoute(builder: (_) => SaveMenuPage(ctx: ctx, mode: SaveMenuMode.load)))),
                   _menuBtn(context, '存档码备份', Icons.qr_code, () => showSaveCodeBackup(context, ctx)),
-                  // 第一阶段新增：主菜单新手引导入口（forceShow，可随时回顾，不影响存档）
                   _menuBtn(context, '新手引导', Icons.school, () => showTutorialGuide(context, ctx, forceShow: true)),
                   _menuBtn(context, '游戏说明', Icons.help_outline, () => Navigator.push(context,
                       MaterialPageRoute(builder: (_) => const HelpPage()))),
                   _menuBtn(context, '退出', Icons.exit_to_app, () => Navigator.of(context).maybePop()),
                   const SizedBox(height: 28),
-                  // UI美化：底部开源免责小字 + 开源地址
                   const Text(
                     '本项目为开源单机同人作品，仅供学习交流，严禁商用。\n游戏内容纯属虚构，与现实无关。',
                     textAlign: TextAlign.center,
@@ -187,7 +201,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
   }
 
   Widget _menuBtn(BuildContext context, String label, IconData icon, VoidCallback onTap, {bool highlight = false}) {
-    // UI美化：圆角16、底色#261C30、淡紫细描边，按压柔光晕动效（封装于 _GlowMenuButton，仅样式）
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: _GlowMenuButton(label: label, icon: icon, onTap: onTap, highlight: highlight),
@@ -219,7 +232,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
               onPressed: () {
                 ctx.newGame(nameCtrl.text.trim().isEmpty ? '无名蛊师' : nameCtrl.text.trim(), align);
                 Navigator.pop(c);
-                // 第一阶段新增：新建角色后自动弹出新手分段引导（autoStartTutorial=true）
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) =>
                     MainGamePage(ctx: ctx, autoStartTutorial: true)));
               },
@@ -232,14 +244,11 @@ class _MainMenuPageState extends State<MainMenuPage> {
   }
 }
 
-// ===================== 主菜单 UI 美化组件（仅样式，无业务逻辑） =====================
+// ===================== 主菜单 UI 美化组件 =====================
 
-/// 低透明度古卷暗纹背景：斜向纹理 + 暗印章方框，营造国风诡秘内敛氛围。
-/// 纯绘制，不接收点击、不影响交互。
 class _ScrollPatternPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // 斜向暗纹
     final line = Paint()
       ..color = const Color(0xFF9D5CD0).withOpacity(0.04)
       ..strokeWidth = 1;
@@ -247,7 +256,6 @@ class _ScrollPatternPainter extends CustomPainter {
     for (double x = -size.height; x < size.width + size.height; x += step) {
       canvas.drawLine(Offset(x, 0), Offset(x + size.height, size.height), line);
     }
-    // 暗印章方框
     final sq = Paint()
       ..color = const Color(0xFF593475).withOpacity(0.05)
       ..style = PaintingStyle.stroke
@@ -258,14 +266,10 @@ class _ScrollPatternPainter extends CustomPainter {
       }
     }
   }
-
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// 主菜单按钮：圆角16、底色#261C30、淡紫细描边，按压时柔光晕动效。
-/// 仅样式封装，点击透传原 onTap 回调，不改动任何业务逻辑。
-/// V1.9 新增 highlight 参数：为 true 时外发光+绿描边（推荐"继续游戏"使用）。
 class _GlowMenuButton extends StatefulWidget {
   final String label;
   final IconData icon;
@@ -278,7 +282,6 @@ class _GlowMenuButton extends StatefulWidget {
 
 class _GlowMenuButtonState extends State<_GlowMenuButton> {
   bool _pressed = false;
-
   @override
   Widget build(BuildContext context) {
     final borderColor = widget.highlight ? const Color(0xFF27AE60) : const Color(0xFF9D5CD0);

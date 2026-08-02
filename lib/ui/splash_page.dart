@@ -1,15 +1,42 @@
 // splash_page.dart
-// V3.0 闪屏启动页：先展示加载界面，后台异步初始化游戏数据，初始化完成再跳转主菜单。
+// V3.1 闪屏启动页：addPostFrameCallback → 先渲染 UI → 后台异步分批加载 → 完成跳转。
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gzren/engine/command.dart';
 import 'package:gzren/ui/disclaimer_dialog.dart';
 
-class SplashPage extends StatefulWidget {
-  /// 初始化完成后的回调，由 main.dart 传入，负责跳转主菜单页面。
-  final Widget Function(GameContext ctx) onInitialized;
+/// 加载阶段进度枚举。
+enum _LoadPhase {
+  init,
+  guList,
+  map,
+  recipe,
+  npc,
+  material,
+  event,
+  region,
+  environment,
+  quest,
+  done,
+}
 
+const _phaseNames = {
+  _LoadPhase.init: '正在初始化...',
+  _LoadPhase.guList: '加载蛊虫数据...',
+  _LoadPhase.map: '加载地图数据...',
+  _LoadPhase.recipe: '加载蛊方数据...',
+  _LoadPhase.npc: '加载NPC数据...',
+  _LoadPhase.material: '加载材料数据...',
+  _LoadPhase.event: '加载事件数据...',
+  _LoadPhase.region: '加载区域数据...',
+  _LoadPhase.environment: '加载环境配置...',
+  _LoadPhase.quest: '加载任务系统...',
+  _LoadPhase.done: '加载完成',
+};
+
+class SplashPage extends StatefulWidget {
+  final Widget Function(GameContext ctx) onInitialized;
   const SplashPage({super.key, required this.onInitialized});
 
   @override
@@ -18,29 +45,83 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   final GameContext _ctx = GameContext();
-  String _statusText = '正在初始化...';
+  _LoadPhase _phase = _LoadPhase.init;
   bool _hasError = false;
   String _errorMessage = '';
 
   @override
   void initState() {
     super.initState();
-    _initGame();
+    // ① 先渲染 UI（首帧只显示标题+加载动画，不执行任何数据加载）
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // ② 首帧渲染完成后，开始异步分批加载
+      _loadInBatches();
+    });
   }
 
-  Future<void> _initGame() async {
+  // 分批加载：每批加载完成后更新状态文字，释放 UI 事件循环
+  Future<void> _loadInBatches() async {
     try {
-      setState(() => _statusText = '正在加载游戏数据...');
-
-      // 异步加载全部静态资源（JSON 解析内部已包裹 try-catch）
-      await _ctx.loadStatic();
-
+      // 第1批：蛊虫（核心，失败则无法继续）
+      await _safeBatch(_LoadPhase.guList, () => _ctx.loadStaticGuList());
       if (!mounted) return;
 
-      setState(() => _statusText = '加载完成');
+      // 每批之间让出微任务队列，防止 UI 卡顿
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
 
-      // 短暂延迟让用户看到"加载完成"
-      await Future.delayed(const Duration(milliseconds: 300));
+      // 第2批：地图（核心，失败则无法继续）
+      await _safeBatch(_LoadPhase.map, () => _ctx.loadStaticMap());
+      if (!mounted) return;
+
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第3批：蛊方
+      await _safeBatch(_LoadPhase.recipe, () => _ctx.loadStaticRecipe());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第4批：NPC模板
+      await _safeBatch(_LoadPhase.npc, () => _ctx.loadStaticNpc());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第5批：材料
+      await _safeBatch(_LoadPhase.material, () => _ctx.loadStaticMaterial());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第6批：随机事件
+      await _safeBatch(_LoadPhase.event, () => _ctx.loadStaticEvent());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第7批：南疆区域数据
+      await _safeBatch(_LoadPhase.region, () => _ctx.loadStaticRegion());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第8批：环境配置
+      await _safeBatch(_LoadPhase.environment, () => _ctx.loadStaticEnvironment());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 第9批：任务系统
+      await _safeBatch(_LoadPhase.quest, () => _ctx.loadStaticQuest());
+      if (!mounted) return;
+      await Future<void>.delayed(Duration.zero);
+      if (!mounted) return;
+
+      // 所有资源加载完成，标记完成
+      _setPhase(_LoadPhase.done);
+      await Future<void>.delayed(const Duration(milliseconds: 200));
       if (!mounted) return;
 
       // 展示免责声明弹窗
@@ -48,24 +129,30 @@ class _SplashPageState extends State<SplashPage> {
       if (!mounted) return;
 
       if (accepted) {
-        // 跳转主菜单页面（由回调构建）
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => widget.onInitialized(_ctx)),
         );
       }
-      // 用户拒绝 → showStartupDisclaimer 内部已调用 SystemNavigator.pop()
     } catch (e, stack) {
-      // 全局兜底：loadStatic 内部 try-catch 漏掉的异常在此捕获
       if (!mounted) return;
-      debugPrint('SplashPage 初始化异常: $e\n$stack');
+      debugPrint('SplashPage 分批加载异常: $e\n$stack');
       setState(() {
         _hasError = true;
         _errorMessage = e.toString();
-        _statusText = '初始化失败';
       });
       _showErrorDialog();
     }
+  }
+
+  // 执行单批加载，失败时抛出异常中断流程
+  Future<void> _safeBatch(_LoadPhase phase, Future<void> Function() loader) async {
+    _setPhase(phase);
+    await loader();
+  }
+
+  void _setPhase(_LoadPhase p) {
+    if (mounted) setState(() => _phase = p);
   }
 
   void _showErrorDialog() {
@@ -81,7 +168,7 @@ class _SplashPageState extends State<SplashPage> {
         ),
         content: SingleChildScrollView(
           child: Text(
-            '游戏资源加载异常，请检查安装包完整性后重试。\n\n错误: $_errorMessage',
+            '游戏资源加载异常，请尝试重新安装。\n\n错误: $_errorMessage',
             style: const TextStyle(color: Colors.white70, fontSize: 14),
           ),
         ),
@@ -92,9 +179,10 @@ class _SplashPageState extends State<SplashPage> {
               setState(() {
                 _hasError = false;
                 _errorMessage = '';
-                _statusText = '正在重试...';
+                _phase = _LoadPhase.init;
               });
-              _initGame();
+              // 重新加载
+              WidgetsBinding.instance.addPostFrameCallback((_) => _loadInBatches());
             },
             style: TextButton.styleFrom(foregroundColor: const Color(0xFF9D5CD0)),
             child: const Text('重试'),
@@ -114,13 +202,13 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    final phaseName = _phaseNames[_phase] ?? '加载中...';
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0D),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 游戏标题
             const Text(
               '蛊 真 人',
               style: TextStyle(
@@ -145,7 +233,6 @@ class _SplashPageState extends State<SplashPage> {
               ),
             ),
             const SizedBox(height: 60),
-            // 加载指示器
             if (!_hasError)
               const SizedBox(
                 width: 36,
@@ -162,9 +249,8 @@ class _SplashPageState extends State<SplashPage> {
                 size: 36,
               ),
             const SizedBox(height: 24),
-            // 状态文字
             Text(
-              _statusText,
+              _hasError ? '初始化失败' : phaseName,
               style: TextStyle(
                 color: _hasError ? Colors.redAccent : const Color(0xFF9D5CD0),
                 fontSize: 14,
