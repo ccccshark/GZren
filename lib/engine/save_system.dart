@@ -20,7 +20,9 @@ const int maxSlots = 5;
 Future<Directory> _saveDir() async {
   final doc = await getApplicationDocumentsDirectory();
   final dir = Directory('${doc.path}/save');
-  if (!dir.existsSync()) dir.createSync(recursive: true);
+  // 【修复】V3.1 异步创建目录，禁止 existsSync/createSync 阻塞主线程。
+  final exists = await dir.exists();
+  if (!exists) await dir.create(recursive: true);
   return dir;
 }
 
@@ -31,9 +33,12 @@ Future<Map<String, dynamic>?> listSlots() async {
   final result = <String, dynamic>{};
   for (var i = 1; i <= maxSlots; i++) {
     final f = File('${dir.path}/${_slotPath(i)}');
-    if (f.existsSync()) {
+    // 【修复】V3.1 异步文件操作，禁止 existsSync/readAsStringSync。
+    final exists = await f.exists();
+    if (exists) {
       try {
-        final j = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+        final raw = await f.readAsString();
+        final j = jsonDecode(raw) as Map<String, dynamic>;
         final p = j['player'] as Map<String, dynamic>;
         result['$i'] = {
           'empty': false,
@@ -62,8 +67,9 @@ Future<bool> saveGame(int slot, Player p, Map<String, Npc> npcs) async {
     'save_time': DateTime.now().toIso8601String(),
     'version': 1,
   };
+  // 【修复】V3.1 异步写文件，禁止 writeAsStringSync。
   final f = File('${dir.path}/${_slotPath(slot)}');
-  f.writeAsStringSync(jsonEncode(data));
+  await f.writeAsString(jsonEncode(data));
   return true;
 }
 
@@ -72,9 +78,12 @@ Future<(Player?, List<Map<String, dynamic>>)> loadGame(int slot) async {
   if (slot < 1 || slot > maxSlots) return (null as Player?, <Map<String, dynamic>>[]);
   final dir = await _saveDir();
   final f = File('${dir.path}/${_slotPath(slot)}');
-  if (!f.existsSync()) return (null as Player?, <Map<String, dynamic>>[]);
+  // 【修复】V3.1 异步文件操作，禁止 existsSync/readAsStringSync。
+  final exists = await f.exists();
+  if (!exists) return (null as Player?, <Map<String, dynamic>>[]);
   try {
-    final j = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+    final raw = await f.readAsString();
+    final j = jsonDecode(raw) as Map<String, dynamic>;
     final player = Player.fromJson(j['player'] as Map<String, dynamic>);
     final npcStates = (j['npcs'] as List? ?? [])
         .map((e) => Map<String, dynamic>.from(e as Map))
@@ -90,9 +99,12 @@ Future<Map<String, dynamic>?> readRawSlot(int slot) async {
   if (slot < 1 || slot > maxSlots) return null;
   final dir = await _saveDir();
   final f = File('${dir.path}/${_slotPath(slot)}');
-  if (!f.existsSync()) return null;
+  // 【修复】V3.1 异步文件操作。
+  final exists = await f.exists();
+  if (!exists) return null;
   try {
-    return jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+    final raw = await f.readAsString();
+    return jsonDecode(raw) as Map<String, dynamic>;
   } catch (_) {
     return null;
   }
@@ -104,7 +116,7 @@ Future<bool> writeRawSlot(int slot, Map<String, dynamic> data) async {
   final dir = await _saveDir();
   final f = File('${dir.path}/${_slotPath(slot)}');
   try {
-    f.writeAsStringSync(jsonEncode(data));
+    await f.writeAsString(jsonEncode(data));
     return true;
   } catch (_) {
     return false;
@@ -210,8 +222,10 @@ class SafeSaveManager {
       // ① 写临时文件
       await tmpFile.writeAsString(content, flush: true);
       // ② 把旧正式存档（若存在）备份为 .bak
-      if (mainFile.existsSync()) {
-        try { mainFile.copySync(bakPath); } catch (_) {}
+      // 【修复】V3.1 异步文件操作，禁止 existsSync/copySync。
+      final mainExists = await mainFile.exists();
+      if (mainExists) {
+        try { await mainFile.copy(bakPath); } catch (_) {}
       }
       // ③ 临时文件 rename 覆盖正式存档（文件系统原子操作）
       await tmpFile.rename(path);
@@ -329,24 +343,31 @@ class SafeSaveManager {
     final bak = File('${dir.path}/save_autoslot.json.bak');
     Player? p; List<Map<String, dynamic>> npcs = [];
     bool loaded = false;
+    // 【修复】V3.1 异步文件操作，禁止 existsSync/readAsStringSync。
     // 优先主档
-    if (main.existsSync()) {
+    final mainExists = await main.exists();
+    if (mainExists) {
       try {
-        final j = jsonDecode(main.readAsStringSync()) as Map<String, dynamic>;
+        final raw = await main.readAsString();
+        final j = jsonDecode(raw) as Map<String, dynamic>;
         p = Player.fromJson(j['player'] as Map<String, dynamic>);
         npcs = (j['npcs'] as List? ?? []).map((e) => Map<String, dynamic>.from(e as Map)).toList();
         loaded = true;
       } catch (_) { loaded = false; }
     }
     // 主档坏→读备份
-    if (!loaded && bak.existsSync()) {
-      try {
-        final j = jsonDecode(bak.readAsStringSync()) as Map<String, dynamic>;
-        p = Player.fromJson(j['player'] as Map<String, dynamic>);
-        npcs = (j['npcs'] as List? ?? []).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-        loaded = true;
-        onStatus?.call(true, '主档损坏，已自动加载备份存档', true);
-      } catch (_) { loaded = false; }
+    if (!loaded) {
+      final bakExists = await bak.exists();
+      if (bakExists) {
+        try {
+          final raw = await bak.readAsString();
+          final j = jsonDecode(raw) as Map<String, dynamic>;
+          p = Player.fromJson(j['player'] as Map<String, dynamic>);
+          npcs = (j['npcs'] as List? ?? []).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+          loaded = true;
+          onStatus?.call(true, '主档损坏，已自动加载备份存档', true);
+        } catch (_) { loaded = false; }
+      }
     }
     if (!loaded) {
       onStatus?.call(false, '自动存档文件损坏且无备份，无法加载', true);
@@ -357,7 +378,9 @@ class SafeSaveManager {
   /// 自动存档文件是否存在（供"继续游戏"按钮判断）。
   Future<bool> hasAutoSave() async {
     final dir = await _saveDir();
-    return File('${dir.path}/save_autoslot.json').existsSync() ||
-        File('${dir.path}/save_autoslot.json.bak').existsSync();
+    // 【修复】V3.1 异步文件操作，禁止 existsSync。
+    final mainExists = await File('${dir.path}/save_autoslot.json').exists();
+    final bakExists = await File('${dir.path}/save_autoslot.json.bak').exists();
+    return mainExists || bakExists;
   }
 }

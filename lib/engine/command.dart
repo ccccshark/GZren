@@ -5,8 +5,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
+import 'package:gzren/utils/safe_json_loader.dart' as safe_json;
 import 'package:gzren/data_model/player_model.dart';
 import 'package:gzren/data_model/gu_model.dart';
 import 'package:gzren/data_model/scene_model.dart';
@@ -278,112 +280,151 @@ class GameContext extends ChangeNotifier {
   /// 五域扩展(map_nanjiang/ximo/beiyuan/donghai/zhongzhou+配套gu/material/npc/event/weather)
   /// 在玩家首次进入对应地域时由 ensureRegionLoaded() 懒加载。
   Future<void> loadStatic() async {
-    // V3.0 修复：所有 JSON 解析包裹 try-catch，防止单个文件损坏导致整个启动崩溃。
-    try {
-      final guJson = jsonDecode(await rootBundle.loadString('assets/static/gu_list.json')) as Map<String, dynamic>;
-      final guArr = guJson['gu_list'] as List;
-      guList = {for (var g in guArr) (g as Map<String, dynamic>)['gid'] as String: GuTemplate.fromJson(g)};
-      combatEngine = CombatEngine(guList);
-    } catch (e) {
-      debugPrint('loadStatic: gu_list.json 解析失败: $e');
-      rethrow; // 蛊虫列表是核心数据，无默认值，继续向上抛让 SplashPage 显示错误
-    }
+    // V3.1 兼容调用：依次调用各分批加载方法，完整加载全部静态资源。
+    await loadStaticGuList();
+    await loadStaticRecipe();
+    await loadStaticMap();
+    await loadStaticNpc();
+    await loadStaticMaterial();
+    await loadStaticEvent();
+    await loadStaticEnvironment();
+    await loadStaticQuest();
+    // 五域懒加载：南疆为起始区域，启动时加载
+    _loadedRegions.add('南疆');
+    await loadStaticRegion();
+    npcAi = NPCAI(guList);
+  }
 
-    try {
-      final rJson = jsonDecode(await rootBundle.loadString('assets/static/recipe.json')) as Map<String, dynamic>;
-      recipes = (rJson['recipes'] as List).map((e) => Recipe.fromJson(e as Map<String, dynamic>)).toList();
-      evolveRecipes = (rJson['evolve_recipes'] as List? ?? [])
-          .map((e) => EvolveRecipe.fromJson(e as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      debugPrint('loadStatic: recipe.json 解析失败: $e');
+  /// 批量加载：蛊虫主表 gu_list.json（核心资源，失败抛异常）。
+  Future<void> loadStaticGuList() async {
+    final result = await safe_json.loadAssetJson('assets/static/gu_list.json');
+    if (result.isFailure) {
+      debugPrint('${result.error}');
+      throw Exception('gu_list.json 加载失败: ${result.error}');
+    }
+    final guJson = result.data as Map<String, dynamic>;
+    final guArr = guJson['gu_list'] as List;
+    guList = {for (var g in guArr) (g as Map<String, dynamic>)['gid'] as String: GuTemplate.fromJson(g)};
+    combatEngine = CombatEngine(guList);
+  }
+
+  /// 批量加载：蛊方 recipe.json（失败时使用空列表）。
+  Future<void> loadStaticRecipe() async {
+    final result = await safe_json.loadAssetJson('assets/static/recipe.json');
+    if (result.isFailure) {
+      debugPrint('${result.error}');
       recipes = [];
       evolveRecipes = [];
+      return;
     }
+    final rJson = result.data as Map<String, dynamic>;
+    recipes = (rJson['recipes'] as List).map((e) => Recipe.fromJson(e as Map<String, dynamic>)).toList();
+    evolveRecipes = (rJson['evolve_recipes'] as List? ?? [])
+        .map((e) => EvolveRecipe.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 
-    try {
-      final mJson = jsonDecode(await rootBundle.loadString('assets/static/map.json')) as Map<String, dynamic>;
-      final roomList = (mJson['rooms'] as List)
-          .map((r) => Room.fromJson(r as Map<String, dynamic>))
-          .toList();
-      rooms = {for (final r in roomList) r.rid: r};
-      startRid = mJson['start_rid'] ?? 'qingmao_01';
-    } catch (e) {
-      debugPrint('loadStatic: map.json 解析失败: $e');
-      rethrow; // 地图是核心数据，无默认值
+  /// 批量加载：主地图 map.json（核心资源，失败抛异常）。
+  Future<void> loadStaticMap() async {
+    final result = await safe_json.loadAssetJson('assets/static/map.json');
+    if (result.isFailure) {
+      debugPrint('${result.error}');
+      throw Exception('map.json 加载失败: ${result.error}');
     }
+    final mJson = result.data as Map<String, dynamic>;
+    final roomList = (mJson['rooms'] as List)
+        .map((r) => Room.fromJson(r as Map<String, dynamic>))
+        .toList();
+    rooms = {for (final r in roomList) r.rid: r};
+    startRid = mJson['start_rid'] ?? 'qingmao_01';
+  }
 
-    try {
-      final nJson = jsonDecode(await rootBundle.loadString('assets/static/npc_template.json')) as Map<String, dynamic>;
-      npcTemplates = (nJson['npcs'] as List).map((e) => NpcTemplate.fromJson(e as Map<String, dynamic>)).toList();
-    } catch (e) {
-      debugPrint('loadStatic: npc_template.json 解析失败: $e');
+  /// 批量加载：NPC模板主表 npc_template.json（失败时使用空列表）。
+  Future<void> loadStaticNpc() async {
+    final result = await safe_json.loadAssetJson('assets/static/npc_template.json');
+    if (result.isFailure) {
+      debugPrint('${result.error}');
       npcTemplates = [];
+      return;
     }
+    final nJson = result.data as Map<String, dynamic>;
+    npcTemplates = (nJson['npcs'] as List).map((e) => NpcTemplate.fromJson(e as Map<String, dynamic>)).toList();
+  }
 
-    try {
-      materials = jsonDecode(await rootBundle.loadString('assets/static/material.json')) as Map<String, dynamic>;
-    } catch (e) {
-      debugPrint('loadStatic: material.json 解析失败: $e');
+  /// 批量加载：材料主表 material.json（失败时使用空 Map）。
+  Future<void> loadStaticMaterial() async {
+    final result = await safe_json.loadAssetJson('assets/static/material.json');
+    if (result.isFailure) {
+      debugPrint('${result.error}');
       materials = {};
+      return;
     }
+    materials = result.data as Map<String, dynamic>;
+  }
 
-    try {
-      final eJson = jsonDecode(await rootBundle.loadString('assets/static/random_event.json')) as Map<String, dynamic>;
-      events = (eJson['events'] as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
-      eventTriggerChance = Map<String, double>.from(
-          (eJson['trigger_chance'] ?? {}).map((k, v) => MapEntry(k, (v as num).toDouble())));
-    } catch (e) {
-      debugPrint('loadStatic: random_event.json 解析失败: $e');
+  /// 批量加载：随机事件主表 random_event.json + 全局奇遇 event_global.json（失败时使用空数据）。
+  Future<void> loadStaticEvent() async {
+    final result = await safe_json.loadAssetJson('assets/static/random_event.json');
+    if (result.isFailure) {
+      debugPrint('${result.error}');
       events = [];
       eventTriggerChance = {};
+      return;
     }
+    final eJson = result.data as Map<String, dynamic>;
+    events = (eJson['events'] as List).map((e) => Map<String, dynamic>.from(e as Map)).toList();
+    eventTriggerChance = Map<String, double>.from(
+        (eJson['trigger_chance'] ?? {}).map((k, v) => MapEntry(k, (v as num).toDouble())));
 
-    // V1.9 新增【全局奇遇系统】：event_global 为全局通用，启动时加载（权重极低，体量小）。
-    try {
-      final egJson = jsonDecode(await rootBundle.loadString('assets/static/event_global.json')) as Map<String, dynamic>;
+    // 全局奇遇（可选，静默跳过）
+    final egResult = await safe_json.loadAssetJson('assets/static/event_global.json', source: 'event_global.json');
+    if (egResult.isSuccess) {
+      final egJson = egResult.data as Map<String, dynamic>;
       for (final e in (egJson['events'] as List)) {
         events.add(Map<String, dynamic>.from(e as Map));
       }
-    } catch (_) {}
+    }
 
-    // 第三阶段新增：加载战斗生态配置 battle_config.json（判空兜底，文件缺失时使用空配置）
-    try {
-      battleConfig = jsonDecode(await rootBundle.loadString('assets/static/battle_config.json')) as Map<String, dynamic>;
-    } catch (_) {
+    // 战斗生态配置（可选，静默跳过）
+    final bcResult = await safe_json.loadAssetJson('assets/static/battle_config.json', source: 'battle_config.json');
+    if (bcResult.isSuccess) {
+      battleConfig = bcResult.data as Map<String, dynamic>;
+    } else {
       battleConfig = {};
     }
 
-    // V1.9 专项新增【仙道杀招·原著预设系统】：加载 kill_move.json 的 preset_killer_moves。
-    try {
-      final kmJson = jsonDecode(await rootBundle.loadString('assets/static/kill_move.json')) as Map<String, dynamic>;
+    // 仙道杀招预设（可选，静默跳过）
+    final kmResult = await safe_json.loadAssetJson('assets/static/kill_move.json', source: 'kill_move.json');
+    if (kmResult.isSuccess) {
+      final kmJson = kmResult.data as Map<String, dynamic>;
       PresetKillerMoveStore.load((kmJson['preset_killer_moves'] as List?) ?? []);
-    } catch (_) {}
+    }
+  }
 
-    // V1.3 新增【昼夜/天气环境系统】：加载 time_config.json / weather_config.json（判空兜底）
+  /// 批量加载：环境配置 time_config.json + weather_config.json（失败时使用默认值）。
+  Future<void> loadStaticEnvironment() async {
     Map<String, dynamic>? timeCfg;
     Map<String, dynamic>? weatherCfg;
-    try {
-      timeCfg = jsonDecode(await rootBundle.loadString('assets/static/time_config.json')) as Map<String, dynamic>;
-    } catch (_) {}
-    try {
-      weatherCfg = jsonDecode(await rootBundle.loadString('assets/static/weather_config.json')) as Map<String, dynamic>;
-    } catch (_) {}
+    final tResult = await safe_json.loadAssetJson('assets/static/time_config.json', source: 'time_config.json');
+    if (tResult.isSuccess) timeCfg = tResult.data as Map<String, dynamic>;
+    final wResult = await safe_json.loadAssetJson('assets/static/weather_config.json', source: 'weather_config.json');
+    if (wResult.isSuccess) weatherCfg = wResult.data as Map<String, dynamic>;
     EnvironmentSystem.init(timeCfg, weatherCfg);
+  }
 
-    // V1.4 新增【任务系统】：加载 quest.json（判空兜底，文件缺失时静默跳过）
-    try {
-      final qJson = jsonDecode(await rootBundle.loadString('assets/static/quest.json')) as Map<String, dynamic>;
+  /// 批量加载：任务系统 quest.json（失败时使用空列表）。
+  Future<void> loadStaticQuest() async {
+    final qResult = await safe_json.loadAssetJson('assets/static/quest.json', source: 'quest.json');
+    if (qResult.isSuccess) {
+      final qJson = qResult.data as Map<String, dynamic>;
       QuestSystem.load(qJson['quests'] as List? ?? []);
-    } catch (_) {
+    } else {
       QuestSystem.load([]);
     }
+  }
 
-    npcAi = NPCAI(guList);
-
-    // V2.0 内存优化：南疆扩展地图(nanjiang)在启动时加载（起始区域，玩家默认在此）。
-    // 其余四域（西漠/北原/东海/中州）在首次进入时懒加载。
-    _loadedRegions.add('南疆'); // 标记起始区域已加载
+  /// 批量加载：南疆扩展区域数据（起始区域，启动时加载）。
+  Future<void> loadStaticRegion() async {
     await _loadRegionData('nanjiang');
   }
 
@@ -413,19 +454,20 @@ class GameContext extends ChangeNotifier {
   }
 
   /// 加载单个地域的全部配套资源（map+gu+material+npc+event+weather）。
+  /// 【修复】V3.1 使用 safe_json 异步加载，避免 jsonDecode 阻塞主线程。
   Future<void> _loadRegionData(String prefix) async {
     // 地图房间
     try {
-      final j = jsonDecode(await rootBundle.loadString('assets/static/map_$prefix.json')) as Map<String, dynamic>;
-      final rList = (j['rooms'] as List).map((r) => Room.fromJson(r as Map<String, dynamic>)).toList();
+      final j = await safe_json.loadAssetJsonMap('assets/static/map_$prefix.json', source: 'map_$prefix.json');
+      final rList = (j['rooms'] as List?)?.map((r) => Room.fromJson(r as Map<String, dynamic>)).toList() ?? [];
       for (final r in rList) {
         rooms.putIfAbsent(r.rid, () => r);
       }
     } catch (_) {}
     // 蛊虫模板
     try {
-      final j = jsonDecode(await rootBundle.loadString('assets/static/gu_$prefix.json')) as Map<String, dynamic>;
-      for (final g in (j['gu_list'] as List)) {
+      final j = await safe_json.loadAssetJsonMap('assets/static/gu_$prefix.json', source: 'gu_$prefix.json');
+      for (final g in (j['gu_list'] as List? ?? [])) {
         final t = GuTemplate.fromJson(g as Map<String, dynamic>);
         guList.putIfAbsent(t.gid, () => t);
       }
@@ -433,7 +475,7 @@ class GameContext extends ChangeNotifier {
     } catch (_) {}
     // 材料表
     try {
-      final j = jsonDecode(await rootBundle.loadString('assets/static/material_$prefix.json')) as Map<String, dynamic>;
+      final j = await safe_json.loadAssetJsonMap('assets/static/material_$prefix.json', source: 'material_$prefix.json');
       final mats = j['materials'] as Map? ?? {};
       for (final e in mats.entries) {
         materials.putIfAbsent(e.key, () => e.value);
@@ -441,16 +483,16 @@ class GameContext extends ChangeNotifier {
     } catch (_) {}
     // NPC 模板
     try {
-      final j = jsonDecode(await rootBundle.loadString('assets/static/npc_$prefix.json')) as Map<String, dynamic>;
-      for (final n in (j['npcs'] as List)) {
+      final j = await safe_json.loadAssetJsonMap('assets/static/npc_$prefix.json', source: 'npc_$prefix.json');
+      for (final n in (j['npcs'] as List? ?? [])) {
         final t = NpcTemplate.fromJson(n as Map<String, dynamic>);
         if (!npcTemplates.any((e) => e.nid == t.nid)) npcTemplates.add(t);
       }
     } catch (_) {}
     // 随机事件
     try {
-      final j = jsonDecode(await rootBundle.loadString('assets/static/event_$prefix.json')) as Map<String, dynamic>;
-      for (final e in (j['events'] as List)) {
+      final j = await safe_json.loadAssetJsonMap('assets/static/event_$prefix.json', source: 'event_$prefix.json');
+      for (final e in (j['events'] as List? ?? [])) {
         events.add(Map<String, dynamic>.from(e as Map));
       }
     } catch (_) {}
@@ -460,7 +502,7 @@ class GameContext extends ChangeNotifier {
     }[prefix];
     if (regionName != null) {
       try {
-        final j = jsonDecode(await rootBundle.loadString('assets/static/weather_$prefix.json')) as Map<String, dynamic>;
+        final j = await safe_json.loadAssetJsonMap('assets/static/weather_$prefix.json', source: 'weather_$prefix.json');
         EnvironmentSystem.addRegionWeather(regionName, j);
       } catch (_) {}
     }
@@ -510,7 +552,8 @@ class GameContext extends ChangeNotifier {
       for (final m in log) {
         buf.writeln('[${_logTag(m.type)}] ${m.text}');
       }
-      f.writeAsStringSync(buf.toString());
+      // 【修复】V3.1 异步文件写入，禁止 writeAsStringSync。
+      await f.writeAsString(buf.toString());
       return f.path;
     } catch (_) {
       return null;

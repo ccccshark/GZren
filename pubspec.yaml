@@ -70,3 +70,4 @@ flutter:
     - assets/static/event_zhongzhou.json
     - assets/static/weather_zhongzhou.json
     - assets/static/event_global.json
+    - assets/static/quest.json
