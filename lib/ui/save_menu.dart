@@ -48,11 +48,13 @@ class _SaveMenuPageState extends State<SaveMenuPage> {
     final main = File('${dir.path}/save_autoslot.json');
     final bak = File('${dir.path}/save_autoslot.json.bak');
     File? f;
-    if (main.existsSync()) f = main;
-    else if (bak.existsSync()) f = bak;
+    // 【修复】V3.1 异步文件操作，禁止 existsSync/readAsStringSync。
+    if (await main.exists()) f = main;
+    else if (await bak.exists()) f = bak;
     if (f == null) return {'empty': true};
     try {
-      final j = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+      final raw = await f.readAsString();
+      final j = jsonDecode(raw) as Map<String, dynamic>;
       final p = j['player'] as Map<String, dynamic>;
       final trigger = j['trigger'] as String? ?? '';
       return {
