@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- V3.0 启动修复：使用深色背景 #0A0A0D 匹配游戏主题，消除原生白闪 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <color android:color="#FF0A0A0D"/>
+    </item>
+</layer-list>

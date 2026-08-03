@@ -44,21 +44,12 @@ jobs:
           flutter --version
           java -version
 
-      # 【修复】V1.5.0 只在 android/ 目录缺失时才创建脚手架，避免覆盖已有工程配置。
-      # 全量的 AndroidManifest/build.gradle.kts/styles.xml/launch_background.xml 已在 Git 中维护，
-      # flutter create 会覆盖这些配置导致离线约束失效、深色主题被重置。
-      - name: 补全 Android 工程脚手架（仅当 android 目录缺失时）
-        run: |
-          if [ ! -d "android" ]; then
-            flutter create \
-              --org com.guzhenren \
-              --project-name gzren \
-              --platforms=android \
-              --description "蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。" \
-              .
-          else
-            echo "android 目录已存在，跳过 flutter create，直接使用 Git 维护的工程配置"
-          fi
+      # 【修复】V1.5.0 Android 工程文件已全部入库，无需 flutter create 生成脚手架。
+      # 直接使用 Git 维护的完整 Android 工程配置（build.gradle.kts/settings.gradle.kts/
+      # MainActivity.kt/styles.xml/launch_background.xml/图标资源等）。
+      # flutter pub get 会自动生成 local.properties。
+      - name: 拉取依赖（同时生成 local.properties）
+        run: flutter pub get
 
       - name: 校验 AndroidManifest 离线约束
         run: |
@@ -66,9 +57,6 @@ jobs:
           grep -q "蛊真人单机MUD" "$MANIFEST" || { echo "AndroidManifest 被覆盖，请检查"; exit 1; }
           ! grep -q "android.permission.INTERNET" "$MANIFEST" || { echo "AndroidManifest 含 INTERNET 权限，违反离线约束"; exit 1; }
           echo "AndroidManifest 校验通过"
-
-      - name: 拉取依赖
-        run: flutter pub get
 
       - name: 生成应用图标
         run: flutter pub run flutter_launcher_icons
