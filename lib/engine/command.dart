@@ -1184,55 +1184,43 @@ class GameContext extends ChangeNotifier {
       return;
     }
     // 第三阶段新增【14.域外通道伏笔】：识别 border_ 前缀的域外通道，封锁跨域通行
-    // V1.5 改造：西漠通道（border_west_pass）满足条件可解锁通行；其余 border_ 持续封锁。
-    // V1.6 改造：北原通道（border_north_pass）满足条件可解锁通行；东海/中州持续封锁。
-    // V1.9 改造：五地全部开放——东海通道(border_east_pass)、中州通道(border_center_pass)
-    //   满足条件可解锁通行；仅余太古遗迹域外通道持续封锁（主线伏笔，不开放）。
+    // V3.7 改造【五域境界解锁】：四大域外通道（西漠/北原/东海/中州）统一改为「达到五转境界即可解锁」，
+    //   移除原主线进度前置依赖（xisha_unlock_ready / xisha_unlocked 链式依赖）。
+    //   仅余太古遗迹域外通道持续封锁（主线伏笔，不属于五域，不开放）。
+    //   旧存档兼容：已解锁的 flags 保持有效；未解锁的改由境界判定，逻辑向后兼容。
     if (targetRid.startsWith('border_')) {
       if (targetRid == 'border_west_pass') {
-        // 【南疆→西漠】通道解锁判定：需完成南疆主线（xisha_unlock_ready）且修为≥5转
+        // 【南疆→西漠】通道解锁判定：修为≥5转即可
         final unlocked = (player!.flags['xisha_unlocked'] as num?)?.toInt() ?? 0;
-        final ready = (player!.flags['xisha_unlock_ready'] as num?)?.toInt() ?? 0;
         final rank = levelRank(player!.level);
         if (unlocked > 0) {
           // 已解锁，自由通行（关口房间，连接南疆与西漠）
-        } else if (ready > 0 && rank >= 5) {
+        } else if (rank >= 5) {
           player!.flags['xisha_unlocked'] = 1;
-          out('【禁制破除】你催动风行蛊御风沙、沙遁蛊穿沙海，双蛊合一，西漠通道的千年禁制轰然崩裂！', MsgType.fortune);
+          out('【禁制破除】你以五转修为强催风沙真元，黄沙古道禁制符文寸寸崩裂，西漠通道的千年禁制轰然洞开！', MsgType.fortune);
           out('  黄沙漫天扑面而来——西漠，已为你敞开。', MsgType.scene);
         } else {
           out('【域外古道·禁制封锁】前方通往 ${target.name} 的通道被一道上古禁制封锁，符文隐现。', MsgType.danger);
-          if (ready == 0) {
-            out('  （需完成南疆主线『西漠之钥』集齐风行蛊与沙遁蛊方可破禁）', MsgType.system);
-          } else if (rank < 5) {
-            out('  （禁制反噬剧烈，需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
-          }
+          out('  （需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
           return;
         }
       } else if (targetRid == 'border_north_pass') {
-        // 【南疆→北原】通道解锁判定：需已解锁西漠（xisha_unlocked）且修为≥5转
-        //   设计依据：南疆→西漠→北原 自然递进；北原环境更险恶，需御寒蛊方可深入。
+        // 【南疆→北原】通道解锁判定：修为≥5转即可
         final unlocked = (player!.flags['beiyuan_unlocked'] as num?)?.toInt() ?? 0;
-        final xishaDone = (player!.flags['xisha_unlocked'] as num?)?.toInt() ?? 0;
         final rank = levelRank(player!.level);
         if (unlocked > 0) {
           // 已解锁，自由通行（关口房间，连接南疆与北原）
-        } else if (xishaDone > 0 && rank >= 5) {
+        } else if (rank >= 5) {
           player!.flags['beiyuan_unlocked'] = 1;
           out('【禁制破除】你以五转修为强催玄冰禁制，寒霜符文寸寸崩裂，北原通道的千年禁制轰然洞开！', MsgType.fortune);
           out('  朔风裹挟碎雪扑面而来——北原，已为你敞开。', MsgType.scene);
         } else {
           out('【域外古道·禁制封锁】前方通往 ${target.name} 的通道被一道寒冰禁制封锁，符文隐现。', MsgType.danger);
-          if (xishaDone == 0) {
-            out('  （需先解锁西漠通道，方可循迹破除北原禁制）', MsgType.system);
-          } else if (rank < 5) {
-            out('  （禁制反噬剧烈，需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
-          }
+          out('  （需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
           return;
         }
       } else if (targetRid == 'border_east_pass') {
-        // V1.9【南疆→东海】通道解锁判定：需修为≥5转（与西漠/北原同阶，五地全面开放）
-        //   设计依据：东海滨海，水道蛊气充沛，需五转修为方可抵御海妖暗流。
+        // 【南疆→东海】通道解锁判定：修为≥5转即可
         final unlocked = (player!.flags['donghai_unlocked'] as num?)?.toInt() ?? 0;
         final rank = levelRank(player!.level);
         if (unlocked > 0) {
@@ -1243,12 +1231,11 @@ class GameContext extends ChangeNotifier {
           out('  咸湿海风裹挟浪花扑面而来——东海，已为你敞开。', MsgType.scene);
         } else {
           out('【域外古道·禁制封锁】前方通往 ${target.name} 的通道被一道水幕禁制封锁，符文隐现。', MsgType.danger);
-          out('  （禁制反噬剧烈，需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
+          out('  （需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
           return;
         }
       } else if (targetRid == 'border_center_pass') {
-        // V1.9【南疆→中州】通道解锁判定：需修为≥5转（与西漠/北原同阶，五地全面开放）
-        //   设计依据：中州官道通达中原，需五转修为方可破除古道禁制。
+        // 【南疆→中州】通道解锁判定：修为≥5转即可
         final unlocked = (player!.flags['zhongzhou_unlocked'] as num?)?.toInt() ?? 0;
         final rank = levelRank(player!.level);
         if (unlocked > 0) {
@@ -1259,7 +1246,7 @@ class GameContext extends ChangeNotifier {
           out('  中原麦浪的清香扑面而来——中州，已为你敞开。', MsgType.scene);
         } else {
           out('【域外古道·禁制封锁】前方通往 ${target.name} 的通道被一道石碑禁制封锁，符文隐现。', MsgType.danger);
-          out('  （禁制反噬剧烈，需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
+          out('  （需五转以上修为方可承受破禁之力，当前 $rank 转）', MsgType.system);
           return;
         }
       } else {

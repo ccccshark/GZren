@@ -128,18 +128,25 @@ class _MapNavContent extends StatelessWidget {
                 final dirCN = _dirCN[e.key] ?? e.key;
                 final target = ctx.rooms[e.value];
                 final targetName = target?.name ?? e.value;
-                final isBorder = e.value.startsWith('border_');
+                // V3.7 五域境界解锁：4 大关口（西漠/北原/东海/中州）改为境界判定，
+                //   不再 UI 预拦截，直接走 go 指令由引擎解锁/放行/提示。
+                //   仅太古遗迹等其它 border_ 仍由引擎封锁，UI 不再弹封锁弹窗。
+                final isBorderPass = e.value == 'border_west_pass' ||
+                    e.value == 'border_north_pass' ||
+                    e.value == 'border_east_pass' ||
+                    e.value == 'border_center_pass';
+                final isBorderLocked = e.value.startsWith('border_') && !isBorderPass;
                 // 秘境入口判定：目标房间 secret 字段以 need_gu_ 开头
                 final isSecretLocked = target != null && target.secret.startsWith('need_gu_');
                 return _exitCard(dirCN, e.key, targetName, () {
-                  if (isBorder) {
-                    // 域外通道：弹出封锁提示，不执行传送
+                  if (isBorderLocked) {
+                    // 太古遗迹等持续封锁通道：弹出封锁提示，不执行传送
                     showBorderLockedDialog(context, targetName);
                   } else {
                     Navigator.pop(context);
                     ctx.handle('go ${e.key}');
                   }
-                }, isBorder: isBorder, isSecretLocked: isSecretLocked);
+                }, isBorder: isBorderLocked, isSecretLocked: isSecretLocked);
               }).toList(),
             ),
           const SizedBox(height: 6),

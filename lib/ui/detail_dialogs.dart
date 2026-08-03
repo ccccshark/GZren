@@ -477,11 +477,9 @@ Future<void> showBorderLockedDialog(BuildContext context, String borderName) asy
 // ===================== 世界总地图面板 =====================
 
 /// 世界总地图面板【V1.6·域外通道总览】
-/// 五大区域状态：
+/// 五大区域状态（V3.7 统一境界解锁）：
 ///   - 南疆：已点亮（玩家初始所在区域，默认开启）
-///   - 西漠：满足条件解锁（完成南疆主线 + 修为≥5转），否则显示解锁条件
-///   - 北原：满足条件解锁（已解锁西漠 + 修为≥5转），否则显示解锁条件【V1.6 开放】
-///   - 东海/中州：灰色锁定，版本未开放，保留伏笔
+///   - 西漠/北原/东海/中州：达到五转修为即可解锁（无主线进度前置）
 /// 仅读取 player.flags，不修改任何状态，100%兼容旧存档。
 /// V1.9 升级【大地图导航系统】：两层级交互式大地图。
 /// 层级1：五大区域总览（南疆/西漠/北原/东海/中州），未解锁灰色锁定+提示。
@@ -884,25 +882,8 @@ class _WorldMapDialogState extends State<_WorldMapDialog> {
   /// 区域未解锁提示。
   Widget _unlockHint(_RegionInfo r) {
     String hint;
-    if (r.name == '西漠') {
-      if (r.ready > 0 && r.rank >= 5) {
-        hint = '条件已满足，前往南疆西侧「黄沙古道」催动双蛊破禁即可解锁。';
-      } else {
-        final buf = <String>[];
-        if (r.ready == 0) buf.add('需完成南疆主线『西漠之钥』');
-        if (r.rank < 5) buf.add('修为需达五转（当前 ${r.rank} 转）');
-        hint = '${buf.join("，")}方可破禁。';
-      }
-    } else if (r.name == '北原') {
-      if (r.depUnlocked > 0 && r.rank >= 5) {
-        hint = '条件已满足，前往青茅山北麓「寒冰古道」催动修为破禁即可解锁。';
-      } else {
-        final buf = <String>[];
-        if (r.depUnlocked == 0) buf.add('需先解锁西漠通道');
-        if (r.rank < 5) buf.add('修为需达五转（当前 ${r.rank} 转）');
-        hint = '${buf.join("，")}方可破禁。';
-      }
-    } else if (r.name == '东海' || r.name == '中州') {
+    if (r.name == '西漠' || r.name == '北原' || r.name == '东海' || r.name == '中州') {
+      // V3.7 统一五域境界解锁：仅需五转修为，无主线进度前置
       hint = r.rank >= 5
         ? '条件已满足，前往南疆对应关口破禁即可解锁。'
         : '需修为达五转（当前 ${r.rank} 转）方可破禁。';
