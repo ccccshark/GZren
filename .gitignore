@@ -59,6 +59,9 @@ Thumbs.db
 .clang-format
 .clang-tidy
 
+# ===== 构建产物下载（CI artifact 解压后暂存） =====
+/dist/
+
 # ===== 敏感信息 =====
 # 本项目纯离线无密钥，但保险起见排除以下文件
 .env
