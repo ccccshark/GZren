@@ -165,6 +165,80 @@ class _MainGamePageState extends State<MainGamePage> with WidgetsBindingObserver
     );
   }
 
+  // V3.6 新增【安卓返回键拦截 + 退出确认弹窗】：
+  // 拦截系统物理返回键/手势返回，弹出三选项确认弹窗（返回主界面/继续游戏/退出游戏）。
+  // 与顶部【返回主界面】按钮共用同一个弹窗，保证触屏与物理返回体验一致。
+  // 异常包裹：所有 Navigator 调用均 try-catch，防止路由栈异常导致卡死白屏。
+  Future<void> _showExitConfirm() async {
+    final result = await showDialog<_ExitChoice>(
+      context: context,
+      barrierDismissible: true,
+      builder: (c) => AlertDialog(
+        backgroundColor: const Color(0xFF1E1E1E),
+        title: Row(children: [
+          const Icon(Icons.exit_to_app, color: Color(0xFF9D5CD0), size: 22),
+          const SizedBox(width: 8),
+          const Expanded(
+            child: Text('退出游戏',
+                style: TextStyle(color: Colors.white, fontSize: 17)),
+          ),
+        ]),
+        content: const Padding(
+          padding: EdgeInsets.only(top: 4),
+          child: Text('选择你要执行的操作：',
+              style: TextStyle(color: Colors.white70, fontSize: 13)),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c, _ExitChoice.menu),
+            child: const Text('返回主界面',
+                style: TextStyle(color: Color(0xFF9D5CD0))),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(c, _ExitChoice.continueGame),
+            child: const Text('继续游戏',
+                style: TextStyle(color: Colors.white70)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(c, _ExitChoice.exit),
+            child: const Text('退出游戏',
+                style: TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      ),
+    );
+    if (!mounted) return;
+    switch (result) {
+      case _ExitChoice.menu:
+        // 路由清理：pushAndRemoveUntil 清空栈，防止页面堆积
+        try {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => MainMenuPage(ctx: ctx)),
+            (_) => false,
+          );
+        } catch (e, s) {
+          debugPrint('返回主界面路由异常: $e\n$s');
+          // 兜底：弹出当前页回退
+          try {
+            Navigator.of(context).maybePop();
+          } catch (_) {}
+        }
+        break;
+      case _ExitChoice.exit:
+        // 直接退出 APP
+        try {
+          SystemNavigator.pop();
+        } catch (e, s) {
+          debugPrint('退出APP异常: $e\n$s');
+        }
+        break;
+      case _ExitChoice.continueGame:
+      case null:
+        // 关闭弹窗，留在当前场景
+        break;
+    }
+  }
+
   /// V1.3 新增【UI顶部状态栏】：展示当前游戏日期 + 时段 + 天气，状态栏同步环境系统。
   /// 点击可展开时段/天气增益减益详情。纯只读展示，不修改游戏状态。
   Widget _envStatusBar() {
@@ -384,11 +458,25 @@ class _MainGamePageState extends State<MainGamePage> with WidgetsBindingObserver
     if (ctx.inTribulation && ctx.tribulation != null) {
       return CombatUIPage(ctx: ctx, isTribulation: true);
     }
-    return Scaffold(
+    return PopScope(
+      // V3.6 拦截安卓物理返回键/手势返回：canPop=false 阻止默认 pop，
+      // onPopInvokedWithResult 触发时弹出确认弹窗。
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _showExitConfirm();
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: Text(ctx.player?.name ?? '蛊真人'),
         backgroundColor: const Color(0xFF593475), // UI美化·主色
         actions: [
+          // V3.6 顶部【返回主界面】可视化按钮（触屏玩家入口，与返回键共用确认弹窗）
+          IconButton(
+            icon: const Icon(Icons.home),
+            tooltip: '返回主界面',
+            onPressed: _showExitConfirm,
+          ),
           IconButton(icon: const Icon(Icons.save), tooltip: '存档', onPressed: _showSaveMenu),
           IconButton(icon: const Icon(Icons.folder_open), tooltip: '读档', onPressed: _showLoadMenu),
           // 第一阶段新增：日志管理菜单（清空/保存到文件）
@@ -505,6 +593,7 @@ class _MainGamePageState extends State<MainGamePage> with WidgetsBindingObserver
               ]),
             ),
         ],
+      ),
       ),
     );
   }
@@ -1061,4 +1150,7 @@ class _LogEntryBoxState extends State<_LogEntryBox> {
     );
   }
 }
+
+// V3.6 退出确认弹窗返回值枚举
+enum _ExitChoice { menu, continueGame, exit }
 
