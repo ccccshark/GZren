@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gzren/engine/command.dart';
+import 'package:gzren/engine/npc_ai.dart' show NPCAI;
 import 'package:gzren/ui/disclaimer_dialog.dart';
 
 class SplashPage extends StatefulWidget {
