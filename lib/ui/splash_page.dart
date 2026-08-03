@@ -44,10 +44,13 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  final GameContext _ctx = GameContext();
+  // 【修复】V3.2 GameContext 改为 late 懒加载，不在字段初始化器创建，
+  // 防止构造函数异常阻塞首帧渲染。在 _loadInBatches() 首次调用时初始化。
+  late final GameContext _ctx;
   _LoadPhase _phase = _LoadPhase.init;
   bool _hasError = false;
   String _errorMessage = '';
+  bool _ctxInitialized = false;
 
   @override
   void initState() {
@@ -62,6 +65,11 @@ class _SplashPageState extends State<SplashPage> {
   // 分批加载：每批加载完成后更新状态文字，释放 UI 事件循环
   Future<void> _loadInBatches() async {
     try {
+      // 【修复】V3.2 首次加载时创建 GameContext，不阻塞首帧渲染
+      if (!_ctxInitialized) {
+        _ctx = GameContext();
+        _ctxInitialized = true;
+      }
       // 第1批：蛊虫（核心，失败则无法继续）
       await _safeBatch(_LoadPhase.guList, () => _ctx.loadStaticGuList());
       if (!mounted) return;

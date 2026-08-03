@@ -25,17 +25,25 @@ class JsonResult<T> {
 
 /// 在独立 Isolate 中执行 jsonDecode，不阻塞 UI 主线程。
 /// [jsonString] 原始 JSON 字符串，[source] 用于错误提示的文件名。
+/// 【修复】V3.2 compute() 加 5s 超时，超时后回退到主线程解析，防止 Release 模式
+/// Isolate 创建失败导致永久挂起。
 Future<JsonResult<dynamic>> decodeInIsolate(
     String jsonString, String source) async {
   try {
-    // compute 将 jsonDecode 放入独立 Isolate 执行，返回值通过消息传递回主 Isolate。
-    final result = await compute(_isolateJsonDecode, jsonString);
+    final result = await compute(_isolateJsonDecode, jsonString)
+        .timeout(const Duration(seconds: 5));
     return JsonResult(data: result, source: source);
   } catch (e) {
-    return JsonResult(
-      error: '[$source] JSON 解析失败: $e',
-      source: source,
-    );
+    // 【修复】V3.2 Isolate 解析失败（超时/创建失败等），回退到主线程 jsonDecode
+    try {
+      final result = jsonDecode(jsonString);
+      return JsonResult(data: result, source: source);
+    } catch (e2) {
+      return JsonResult(
+        error: '[$source] JSON 解析失败(主线程回退): $e2',
+        source: source,
+      );
+    }
   }
 }
 

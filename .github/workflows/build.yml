@@ -53,6 +53,12 @@ jobs:
             --description "蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。" \
             .
 
+      - name: 恢复 Android 原生配置（flutter create 会覆盖 styles.xml/launch_background.xml 等）
+        run: |
+          git checkout android/app/src/main/res/values/styles.xml
+          git checkout android/app/src/main/res/drawable/launch_background.xml
+          echo "已恢复 Android 原生深色主题配置"
+
       - name: 校验 AndroidManifest 离线约束
         run: |
           MANIFEST=android/app/src/main/AndroidManifest.xml
