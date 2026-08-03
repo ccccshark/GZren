@@ -34,7 +34,7 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _startLoading() async {
     try {
-      // 创建 GameContext
+      // 创建 GameContext（构造可能抛异常，放进 try 内捕获）
       _ctx = GameContext();
       _ctxReady = true;
 
@@ -63,11 +63,11 @@ class _SplashPageState extends State<SplashPage> {
         );
       }
     } catch (e, stack) {
-      if (!mounted) return;
       debugPrint('SplashPage 加载异常: $e\n$stack');
+      if (!mounted) return;
       setState(() {
         _hasError = true;
-        _errorMessage = e.toString();
+        _errorMessage = '$e\n\n$stack';
         _statusText = '初始化失败';
       });
     }
@@ -123,19 +123,14 @@ class _SplashPageState extends State<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 标题
+            // 标题（简化渲染：移除 shadows 提高低端设备兼容性）
             const Text(
               '蛊 真 人',
               style: TextStyle(
-                fontSize: 48,
+                fontSize: 44,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF9D5CD0),
-                letterSpacing: 14,
-                fontFamilyFallback: ['serif'],
-                shadows: [
-                  Shadow(color: Color(0xFF9D5CD0), blurRadius: 20),
-                  Shadow(color: Color(0xFF593475), blurRadius: 40),
-                ],
+                letterSpacing: 12,
               ),
             ),
             const SizedBox(height: 12),
@@ -196,14 +191,17 @@ class _SplashPageState extends State<SplashPage> {
                 onPressed: () => SystemNavigator.pop(),
                 child: const Text('退出', style: TextStyle(color: Colors.white54)),
               ),
-              // 显示错误详情（可折叠）
+              // 显示错误详情（可滚动，便于截图反馈）
               const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: SelectableText(
-                  _errorMessage,
-                  style: const TextStyle(color: Colors.white54, fontSize: 11),
-                  textAlign: TextAlign.center,
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 200),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SelectableText(
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.white54, fontSize: 11),
+                    textAlign: TextAlign.left,
+                  ),
                 ),
               ),
             ],

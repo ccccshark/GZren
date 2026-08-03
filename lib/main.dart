@@ -1,6 +1,11 @@
 // main.dart
 // 蛊真人单机文字MUD（安卓端）APP 入口。纯离线，无任何联网功能。
-// V3.1 启动修复：WidgetsFlutterBinding 置顶 + 三层异常捕获 + 写本地错误日志。
+// V3.4 启动修复：
+//   - 移除 runZonedGuarded 包裹 runApp（反模式：吞掉 widget build 异常的默认红屏渲染，
+//     导致 release 模式下任何 build 抛错都看不到反馈，背景又是 #0A0A0D 深黑 → 用户只看到黑屏）
+//   - 加 ErrorWidget.builder：任何 widget build 异常都显示错误文字，不再黑屏
+//   - FlutterError.onError 调用 FlutterError.presentError 保留默认渲染
+//   - 不再静默 debugPrint（防止关键错误被吞）
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -17,48 +22,89 @@ import 'ui/panels.dart';
 import 'ui/splash_page.dart';
 
 void main() {
-  // 【修复】WidgetsFlutterBinding 必须最先初始化，否则 PaintingBinding 等无法访问。
+  // 【必须最先】WidgetsFlutterBinding 初始化，否则 PaintingBinding 等无法访问。
   WidgetsFlutterBinding.ensureInitialized();
 
-  // V2.0 内存优化【关闭 Debug 多余检测】：release 模式下禁用调试断言与 painting 检测。
-  if (kReleaseMode) {
-    debugPrint = (_, {int? wrapWidth}) {}; // 静默 debugPrint，减少字符串拼接开销
-    debugDefaultTargetPlatformOverride = null;
-  }
   // V2.0 内存优化【图片缓存限制】：纯文字游戏无大图，限制 Flutter 图片缓存为最小值。
+  // 注意：放在 ErrorWidget.builder 之前，避免此处异常也无反馈。
   PaintingBinding.instance.imageCache.maximumSize = 20;
   PaintingBinding.instance.imageCache.maximumSizeBytes = 2 * 1024 * 1024;
 
-  // 【修复】FlutterError.onError：捕获 Flutter 框架层渲染/布局/管线异常，防止永久白屏。
+  // 【V3.4 关键修复】ErrorWidget.builder：当任何 widget build/layout 抛异常时，
+  // Flutter 会渲染此 builder 返回的 widget 替代默认红屏。
+  // release 模式默认 ErrorWidget 只显示 "Exception caught" 浅色文字，
+  // 在深色背景上几乎不可见 → 这是黑屏无反应的直接原因之一。
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      color: const Color(0xFF0A0A0D),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline,
+                      color: Colors.redAccent, size: 48),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '应用渲染异常',
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  SelectableText(
+                    details.exception.toString(),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    '请截图反馈给开发者，重启 App 可重试。',
+                    style: TextStyle(color: Colors.white54, fontSize: 11),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  };
+
+  // FlutterError.onError：捕获 Flutter 框架层渲染/布局/管线异常。
+  // 调用 FlutterError.presentError 让 ErrorWidget.builder 渲染错误界面。
   FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
     final msg = details.exceptionAsString();
     final stack = details.stack?.toString() ?? '';
     debugPrint('FlutterError.onError: $msg\n$stack');
-    // 非 debug 模式写入本地日志
     if (kReleaseMode) {
+      // 异步写日志，不阻塞渲染。
       writeErrorLog('FlutterError', msg, stack: stack);
     }
   };
 
-  // 【修复】PlatformDispatcher.onError：捕获 Dart 层未处理的异步异常。
+  // PlatformDispatcher.onError：捕获 Dart 层未处理的异步异常。
   PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
     debugPrint('PlatformDispatcher.onError: $error\n$stack');
     if (kReleaseMode) {
       writeErrorLog('DartError', error.toString(), stack: stack.toString());
     }
-    return true; // 已处理，不终止进程
+    return true;
   };
 
-  // 【修复】runZonedGuarded：捕获 runApp 同步初始化异常 + zone 内未捕获异常。
-  runZonedGuarded(() {
-    runApp(const GuZhenRenApp());
-  }, (Object error, StackTrace stack) {
-    final msg = 'runZonedGuarded: $error';
-    debugPrint('$msg\n$stack');
-    if (kReleaseMode) {
-      writeErrorLog('ZoneError', error.toString(), stack: stack.toString());
-    }
-  });
+  // 【V3.4 关键修复】直接 runApp，不再用 runZonedGuarded 包裹。
+  // runZonedGuarded 包裹 runApp 是反模式：会让 Flutter framework 在 guarded zone 内
+  // 运行，导致 widget build 异常被 zone 吞掉（只调用我们写日志的 handler），
+  // 而 ErrorWidget 默认渲染被跳过 → 黑屏无反馈。
+  runApp(const GuZhenRenApp());
 }
 
 class GuZhenRenApp extends StatelessWidget {
