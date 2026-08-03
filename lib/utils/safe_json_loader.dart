@@ -1,7 +1,7 @@
 // safe_json_loader.dart
-// JSON 安全解析工具：compute isolate 异步解析 + try-catch 兜底 + 文件批量加载。
-// 所有 JSON 解析必须经过此模块，禁止直接调用 jsonDecode 处理外部资产。
-import 'dart:async';
+// JSON 安全解析工具：异步加载 + try-catch 兜底 + 文件批量加载。
+// 【V3.3】移除 compute/Isolate：JSON 总量仅 364KB，Isolate 创建开销远大于解析开销，
+// 且 Release 模式下 compute() 可能挂起导致黑屏。直接主线程 jsonDecode 即可。
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -19,49 +19,29 @@ class JsonResult<T> {
   bool get isSuccess => data != null;
   bool get isFailure => error != null;
 
-  /// 成功时返回 data，失败时返回 [fallback]。
   T? or(T? fallback) => data ?? fallback;
 }
 
-/// 在独立 Isolate 中执行 jsonDecode，不阻塞 UI 主线程。
-/// [jsonString] 原始 JSON 字符串，[source] 用于错误提示的文件名。
-/// 【修复】V3.2 compute() 加 5s 超时，超时后回退到主线程解析，防止 Release 模式
-/// Isolate 创建失败导致永久挂起。
+/// 安全解析 JSON 字符串，try-catch 包裹，失败返回 error。
+/// 【V3.3】直接主线程 jsonDecode，不使用 compute/Isolate。
 Future<JsonResult<dynamic>> decodeInIsolate(
     String jsonString, String source) async {
   try {
-    final result = await compute(_isolateJsonDecode, jsonString)
-        .timeout(const Duration(seconds: 5));
+    final result = jsonDecode(jsonString);
     return JsonResult(data: result, source: source);
   } catch (e) {
-    // 【修复】V3.2 Isolate 解析失败（超时/创建失败等），回退到主线程 jsonDecode
-    try {
-      final result = jsonDecode(jsonString);
-      return JsonResult(data: result, source: source);
-    } catch (e2) {
-      return JsonResult(
-        error: '[$source] JSON 解析失败(主线程回退): $e2',
-        source: source,
-      );
-    }
+    return JsonResult(
+      error: '[$source] JSON 解析失败: $e',
+      source: source,
+    );
   }
 }
 
-/// 在 Isolate 中运行的顶层函数（必须为顶层函数，不能是闭包或类方法）。
-@pragma('vm:entry-point')
-dynamic _isolateJsonDecode(String jsonString) {
-  return jsonDecode(jsonString);
-}
-
-/// 从 assets 中加载 JSON 文件，在独立 Isolate 中解析，返回类型安全的 result。
-/// [path] assets 路径，如 'assets/static/gu_list.json'。
-/// [source] 用于错误日志的标识名，默认取文件 basename。
+/// 从 assets 中加载 JSON 文件并安全解析。
 Future<JsonResult<dynamic>> loadAssetJson(String path, {String? source}) async {
   final tag = source ?? path.split('/').last;
   try {
-    // 1. 主线程读取文件内容（I/O 操作，非 CPU 密集，无需 Isolate）
     final jsonString = await rootBundle.loadString(path);
-    // 2. 在 Isolate 中解析 JSON
     return decodeInIsolate(jsonString, tag);
   } catch (e) {
     return JsonResult(
@@ -71,8 +51,7 @@ Future<JsonResult<dynamic>> loadAssetJson(String path, {String? source}) async {
   }
 }
 
-/// 从文件系统加载 JSON 文件（异步方式，替代 readAsStringSync）。
-/// [path] 文件系统绝对路径。
+/// 从文件系统加载 JSON 文件（异步方式）。
 Future<JsonResult<dynamic>> loadFileJson(String path, {String? source}) async {
   final tag = source ?? path.split('/').last;
   try {

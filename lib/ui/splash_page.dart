@@ -1,39 +1,11 @@
 // splash_page.dart
-// V3.1 闪屏启动页：addPostFrameCallback → 先渲染 UI → 后台异步分批加载 → 完成跳转。
+// V3.3 闪屏启动页：先渲染 UI → 异步加载资源 → 跳转主界面。
+// 【V3.3】移除 compute Isolate（364KB JSON 直接解析），加整体超时保护。
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gzren/engine/command.dart';
 import 'package:gzren/ui/disclaimer_dialog.dart';
-
-/// 加载阶段进度枚举。
-enum _LoadPhase {
-  init,
-  guList,
-  map,
-  recipe,
-  npc,
-  material,
-  event,
-  region,
-  environment,
-  quest,
-  done,
-}
-
-const _phaseNames = {
-  _LoadPhase.init: '正在初始化...',
-  _LoadPhase.guList: '加载蛊虫数据...',
-  _LoadPhase.map: '加载地图数据...',
-  _LoadPhase.recipe: '加载蛊方数据...',
-  _LoadPhase.npc: '加载NPC数据...',
-  _LoadPhase.material: '加载材料数据...',
-  _LoadPhase.event: '加载事件数据...',
-  _LoadPhase.region: '加载区域数据...',
-  _LoadPhase.environment: '加载环境配置...',
-  _LoadPhase.quest: '加载任务系统...',
-  _LoadPhase.done: '加载完成',
-};
 
 class SplashPage extends StatefulWidget {
   final Widget Function(GameContext ctx) onInitialized;
@@ -44,95 +16,42 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  // 【修复】V3.2 GameContext 改为 late 懒加载，不在字段初始化器创建，
-  // 防止构造函数异常阻塞首帧渲染。在 _loadInBatches() 首次调用时初始化。
-  late final GameContext _ctx;
-  _LoadPhase _phase = _LoadPhase.init;
+  late GameContext _ctx;
+  String _statusText = '正在初始化...';
   bool _hasError = false;
   String _errorMessage = '';
-  bool _ctxInitialized = false;
+  bool _ctxReady = false;
 
   @override
   void initState() {
     super.initState();
-    // ① 先渲染 UI（首帧只显示标题+加载动画，不执行任何数据加载）
+    // 首帧渲染后再开始加载
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // ② 首帧渲染完成后，开始异步分批加载
-      _loadInBatches();
+      _startLoading();
     });
   }
 
-  // 分批加载：每批加载完成后更新状态文字，释放 UI 事件循环
-  Future<void> _loadInBatches() async {
+  Future<void> _startLoading() async {
     try {
-      // 【修复】V3.2 首次加载时创建 GameContext，不阻塞首帧渲染
-      if (!_ctxInitialized) {
-        _ctx = GameContext();
-        _ctxInitialized = true;
-      }
-      // 第1批：蛊虫（核心，失败则无法继续）
-      await _safeBatch(_LoadPhase.guList, () => _ctx.loadStaticGuList());
+      // 创建 GameContext
+      _ctx = GameContext();
+      _ctxReady = true;
+
+      // 整体超时保护：30 秒未完成则报错
+      await _loadAll().timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('资源加载超时（30s），请重试');
+        },
+      );
+
       if (!mounted) return;
 
-      // 每批之间让出微任务队列，防止 UI 卡顿
-      await Future<void>.delayed(Duration.zero);
+      setState(() => _statusText = '加载完成');
+      await Future<void>.delayed(const Duration(milliseconds: 300));
       if (!mounted) return;
 
-      // 第2批：地图（核心，失败则无法继续）
-      await _safeBatch(_LoadPhase.map, () => _ctx.loadStaticMap());
-      if (!mounted) return;
-
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第3批：蛊方
-      await _safeBatch(_LoadPhase.recipe, () => _ctx.loadStaticRecipe());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第4批：NPC模板
-      await _safeBatch(_LoadPhase.npc, () => _ctx.loadStaticNpc());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第5批：材料
-      await _safeBatch(_LoadPhase.material, () => _ctx.loadStaticMaterial());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第6批：随机事件
-      await _safeBatch(_LoadPhase.event, () => _ctx.loadStaticEvent());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第7批：南疆区域数据
-      await _safeBatch(_LoadPhase.region, () => _ctx.loadStaticRegion());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第8批：环境配置
-      await _safeBatch(_LoadPhase.environment, () => _ctx.loadStaticEnvironment());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 第9批：任务系统
-      await _safeBatch(_LoadPhase.quest, () => _ctx.loadStaticQuest());
-      if (!mounted) return;
-      await Future<void>.delayed(Duration.zero);
-      if (!mounted) return;
-
-      // 所有资源加载完成，标记完成
-      _setPhase(_LoadPhase.done);
-      await Future<void>.delayed(const Duration(milliseconds: 200));
-      if (!mounted) return;
-
-      // 展示免责声明弹窗
+      // 展示免责声明
       final accepted = await showStartupDisclaimer(context);
       if (!mounted) return;
 
@@ -144,79 +63,66 @@ class _SplashPageState extends State<SplashPage> {
       }
     } catch (e, stack) {
       if (!mounted) return;
-      debugPrint('SplashPage 分批加载异常: $e\n$stack');
+      debugPrint('SplashPage 加载异常: $e\n$stack');
       setState(() {
         _hasError = true;
         _errorMessage = e.toString();
+        _statusText = '初始化失败';
       });
-      _showErrorDialog();
     }
   }
 
-  // 执行单批加载，失败时抛出异常中断流程
-  Future<void> _safeBatch(_LoadPhase phase, Future<void> Function() loader) async {
-    _setPhase(phase);
-    await loader();
-  }
-
-  void _setPhase(_LoadPhase p) {
-    if (mounted) setState(() => _phase = p);
-  }
-
-  void _showErrorDialog() {
+  Future<void> _loadAll() async {
+    // 依次加载各资源，每步更新状态文字
+    setState(() => _statusText = '加载蛊虫数据...');
+    await _ctx.loadStaticGuList();
     if (!mounted) return;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
-        title: const Text(
-          '初始化失败',
-          style: TextStyle(color: Colors.redAccent, fontSize: 18),
-        ),
-        content: SingleChildScrollView(
-          child: Text(
-            '游戏资源加载异常，请尝试重新安装。\n\n错误: $_errorMessage',
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              setState(() {
-                _hasError = false;
-                _errorMessage = '';
-                _phase = _LoadPhase.init;
-              });
-              // 重新加载
-              WidgetsBinding.instance.addPostFrameCallback((_) => _loadInBatches());
-            },
-            style: TextButton.styleFrom(foregroundColor: const Color(0xFF9D5CD0)),
-            child: const Text('重试'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              SystemNavigator.pop();
-            },
-            style: TextButton.styleFrom(foregroundColor: Colors.white54),
-            child: const Text('退出'),
-          ),
-        ],
-      ),
-    );
+
+    setState(() => _statusText = '加载地图数据...');
+    await _ctx.loadStaticMap();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载蛊方数据...');
+    await _ctx.loadStaticRecipe();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载NPC数据...');
+    await _ctx.loadStaticNpc();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载材料数据...');
+    await _ctx.loadStaticMaterial();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载事件数据...');
+    await _ctx.loadStaticEvent();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载区域数据...');
+    await _ctx.loadStaticRegion();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载环境配置...');
+    await _ctx.loadStaticEnvironment();
+    if (!mounted) return;
+
+    setState(() => _statusText = '加载任务系统...');
+    await _ctx.loadStaticQuest();
+    if (!mounted) return;
+
+    // 初始化 NPC AI
+    _ctx.npcAi = NPCAI(_ctx.guList);
   }
 
   @override
   Widget build(BuildContext context) {
-    final phaseName = _phaseNames[_phase] ?? '加载中...';
     return Scaffold(
       backgroundColor: const Color(0xFF0A0A0D),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // 标题
             const Text(
               '蛊 真 人',
               style: TextStyle(
@@ -241,6 +147,7 @@ class _SplashPageState extends State<SplashPage> {
               ),
             ),
             const SizedBox(height: 60),
+            // 加载指示器或错误图标
             if (!_hasError)
               const SizedBox(
                 width: 36,
@@ -257,13 +164,48 @@ class _SplashPageState extends State<SplashPage> {
                 size: 36,
               ),
             const SizedBox(height: 24),
+            // 状态文字
             Text(
-              _hasError ? '初始化失败' : phaseName,
+              _statusText,
               style: TextStyle(
                 color: _hasError ? Colors.redAccent : const Color(0xFF9D5CD0),
                 fontSize: 14,
               ),
             ),
+            // 错误时显示重试按钮
+            if (_hasError) ...[
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _hasError = false;
+                    _errorMessage = '';
+                    _statusText = '正在重试...';
+                  });
+                  _startLoading();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF593475),
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('重试'),
+              ),
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: () => SystemNavigator.pop(),
+                child: const Text('退出', style: TextStyle(color: Colors.white54)),
+              ),
+              // 显示错误详情（可折叠）
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: SelectableText(
+                  _errorMessage,
+                  style: const TextStyle(color: Colors.white54, fontSize: 11),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ],
         ),
       ),
