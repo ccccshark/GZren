@@ -1881,6 +1881,14 @@ class GameContext extends ChangeNotifier {
         for (final ql in questLogs) {
           out(ql, MsgType.fortune);
         }
+        // V3.5 修复【悬赏 kill 类任务 BUG】：同步写入 kill_counts，供 BountyBoard 提交校验。
+        // 原 BUG：BountyBoard._killCount 读 flags['kill_counts'][nid]，但全代码库无写入，
+        // 导致 kill 类悬赏（清剿黑崖斥候/截杀青茅山商队/猎捕青纹豹）永远无法完成。
+        final killedNid = combat!.npc.nid;
+        final kcRaw = player!.flags['kill_counts'];
+        final kcMap = Map<String, dynamic>.from(kcRaw is Map ? kcRaw : <String, dynamic>{});
+        kcMap[killedNid] = ((kcMap[killedNid] as num?) ?? 0).toInt() + 1;
+        player!.flags['kill_counts'] = kcMap;
       } else if (combat!.status == CombatStatus.lose) {
         _onDefeated(combat!.npc);
       }

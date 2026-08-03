@@ -17,6 +17,7 @@ import 'save_menu.dart';
 import 'save_code_dialog.dart';
 import 'help_page.dart';
 import 'panels.dart'; // 第一阶段新增面板集合（地图/快捷栏/预警/背包分类/新手引导 + 毒素系统面板）
+import 'panels_v2.dart'; // V3.5 第二阶段系统面板（空窍/储物/食物/声望/悬赏/黑市/易物/任务）
 import 'detail_dialogs.dart'; // 第三阶段新增：材料/蛊虫详情浮窗 + 域外通道封锁弹窗
 
 class MainGamePage extends StatefulWidget {
@@ -758,6 +759,15 @@ class _MainGamePageState extends State<MainGamePage> with WidgetsBindingObserver
                   _moreBtn(c, '大地图导航', Icons.public, () => showWorldMapPanel(context, ctx)),
                   _moreBtn(c, '蛊虫快捷栏', Icons.flash_on, () => showQuickBarPanel(context, ctx)),
                   _moreBtn(c, '杀招面板', Icons.bolt, () => showKillerMovePanel(context, ctx)),
+                  // V3.5 第二阶段系统面板入口（补齐 v1.5.0 公告但缺 UI 的功能）
+                  _moreBtn(c, '空窍容量', Icons.inventory_2, () => showSlotCapacityPanel(context, ctx)),
+                  _moreBtn(c, '储物蛊', Icons.backpack, () => showStorageGuPanel(context, ctx)),
+                  _moreBtn(c, '食物滋养', Icons.restaurant, () => showFoodPanel(context, ctx)),
+                  _moreBtn(c, '势力声望', Icons.military_tech, () => showReputationPanel(context, ctx)),
+                  _moreBtn(c, '悬赏榜', Icons.assignment, () => showBountyPanel(context, ctx)),
+                  _moreBtn(c, '黑市', Icons.storefront, () => showBlackMarketPanel(context, ctx)),
+                  _moreBtn(c, '以物易物', Icons.swap_horiz, () => showBarterPanel(context, ctx)),
+                  _moreBtn(c, '任务系统', Icons.task_alt, () => showQuestPanel(context, ctx)),
                   _moreBtn(c, '状态预警', Icons.warning_amber_rounded, () {
                     final ws = ctx.warnings();
                     if (ws.isEmpty) ctx.out('当前状态良好，无需预警。', MsgType.fortune);
