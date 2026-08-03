@@ -44,20 +44,21 @@ jobs:
           flutter --version
           java -version
 
-      - name: 补全 Android 工程脚手架
+      # 【修复】V1.5.0 只在 android/ 目录缺失时才创建脚手架，避免覆盖已有工程配置。
+      # 全量的 AndroidManifest/build.gradle.kts/styles.xml/launch_background.xml 已在 Git 中维护，
+      # flutter create 会覆盖这些配置导致离线约束失效、深色主题被重置。
+      - name: 补全 Android 工程脚手架（仅当 android 目录缺失时）
         run: |
-          flutter create \
-            --org com.guzhenren \
-            --project-name gzren \
-            --platforms=android \
-            --description "蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。" \
-            .
-
-      - name: 恢复 Android 原生配置（flutter create 会覆盖 styles.xml/launch_background.xml 等）
-        run: |
-          git checkout android/app/src/main/res/values/styles.xml
-          git checkout android/app/src/main/res/drawable/launch_background.xml
-          echo "已恢复 Android 原生深色主题配置"
+          if [ ! -d "android" ]; then
+            flutter create \
+              --org com.guzhenren \
+              --project-name gzren \
+              --platforms=android \
+              --description "蛊真人单机文字MUD（安卓端）—— 纯离线单机，无任何联网功能。" \
+              .
+          else
+            echo "android 目录已存在，跳过 flutter create，直接使用 Git 维护的工程配置"
+          fi
 
       - name: 校验 AndroidManifest 离线约束
         run: |
