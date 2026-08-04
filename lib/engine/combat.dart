@@ -303,7 +303,7 @@ class CombatEngine {
     final m = raw is Map
         ? Map<String, dynamic>.from(raw)
         : <String, dynamic>{};
-    final nid = s.npc.template?.nid ?? '';
+    final nid = s.npc.nid;
     if (nid.isNotEmpty) {
       m[nid] = ((m[nid] as num?) ?? 0).toInt() + 1;
       s.player.flags['kill_counts'] = m;
