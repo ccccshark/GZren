@@ -8,6 +8,8 @@ plugins {
 android {
     namespace = "com.guzhenren.gzren"
     compileSdk = flutter.compileSdkVersion
+    // jni 插件要求 NDK 28.2.13676358，显式声明避免 CI 构建报 "path is null"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
