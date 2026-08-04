@@ -381,8 +381,10 @@ class BountyBoard {
 // ---------- 以物易物 ----------
 class Barter {
   /// 简单估值（参考价/价值指数）：若有 materials[name].price 用之，否则按常见材料估值。
+  /// GameContext.materials 结构：{materials: {材料名: {price:...}}，故先找子层，找不到直接找顶层（分区域加载时材料直接放顶层）
   static int _estimate(String name, int count, Map<String, dynamic> materials) {
-    final m = materials[name];
+    final sub = materials['materials'];
+    final m = (sub is Map ? sub[name] : null) ?? materials[name];
     int price = 1;
     if (m is Map) {
       price = ((m['price'] as num?) ?? 1).toInt();

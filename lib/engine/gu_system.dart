@@ -199,7 +199,12 @@ List<String> refine(Player p, String recipeName, List<Recipe> recipes,
     final inst = makeGuInstance(recipe.outputGid, guList, mutated: mutated);
     p.guBag.add(inst);
     p.refineProficiency += 1;
+    // 道痕获取：炼蛊成功按输出蛊转数累积流派道痕（1转=1.0点，九转=9.0点）
+    // 成功炼就一只蛊相当于完全掌握该流派的基础法门。
+    final daoGain = inst.rank * 1.0;
+    p.addDaoMark(inst.school, daoGain);
     log.add('【炼蛊成功】你炼制出 ${inst.name}！（成功率 ${(success * 100).round()}%）');
+    log.add('  道痕+${daoGain.toStringAsFixed(1)}（${inst.school}）');
     if (mutated) {
       log.add('异变突生——竟炼出一只变异蛊！威力大增，但反噬更深。');
       if (outT?.isMutate ?? false) {
@@ -329,6 +334,8 @@ List<String> useGu(Player p, String guName) {
   }
   p.spendTrueyuan(target.costZhen);
   target.durability = max(0, target.durability - 2);
+  // 道痕获取：每催动一次对应流派蛊，累积 0.5 点道痕（与战斗单体攻击一致）
+  p.addDaoMark(target.school, 0.5);
   final ctype = target.combat['type'] ?? 'passive';
   final power = (target.combat['power'] as num? ?? 0).toInt();
 

@@ -298,6 +298,16 @@ class CombatEngine {
     s.addLog('\n═══ 战斗结束：你击败了 ${s.npc.name}！ ═══');
     s.player.kills += 1;
     s.player.tribulation += 5;
+    // 悬赏击杀计数：按击败的 NPC nid 逐只累计（用于 BountyBoard kill 类悬赏）
+    final raw = s.player.flags['kill_counts'];
+    final m = raw is Map
+        ? Map<String, dynamic>.from(raw)
+        : <String, dynamic>{};
+    final nid = s.npc.template?.nid ?? '';
+    if (nid.isNotEmpty) {
+      m[nid] = ((m[nid] as num?) ?? 0).toInt() + 1;
+      s.player.flags['kill_counts'] = m;
+    }
     _loot(s);
   }
 

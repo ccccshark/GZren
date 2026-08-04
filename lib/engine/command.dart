@@ -2412,6 +2412,7 @@ class GameContext extends ChangeNotifier {
       player!,
       giveMat: {giveName: giveCount},
       wantMat: {wantName: wantCount},
+      materials: materials,
     );
     for (final l in logs) out(l, ok ? MsgType.fortune : MsgType.danger);
     if (ok) {
