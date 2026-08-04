@@ -1,5 +1,8 @@
 allprojects {
     repositories {
+        // 阿里云近期频繁 502，腾讯镜像作为首选，阿里云作 fallback，最后官方源
+        maven { url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-public/") }
+        maven { url = uri("https://mirrors.cloud.tencent.com/nexus/repository/maven-google/") }
         maven { url = uri("https://maven.aliyun.com/repository/google") }
         maven { url = uri("https://maven.aliyun.com/repository/central") }
         maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
