@@ -213,11 +213,12 @@ Future<void> showFoodPanel(BuildContext context, GameContext ctx) async {
   final p = ctx.player!;
   FoodSystem.ensureStrictMode(p);
   final left = FoodSystem.satietyHoursLeft(p);
-  // 收集可食用物资
+  // 收集可食用物资（材料主表在 ctx.materials['materials'] 子层）
+  final matInfo = (ctx.materials['materials'] ?? {}) as Map<String, dynamic>;
   final foods = <MapEntry<String, (int, FoodEffect)>>[];
   for (final it in p.inventory) {
     final (n, c) = MatParser.parse(it);
-    final info = ctx.materials[n] as Map<String, dynamic>?;
+    final info = matInfo[n] as Map<String, dynamic>?;
     final fe = FoodSystem.parseFoodEffect(info?['effect'] as Map<String, dynamic>?);
     if (fe != null) foods.add(MapEntry(n, (c, fe)));
   }

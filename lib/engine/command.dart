@@ -2182,10 +2182,11 @@ class GameContext extends ChangeNotifier {
     FoodSystem.ensureStrictMode(p);
     if (args.isEmpty) {
       out('用法：eat [食物名] 或 数量。当前背包中可直接食用物资：', MsgType.system);
+      final matInfo = (materials['materials'] ?? {}) as Map<String, dynamic>;
       int found = 0;
       for (final it in p.inventory) {
         final (n, c) = MatParser.parse(it);
-        final info = materials[n] as Map<String, dynamic>?;
+        final info = matInfo[n] as Map<String, dynamic>?;
         final fe = FoodSystem.parseFoodEffect(info?['effect'] as Map<String, dynamic>?);
         if (fe != null) {
           out('  · $n x$c (${fe.desc()})', MsgType.system);
@@ -2203,7 +2204,8 @@ class GameContext extends ChangeNotifier {
       return;
     }
     // 解析效果
-    final info = materials[name] as Map<String, dynamic>?;
+    final matInfo = (materials['materials'] ?? {}) as Map<String, dynamic>;
+    final info = matInfo[name] as Map<String, dynamic>?;
     final fe = FoodSystem.parseFoodEffect(info?['effect'] as Map<String, dynamic>?);
     if (fe == null) {
       out('$name 不能直接食用。', MsgType.danger);
