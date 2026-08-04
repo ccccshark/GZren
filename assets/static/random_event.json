@@ -514,6 +514,20 @@
       "scene_rids": ["qm2_secret_tomb"],
       "desc": "坟茔主室石棺之上刻着上古鬼道蛊文，你依文摸索，竟寻得『阴视蛊蛊方』残卷！",
       "effect": {"add_item": ["阴视蛊蛊方x1", "阴魂砂x3"], "dao_mark": {"鬼道": 6}, "luck": 2}
+    },
+    {
+      "eid": "ev063", "name": "机缘·瑞兽献宝", "type": "fortune",
+      "weight": 1, "min_rank": 6, "max_rank": 9,
+      "trigger": "move",
+      "desc": "一只通体金光的瑞兽忽然现身道旁，神光流转间吐出一枚异宝便隐入云海。你拾起一看，竟是传说中的『龙肝凤髓』！",
+      "effect": {"add_item": ["龙肝凤髓x1"], "luck": 5, "dao_mark": {"运道": 5}}
+    },
+    {
+      "eid": "ev064", "name": "机缘·万年石乳滴落", "type": "fortune",
+      "weight": 1, "min_rank": 6, "max_rank": 9,
+      "trigger": "gather",
+      "desc": "采集时触及一处钟乳洞壁，一滴凝结万年的灵乳正落入掌心，化为精纯真元。这是『万年石乳』！",
+      "effect": {"add_item": ["万年石乳x1"], "trueyuan": 50, "dao_mark": {"寿道": 3}}
     }
   ],
   "trigger_chance": {

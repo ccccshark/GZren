@@ -300,6 +300,118 @@
       "desc": "高阶异兽体内的妖丹，兽道至宝",
       "price": 60
     },
+    "烤红薯": {
+      "mid": "m067",
+      "rarity": 1,
+      "desc": "南疆田野常见的烤红薯，香甜软糯，穷苦蛊师的口粮",
+      "price": 1,
+      "effect": {
+        "type": "food",
+        "heal_phy": 8,
+        "heal_zhen": 0,
+        "satiety": 10,
+        "heal_injure_chance": 0,
+        "detox_power": 0
+      }
+    },
+    "山菌汤": {
+      "mid": "m068",
+      "rarity": 1,
+      "desc": "南疆山林野生菌菇熬成的清汤，鲜香暖胃",
+      "price": 2,
+      "effect": {
+        "type": "food",
+        "heal_phy": 10,
+        "heal_zhen": 2,
+        "satiety": 12,
+        "heal_injure_chance": 0.05,
+        "detox_power": 1
+      }
+    },
+    "兽血酒": {
+      "mid": "m069",
+      "rarity": 3,
+      "desc": "以兽血发酵酿造的烈酒，沙盗与北原勇士最爱，气血勃发",
+      "price": 18,
+      "effect": {
+        "type": "food",
+        "heal_phy": 25,
+        "heal_zhen": 12,
+        "satiety": 14,
+        "heal_injure_chance": 0.1,
+        "detox_power": 0
+      }
+    },
+    "冰镇奶酪": {
+      "mid": "m070",
+      "rarity": 2,
+      "desc": "北原寒地牛羊乳凝制而成，冰镇后奶香醇厚",
+      "price": 8,
+      "effect": {
+        "type": "food",
+        "heal_phy": 15,
+        "heal_zhen": 8,
+        "satiety": 16,
+        "heal_injure_chance": 0,
+        "detox_power": 0
+      }
+    },
+    "海藻羹": {
+      "mid": "m071",
+      "rarity": 2,
+      "desc": "东海海边采摘的灵藻熬羹，咸鲜清润，略解水毒",
+      "price": 6,
+      "effect": {
+        "type": "food",
+        "heal_phy": 12,
+        "heal_zhen": 6,
+        "satiety": 14,
+        "heal_injure_chance": 0,
+        "detox_power": 2
+      }
+    },
+    "中原烧鸡": {
+      "mid": "m072",
+      "rarity": 2,
+      "desc": "中州酒楼名菜，皮酥肉嫩，膏粱厚味，最能补气养血",
+      "price": 7,
+      "effect": {
+        "type": "food",
+        "heal_phy": 22,
+        "heal_zhen": 4,
+        "satiety": 20,
+        "heal_injure_chance": 0.1,
+        "detox_power": 0
+      }
+    },
+    "龙肝凤髓": {
+      "mid": "m073",
+      "rarity": 5,
+      "desc": "传说中龙凤瑞兽的肝髓，九转蛊师梦寐以求的食补圣品",
+      "price": 200,
+      "effect": {
+        "type": "food",
+        "heal_phy": 80,
+        "heal_zhen": 60,
+        "satiety": 30,
+        "heal_injure_chance": 0.5,
+        "detox_power": 10
+      }
+    },
+    "万年石乳": {
+      "mid": "m074",
+      "rarity": 5,
+      "desc": "太古秘境钟乳洞凝结万年的灵乳，滴入腑脏即化精元",
+      "price": 250,
+      "effect": {
+        "type": "food",
+        "heal_phy": 60,
+        "heal_zhen": 80,
+        "satiety": 36,
+        "heal_injure_chance": 0.4,
+        "detox_power": 8
+      }
+    },
     "蛊魂晶": {
       "mid": "m037",
       "rarity": 4,
